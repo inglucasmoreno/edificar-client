@@ -1,0 +1,49 @@
+<div class="h-screen font-sans">
+    <div class="container animate__animated animate__zoomIn mx-auto h-full flex justify-center items-center">
+        <div class="w-11/12 md:w-1/2 lg:w-1/3">
+            <div class="flex items-center justify-center font-hairline text-white mb-0 text-center text-2xl"> 
+                <img 
+                    src="assets/Edificar-Logo.png" 
+                    alt="Logo Edificar"
+                    class="w-1/6"
+                >
+                <h1 class="font-semibold font-sans text-gray-700"> Control de inventario </h1>
+            </div>
+            <form class="border-yellow-500 border-t-8 mt-2 mb-6 rounded-lg shadow-lg px-5 pb-4 bt-2 bg-white"
+                  autocomplete="off"
+                  [formGroup]="loginForm"
+                  (submit)="login()"  
+            >
+                <div class="mt-4 mb-4">
+                    <label for="dni" class="font-semibold block mb-2 text-gray-600"> 
+                        <i class="fas fa-user mr-1"></i>
+                        Usuario 
+                    </label>
+                    <input type="text" 
+                           id="dni" 
+                           placeholder="Ingresar DNI"
+                           formControlName="dni" 
+                           class="block appearance-none w-full bg-white border border-gray-200 hover:border-gray-300 px-2 py-2 rounded shadow">
+                </div>
+                <div>
+                    <label for="password" class="font-semibold block mb-2 text-gray-600"> 
+                        <i class="fas fa-key mr-1"></i>
+                        Contraseña 
+                    </label>
+                    <input type="password" 
+                           id="password" 
+                           placeholder="Ingresar password" 
+                           formControlName="password"
+                           class="block appearance-none w-full bg-white border border-gray-200 hover:border-gray-300 px-2 py-2 rounded shadow">
+                </div>
+                <div class="flex items-center justify-between mt-4">
+                    <button [disabled]="loading" [ngClass]="{'bg-yellow-400':loading, 'bg-yellow-500':!loading}" class="focus:outline-none text-white hover:bg-yellow-400 transition duration-200 font-semibold py-2 px-4 rounded"> 
+                        <span *ngIf="!loading"> Ingresar </span>
+                        <span *ngIf="loading"> Cargando <i class="fas fa-spinner animate-spin"></i> </span> 
+                    </button>
+                    <a class="no-underline inline-block align-baseline font-semibold text-sm text-yellow-600 float-right hover:text-yellow-400 transition duration-200" href="#"> ¿Olvidaste tu contraseña? </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

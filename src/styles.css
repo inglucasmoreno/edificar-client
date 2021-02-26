@@ -1,1 +1,5 @@
-/* You can add global styles to this file, and also import other style files */
+.fondoEdificar {
+    /* background-color: #faca8a; */
+    background: rgb(255,167,105);
+    background: linear-gradient(0deg, rgba(255,167,105,1) 0%, rgba(255,181,108,1) 82%);
+}
