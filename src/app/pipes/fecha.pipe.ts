@@ -7,6 +7,7 @@ import * as moment from 'moment';
 
 export class FechaPipe implements PipeTransform {
   transform(fecha: Date): string {
+    console.log(fecha);
     return moment(fecha).format('DD/MM/YYYY');
   }
 }

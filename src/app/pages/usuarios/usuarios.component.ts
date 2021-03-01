@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
-import * as moment from 'moment';
 
 import { UsuariosService } from '../../services/usuarios.service';
 import { Usuario } from '../../models/usuario.model';
@@ -13,13 +12,22 @@ import { Usuario } from '../../models/usuario.model';
 })
 export class UsuariosComponent implements OnInit {
 
+  // Usuarios Listados
   public usuarios: Usuario[];
   public total = 0;
-  public limit = 10;
-  public desde = 0;
-  public hasta = 10;
-  public filtroActivo = '';
-  public filtroDni = '';
+
+  // Paginacion
+  public paginacion = {
+    limit: 10,
+    desde: 0,
+    hasta: 10
+  };
+
+  // Filtrado
+  public filtro = {
+    activo: true,
+    dni: '',
+  }
   public loading = true;
 
   // Para reportes
@@ -32,8 +40,14 @@ export class UsuariosComponent implements OnInit {
     this.listarUsuarios();
   }
 
+  // Listar usuarios
   listarUsuarios(): void {
-    this.usuariosService.listarUsuarios(this.limit, this.desde, this.filtroActivo, this.filtroDni).subscribe( resp => {
+    this.usuariosService.listarUsuarios(
+      this.paginacion.limit, 
+      this.paginacion.desde, 
+      this.filtro.activo, 
+      this.filtro.dni)
+    .subscribe( resp => {
       const { usuarios, total } = resp;
       this.usuarios = usuarios;
       this.total = total;
@@ -48,6 +62,7 @@ export class UsuariosComponent implements OnInit {
     }));
   }
 
+  // Actualizar estado
   actualizarEstado(usuario: Usuario): void {
     const { uid, activo } = usuario;
     Swal.fire({
@@ -82,21 +97,22 @@ export class UsuariosComponent implements OnInit {
 
   }
 
+  // Funcion de paginación
   actualizarDesdeHasta(selector): void {
 
     this.loading = true;
 
     if (selector === 'siguiente'){ // Incrementar
-      if (this.hasta < this.total){
-        this.desde += this.limit;
-        this.hasta += this.limit;
+      if (this.paginacion.hasta < this.total){
+        this.paginacion.desde += this.paginacion.limit;
+        this.paginacion.hasta += this.paginacion.limit;
       }
     }else{                         // Decrementar
-      this.desde -= this.limit;
-      if (this.desde < 0){
-        this.desde = 0;
+      this.paginacion.desde -= this.paginacion.limit;
+      if (this.paginacion.desde < 0){
+        this.paginacion.desde = 0;
       }else{
-        this.hasta -= this.limit;
+        this.paginacion.hasta -= this.paginacion.limit;
       }
     }
 
@@ -104,15 +120,17 @@ export class UsuariosComponent implements OnInit {
 
   }
 
+  // Filtrar Activo/Inactivo
   filtrarActivos(activo: any): void{
     this.loading = true;
-    this.filtroActivo = activo;
+    this.filtro.activo = activo;
     this.listarUsuarios();
   }
 
+  // Filtrar por DNI
   filtrarDni(dni: string): void{
     this.loading = true;
-    this.filtroDni = dni;
+    this.filtro.dni = dni;
     this.listarUsuarios();
   }
 }

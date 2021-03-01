@@ -10,6 +10,7 @@ import { PipesModule } from '../pipes/pipes.module';
 import { UsuariosComponent } from './usuarios/usuarios.component';
 import { ComponentsModule } from '../components/components.module';
 import { NuevoUsuarioComponent } from './usuarios/nuevo-usuario.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { NuevoUsuarioComponent } from './usuarios/nuevo-usuario.component';
     AppRoutingModule,
     SharedModule,
     PipesModule,
-    ComponentsModule
+    ComponentsModule,
+    ReactiveFormsModule
   ]
 })
 export class PagesModule { }

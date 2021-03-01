@@ -20,8 +20,8 @@
 }
 
 .fondoEdificar {
-    background: rgb(251,140,95);
-    background: linear-gradient(60deg, rgba(251,140,95,1) 0%, rgba(247,169,49,1) 90%);
+    background: rgb(253,159,110);
+    background: linear-gradient(90deg, rgba(253,159,110,1) 0%, rgba(251,199,119,1) 100%);
 }
 
 .colorButton {

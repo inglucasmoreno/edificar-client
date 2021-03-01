@@ -11,58 +11,82 @@
             </div>
         </h1>
     </div>
-    <form class="px-5 pb-5">
-        <div class="font-bold text-gray-600 text-sm mx-2 mt-3"> Nombre de usuario </div>
-            <div class="flex flex-col lg:flex-row">
-                <div class="w-full flex-1 mx-2">
-                    <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
-                        <input placeholder="Ingresar DNI" class="p-1 px-2 appearance-none outline-none w-full text-gray-800"> 
-                    </div>
-                </div>
-                <div class="w-full flex-1 mx-2"></div>
+    <form 
+        [formGroup]="usuarioForm"
+        (submit)="nuevoUsuario()"    
+        class="px-5 pb-5">
+        <div class="flex flex-col lg:flex-row">
+            <div class="w-full mx-2 flex-1 svelte-1l8159u">
+                <div class="font-bold mt-3 text-gray-600 text-sm"> Nombre de usuario (DNI) </div>
+                <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
+                    <input placeholder="Ej. 34060398" 
+                           class="p-1 px-2 appearance-none outline-none w-full text-gray-800"
+                           formControlName="dni"
+                           ></div>
             </div>
+            <div class="w-full mx-2 flex-1 svelte-1l8159u">
+                <div class="font-bold mt-3 text-gray-600 text-sm"> Email </div>
+                <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
+                    <input type="email"
+                           formControlName="email" 
+                           placeholder="Ej. lucasmoreno@gmail.com" 
+                           class="p-1 px-2 appearance-none outline-none w-full text-gray-800"></div>
+            </div>
+        </div>
         <div class="flex flex-col lg:flex-row">
             <div class="w-full mx-2 flex-1 svelte-1l8159u">
                 <div class="font-bold mt-3 text-gray-600 text-sm"> Apellido </div>
                 <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
-                    <input placeholder="Ej. Moreno" class="p-1 px-2 appearance-none outline-none w-full text-gray-800"> 
+                    <input placeholder="Ej. Moreno" 
+                           formControlName="apellido"
+                           class="p-1 px-2 appearance-none outline-none w-full text-gray-800"> 
                 </div>
             </div>
             <div class="w-full mx-2 flex-1 svelte-1l8159u">
                 <div class="font-bold mt-3 text-gray-600 text-sm"> Nombre </div>
                 <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
-                    <input placeholder="Ej. Lucas" class="p-1 px-2 appearance-none outline-none w-full text-gray-800"> </div>
+                    <input placeholder="Ej. Lucas" 
+                           formControlName="nombre"
+                           class="p-1 px-2 appearance-none outline-none w-full text-gray-800"> </div>
             </div>
         </div>
         <div class="flex flex-col lg:flex-row">
             <div class="w-full mx-2 flex-1">
                 <div class="font-bold mt-3 text-gray-600 text-sm"> Contraseña </div>
                 <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
-                    <input type="password" placeholder="******" class="p-1 px-2 appearance-none outline-none w-full text-gray-800"> 
+                    <input type="password" 
+                           formControlName="password"
+                           placeholder="******" 
+                           class="p-1 px-2 appearance-none outline-none w-full text-gray-800"> 
                 </div>
             </div>
             <div class="w-full mx-2 flex-1">
-                <div class="font-bold mt-3 text-gray-600 text-sm"> Email </div>
+                <div class="font-bold mt-3 text-gray-600 text-sm"> Repetir contraseña </div>
                 <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
-                    <input placeholder="lucasmoreno@gmail.com" class="p-1 px-2 appearance-none outline-none w-full text-gray-800"> </div>
+                    <input type="password" 
+                           formControlName="repetir"
+                           placeholder="******" 
+                           class="p-1 px-2 appearance-none outline-none w-full text-gray-800"> </div>
             </div>
         </div>
         <div class="flex flex-col lg:flex-row">
             <div class="w-full mx-2 flex-1">
                 <div class="font-bold mt-3 text-gray-600 text-sm"> Rol </div>
                 <div class="bg-white my-2 flex">
-                    <select class="border rounded p-1 py-2 w-full shadow">
-                        <option value=""> Consulta </option>
-                        <option value=""> Administrador </option>
+                    <select class="border rounded p-1 py-2 w-full shadow"
+                            formControlName="role">
+                        <option value="USER_ROLE"> Consulta </option>
+                        <option value="ADMIN_ROLE"> Administrador </option>
                     </select>
                 </div>
             </div>
             <div class="w-full mx-2 flex-1">
                 <div class="font-bold mt-3 text-gray-600 text-sm"> Estado </div>
                 <div class="bg-white my-2 flex">
-                    <select class="border rounded p-1 py-2 w-full shadow">
-                        <option value=""> Activo </option>
-                        <option value=""> Inactivo </option>
+                    <select class="border rounded p-1 py-2 w-full shadow"
+                            formControlName="activo">
+                        <option value=true> Activo </option>
+                        <option value=false> Inactivo </option>
                     </select>
                 </div>
             </div>
