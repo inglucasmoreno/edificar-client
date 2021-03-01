@@ -1,1 +1,44 @@
-<h1 class="text-center font-semibold text-2xl"> Header </h1>
+<div class="lg:flex flex-col animate__animated animate__fadeIn lg:flex-row lg:min-h-screen w-full shadow">
+    <div class="flex flex-col w-full lg:w-64 text-gray-700 bg-white flex-shrink-0">
+      <div class="flex-shrink-0 px-8 py-4 flex flex-row items-center justify-between">
+        <a href="#" class="font-semibold text-gray-900 rounded-lg focus:outline-none focus:shadow-outline">
+          <div class="flex items-center">
+            <img class="w-1/4" src="assets/Edificar-Logo.png" alt="">
+            <h1 class="uppercase"> Edificar SRL </h1>
+          </div>
+        </a>
+        <button (click)="showMenu = !showMenu" class="rounded-lg lg:hidden rounded-lg focus:outline-none focus:shadow-outline">
+          <svg fill="currentColor" viewBox="0 0 20 20" class="w-6 h-6">
+            <path *ngIf="!showMenu" fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM9 15a1 1 0 011-1h6a1 1 0 110 2h-6a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+            <path *ngIf="showMenu" fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+          </svg>
+        </button>
+      </div>
+      <nav *ngIf="showMenu" class="flex-grow lg:block px-4 pb-4 lg:pb-0 lg:overflow-y-auto">
+        <a routerLinkActive="text-yellow-500" routerLink="home" class="block px-4 py-2 mt-2 text-sm font-semibold text-gray-900 rounded-lg hover:text-gray-900 focus:outline-none focus:shadow-outline cursor-pointer hover:text-yellow-500"> 
+          <i class="fas fa-home mr-1"></i>
+          Home 
+        </a>
+        <div class="relative">
+          <button (click)="showUsuarios = !showUsuarios" class="flex flex-row items-center w-full px-4 py-2 mt-2 text-sm font-semibold text-left bg-transparent rounded-lg lg:block focus:outline-none focus:shadow-outline">
+            <span> 
+              <i class="fas fa-user mr-1"></i>
+              Usuarios 
+            </span>
+            <svg fill="currentColor" [ngClass]="{'rotate-180': !showUsuarios, 'rotate-0': showUsuarios}" viewBox="0 0 20 20"  class="inline w-4 h-4 mt-1 ml-1 transition-transform duration-200 transform lg:-mt-1"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+          </button>
+          <div *ngIf="showUsuarios" class="border bg-gray-100 rounded">
+            <a routerLinkActive="text-yellow-500" [routerLinkActiveOptions]="{exact:true}" routerLink="usuarios" class="cursor-pointer block px-4 py-2 mt-1 text-sm font-semibold text-gray-900 bg-transparent rounded-lg hover:text-yellow-500 hover:text-gray-900 focus:outline-none focus:shadow-outline"> 
+              Listar usuarios 
+            </a>
+            <a routerLinkActive="text-yellow-500" [routerLinkActiveOptions]="{exact:true}" routerLink="usuarios/nuevo" class="cursor-pointer block mb-1 px-4 py-2 text-sm font-semibold text-gray-900 bg-transparent rounded-lg hover:text-yellow-500 hover:text-gray-900 focus:outline-none focus:shadow-outline"> Nuevo usuario </a>
+          </div>
+        </div>
+        <a (click)="logout()" class="block px-4 py-2 mt-2 text-sm font-semibold hover:text-red-500 focus:bg-gray-200 focus:outline-none focus:shadow-outline cursor-pointer">
+          <i class="fas fa-door-open mr-1"></i>
+          Cerrar Sesion
+        </a>
+      </nav>
+    </div>
+  </div>
+

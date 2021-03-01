@@ -7,6 +7,7 @@ export class Usuario {
         public email: string,
         public role?: string,
         public activo?: boolean,
-        public password?: string
+        public password?: string,
+        public createdAt?: string
     ){}
 }

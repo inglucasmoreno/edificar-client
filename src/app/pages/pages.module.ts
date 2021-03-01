@@ -5,16 +5,25 @@ import { PagesComponent } from './pages.component';
 import { HomeComponent } from './home/home.component';
 import { AppRoutingModule } from '../app-routing.module';
 import { SharedModule } from '../shared/shared.module';
+import { PipesModule } from '../pipes/pipes.module';
+
+import { UsuariosComponent } from './usuarios/usuarios.component';
+import { ComponentsModule } from '../components/components.module';
+import { NuevoUsuarioComponent } from './usuarios/nuevo-usuario.component';
 
 @NgModule({
   declarations: [
     PagesComponent,
-    HomeComponent
+    HomeComponent,
+    UsuariosComponent,
+    NuevoUsuarioComponent
   ],
   imports: [
     CommonModule,
     AppRoutingModule,
-    SharedModule
+    SharedModule,
+    PipesModule,
+    ComponentsModule
   ]
 })
 export class PagesModule { }

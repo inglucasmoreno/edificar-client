@@ -1,5 +1,29 @@
+
+.bg-orange-100 {
+    background-color: #f19200;
+}
+
+.bg-orange-200 {
+    background-color: #ef8700;
+}
+
+.bg-orange-400 {
+    background-color: #ed7505;
+}
+
+.bg-orange-600 {
+    background-color: #e9600a;
+}
+
+.bg-orange-600 {
+    background-color: #e9600a;
+}
+
 .fondoEdificar {
-    /* background-color: #faca8a; */
-    background: rgb(255,167,105);
-    background: linear-gradient(0deg, rgba(255,167,105,1) 0%, rgba(255,181,108,1) 82%);
+    background: rgb(251,140,95);
+    background: linear-gradient(60deg, rgba(251,140,95,1) 0%, rgba(247,169,49,1) 90%);
+}
+
+.colorButton {
+    background-color: #e9600a;
 }
