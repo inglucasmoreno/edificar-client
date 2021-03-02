@@ -26,7 +26,7 @@ export class UsuariosComponent implements OnInit {
   // Filtrado
   public filtro = {
     activo: true,
-    dni: '',
+    parametro: '',
   }
   public loading = true;
 
@@ -46,13 +46,14 @@ export class UsuariosComponent implements OnInit {
       this.paginacion.limit, 
       this.paginacion.desde, 
       this.filtro.activo, 
-      this.filtro.dni)
+      this.filtro.parametro)
     .subscribe( resp => {
       const { usuarios, total } = resp;
       this.usuarios = usuarios;
       this.total = total;
       this.loading = false;
     }, (({error}) => {
+      this.loading = false;
       Swal.fire({
         icon: 'error',
         title: 'Error',
@@ -62,12 +63,12 @@ export class UsuariosComponent implements OnInit {
     }));
   }
 
-  // Actualizar estado
+  // Actualizar estado Activo/Inactivo
   actualizarEstado(usuario: Usuario): void {
     const { uid, activo } = usuario;
     Swal.fire({
       title: '¿Estas seguro?',
-      text: `¿Quieres actualizar el estado de ${usuario.nombre}?`,
+      text: `¿Quieres actualizar el estado?`,
       icon: 'info',
       showCancelButton: true,
       confirmButtonText: 'Si, estoy seguro',
@@ -80,11 +81,12 @@ export class UsuariosComponent implements OnInit {
           Swal.fire({
             icon: 'success',
             title: 'Completado',
-            text: `Has actualizado el estado de ${usuario.nombre}`,
+            text: `Estado actualizado`,
             showConfirmButton: false,
             timer: 1000
           });
         }, ({error}) => {
+          this.loading = false;
           Swal.fire({
             icon: 'error',
             title: 'Error',
@@ -99,7 +101,6 @@ export class UsuariosComponent implements OnInit {
 
   // Funcion de paginación
   actualizarDesdeHasta(selector): void {
-
     this.loading = true;
 
     if (selector === 'siguiente'){ // Incrementar
@@ -127,10 +128,10 @@ export class UsuariosComponent implements OnInit {
     this.listarUsuarios();
   }
 
-  // Filtrar por DNI
-  filtrarDni(dni: string): void{
+  // Filtrar por Parametro
+  filtrarParametro(parametro: string): void{
     this.loading = true;
-    this.filtro.dni = dni;
+    this.filtro.parametro = parametro;
     this.listarUsuarios();
   }
 }

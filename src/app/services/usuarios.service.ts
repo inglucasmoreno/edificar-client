@@ -31,13 +31,13 @@ export class UsuariosService {
   }
 
   // Listar usuarios con paginador
-  listarUsuarios(limit = 0, desde = 0, activo: any = '', dni: string = ''): Observable<any>{
+  listarUsuarios(limit = 0, desde = 0, activo: any = '', parametro: string = ''): Observable<any>{
     return this.http.get(`${base_url}/usuarios`, {
       params: {
         limit: String(limit),
         desde: String(desde),
         activo,
-        dni
+        parametro
       },
       headers: {
       'x-token': localStorage.getItem('token')

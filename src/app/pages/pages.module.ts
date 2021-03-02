@@ -11,13 +11,17 @@ import { UsuariosComponent } from './usuarios/usuarios.component';
 import { ComponentsModule } from '../components/components.module';
 import { NuevoUsuarioComponent } from './usuarios/nuevo-usuario.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ActualizarPasswordComponent } from './usuarios/editar/actualizar-password.component';
+import { EditarUsuarioComponent } from './usuarios/editar/editar-usuario.component';
 
 @NgModule({
   declarations: [
     PagesComponent,
     HomeComponent,
     UsuariosComponent,
-    NuevoUsuarioComponent
+    NuevoUsuarioComponent,
+    ActualizarPasswordComponent,
+    EditarUsuarioComponent,
   ],
   imports: [
     CommonModule,
