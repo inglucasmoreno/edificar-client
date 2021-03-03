@@ -23,7 +23,7 @@
                            id="dni" 
                            placeholder="Ingresar DNI"
                            formControlName="dni" 
-                           class="block appearance-none w-full bg-white border border-gray-200 hover:border-gray-300 px-2 py-2 rounded shadow">
+                           class="block appearance-none w-full bg-white border border-gray-200 hover:border-gray-300 px-2 py-2 rounded shadow focus:outline-none">
                 </div>
                 <div>
                     <label for="password" class="font-semibold block mb-2 text-gray-600"> 
@@ -34,7 +34,7 @@
                            id="password" 
                            placeholder="Ingresar password" 
                            formControlName="password"
-                           class="block appearance-none w-full bg-white border border-gray-200 hover:border-gray-300 px-2 py-2 rounded shadow">
+                           class="block appearance-none w-full bg-white border border-gray-200 hover:border-gray-300 px-2 py-2 rounded shadow focus:outline-none">
                 </div>
                 <div class="flex items-center justify-between mt-4">
                     <button [disabled]="loading" [ngClass]="{'bg-yellow-400':loading, 'bg-yellow-500':!loading}" class="focus:outline-none text-white hover:bg-yellow-400 transition duration-200 font-semibold py-2 px-4 rounded"> 

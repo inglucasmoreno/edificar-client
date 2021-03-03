@@ -26,8 +26,15 @@ export class UsuariosComponent implements OnInit {
   // Filtrado
   public filtro = {
     activo: true,
-    parametro: '',
+    parametro: ''
   }
+
+  // Ordenar
+  public ordenar = {
+    direccion: 1,  // Asc (1) | Desc (-1)
+    columna: 'apellido'
+  }
+
   public loading = true;
 
   // Para reportes
@@ -46,7 +53,10 @@ export class UsuariosComponent implements OnInit {
       this.paginacion.limit, 
       this.paginacion.desde, 
       this.filtro.activo, 
-      this.filtro.parametro)
+      this.filtro.parametro,
+      this.ordenar.direccion,
+      this.ordenar.columna
+      )
     .subscribe( resp => {
       const { usuarios, total } = resp;
       this.usuarios = usuarios;
@@ -134,4 +144,13 @@ export class UsuariosComponent implements OnInit {
     this.filtro.parametro = parametro;
     this.listarUsuarios();
   }
+  
+  // Ordenar por columna
+  ordenarPorColumna(columna: string){
+    this.loading = true;
+    this.ordenar.columna = columna;
+    this.ordenar.direccion = this.ordenar.direccion == 1 ? -1 : 1; 
+    this.listarUsuarios();
+  }
+
 }
