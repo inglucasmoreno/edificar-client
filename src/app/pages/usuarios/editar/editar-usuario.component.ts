@@ -23,6 +23,7 @@ export class EditarUsuarioComponent implements OnInit {
     role: ['USER_ROLE', Validators.required],
     activo: [true, Validators.required],
   });
+  public loading = true;
 
   constructor(private router: Router,
               private fb: FormBuilder,
@@ -45,6 +46,7 @@ export class EditarUsuarioComponent implements OnInit {
         role,
         activo
       });
+      this.loading = false;
     });
   }
 
@@ -69,8 +71,10 @@ export class EditarUsuarioComponent implements OnInit {
         showConfirmButton: false,
         timer: 1000
       });
+      this.loading = false;
       this.router.navigateByUrl('dashboard/usuarios');
     }, ({error}) => {
+      this.loading = false;
       Swal.fire({
         icon: 'info',
         title: 'Información',

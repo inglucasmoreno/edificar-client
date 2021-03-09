@@ -1,5 +1,5 @@
 <app-tarjeta-formulario>
-    <div class="p-4">
+    <div class="p-4 flex items-center">
         <h1 class="flex items-center text-gray-700">
             <i routerLink="/dashboard/usuarios" class="fas fa-arrow-left border bg-gray-500 text-white border-gray-300 rounded p-2 px-3 shadow cursor-pointer"></i>
             <div class="flex flex-col ml-2">
@@ -10,6 +10,9 @@
                 </span>
             </div>
         </h1>
+        <span class="md:block" *ngIf="loading">
+            <i class="fas fa-spinner animate-spin text-2xl text-gray-400 ml-3"></i>
+        </span>
     </div>
     <form 
         [formGroup]="usuarioForm"
@@ -20,6 +23,7 @@
                 <div class="font-bold mt-3 text-gray-600 text-sm"> Nombre de usuario (DNI) </div>
                 <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
                     <input placeholder="Ej. 34060398" 
+                           [disabled]="loading"
                            class="p-1 px-2 appearance-none outline-none w-full text-gray-800"
                            formControlName="dni"
                            ></div>
@@ -74,7 +78,9 @@
         </div>
         <div class="flex flex-col lg:flex-row mt-2">
             <div class="w-full mx-2 flex-1">
-                <button class="p-2 bg-yellow-500 text-white w-full mt-3 rounded shadow"> Actualizar usuario </button>
+                <button [disabled]="loading"
+                        [ngClass]="{'bg-yellow-300' : loading, 'bg-yellow-500' : !loading}"
+                        class="p-2 text-white w-full mt-3 rounded shadow"> Actualizar usuario </button>
             </div>
             <div class="w-full mx-2 flex-1">
                 <button routerLink="/dashboard/usuarios" 
