@@ -17,9 +17,9 @@
         class="px-5 pb-5">
         <div class="flex flex-col lg:flex-row">
             <div class="w-full mx-2 flex-1 svelte-1l8159u">
-                <div class="font-bold mt-3 text-gray-600 text-sm"> Nombre de usuario (DNI) </div>
+                <div class="font-bold mt-3 text-gray-600 text-sm"> Nombre de usuario </div>
                 <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
-                    <input placeholder="Ej. 34060398" 
+                    <input placeholder="Ej. lmoreno" 
                            class="p-1 px-2 appearance-none outline-none w-full text-gray-800"
                            formControlName="dni"
                            ></div>
@@ -93,11 +93,23 @@
         </div>
         <div class="flex flex-col lg:flex-row mt-2">
             <div class="w-full mx-2 flex-1">
-                <button class="p-2 bg-yellow-500 text-white w-full mt-3 rounded shadow"> Crear usuario </button>
+                <button 
+                        [disabled]="loading"
+                        [ngClass]="{'bg-yellow-400' : loading, 'bg-yellow-500' : !loading}"
+                        class="p-2 bg-yellow-500 text-white w-full mt-3 rounded shadow"> 
+                            <span *ngIf="loading">
+                                <i class="fas fa-spinner animate-spin mr-2"></i>
+                                Creando usuario
+                            </span>
+                            <span *ngIf="!loading"> Crear usuario  </span>    
+                        </button>
             </div>
             <div class="w-full mx-2 flex-1">
-                <button routerLink="/dashboard/usuarios" 
-                        class="p-2 bg-gray-500 text-white w-full mt-3 rounded shadow"> Regresar </button>
+                <button 
+                        [disabled]="loading"
+                        [ngClass]="{'bg-gray-400' : loading, 'bg-gray-500' : !loading }"
+                        routerLink="/dashboard/usuarios" 
+                        class="p-2 text-white w-full mt-3 rounded shadow"> Regresar </button>
             </div>
         </div> 
     </form>

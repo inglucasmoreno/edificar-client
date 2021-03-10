@@ -12,6 +12,8 @@ import Swal from 'sweetalert2';
 })
 export class NuevoUsuarioComponent implements OnInit {
 
+  public loading = false;
+
   public usuarioForm = this.fb.group({
     dni: ['', Validators.required],
     apellido: ['', Validators.required],
@@ -56,6 +58,7 @@ export class NuevoUsuarioComponent implements OnInit {
       return;   
     }
 
+    this.loading = true;  // Comienza la creacion del usuario
     // Crear nuevo usuario
     this.usuariosService.nuevoUsuario(this.usuarioForm.value).subscribe(() => {
       Swal.fire({
@@ -64,6 +67,7 @@ export class NuevoUsuarioComponent implements OnInit {
         text: 'El usuario ha sido creado',
         confirmButtonText: 'Entendido'
       });
+      this.loading = false;  // Finaliza la creacion de usuario
       this.router.navigateByUrl('dashboard/usuarios');
     },( ({error}) => {
       Swal.fire({
@@ -72,6 +76,7 @@ export class NuevoUsuarioComponent implements OnInit {
         text: error.msg,
         confirmButtonText: 'Entendido'    
       });
+      this.loading = false;  // Finaliza la creacion de usuario
       return;  
     }));
   }

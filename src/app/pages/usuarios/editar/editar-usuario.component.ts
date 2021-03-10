@@ -24,6 +24,7 @@ export class EditarUsuarioComponent implements OnInit {
     activo: [true, Validators.required],
   });
   public loading = true;
+  public loadingEnd = false;
 
   constructor(private router: Router,
               private fb: FormBuilder,
@@ -63,6 +64,7 @@ export class EditarUsuarioComponent implements OnInit {
     return false;
     }
 
+    this.loadingEnd = true;  // Comienza la edicion de usuario
     this.usuariosService.actualizarUsuario(this.id, this.usuarioForm.value).subscribe(resp => {
       Swal.fire({
         icon: 'success',
@@ -71,10 +73,10 @@ export class EditarUsuarioComponent implements OnInit {
         showConfirmButton: false,
         timer: 1000
       });
-      this.loading = false;
+      this.loadingEnd = false;  // Finaliza la edicion de usuario
       this.router.navigateByUrl('dashboard/usuarios');
     }, ({error}) => {
-      this.loading = false;
+      this.loadingEnd = false;  // Finaliza la edicion de usuario
       Swal.fire({
         icon: 'info',
         title: 'Información',
