@@ -11,6 +11,7 @@ export class HeaderComponent implements OnInit {
 
   // Dropdown
   public showUsuarios = false;
+  public showProductos = false;
 
   public showMenu = true;
   public openAdmin = true;

@@ -13,6 +13,10 @@ import { NuevoUsuarioComponent } from './usuarios/nuevo-usuario.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ActualizarPasswordComponent } from './usuarios/editar/actualizar-password.component';
 import { EditarUsuarioComponent } from './usuarios/editar/editar-usuario.component';
+import { ProductosComponent } from './productos/productos.component';
+import { UnidadMedidaComponent } from './productos/unidad-medida/unidad-medida.component';
+import { NuevoProductoComponent } from './productos/nuevo-producto.component';
+import { EditarUnidadComponent } from './productos/unidad-medida/editar-unidad.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +26,10 @@ import { EditarUsuarioComponent } from './usuarios/editar/editar-usuario.compone
     NuevoUsuarioComponent,
     ActualizarPasswordComponent,
     EditarUsuarioComponent,
+    ProductosComponent,
+    UnidadMedidaComponent,
+    NuevoProductoComponent,
+    EditarUnidadComponent,
   ],
   imports: [
     CommonModule,

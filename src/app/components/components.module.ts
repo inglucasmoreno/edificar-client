@@ -4,13 +4,15 @@ import { TarjetaTablaComponent } from './tarjeta-tabla/tarjeta-tabla.component';
 import { PastillaEstadoComponent } from './pastilla-estado/pastilla-estado.component';
 import { TarjetaFormularioComponent } from './tarjeta-formulario/tarjeta-formulario.component';
 import { IconoTablaComponent } from './icono-tabla/icono-tabla.component';
+import { TarjetaMiniFomularioComponent } from './tarjeta-mini-fomulario/tarjeta-mini-fomulario.component';
 
 @NgModule({
   declarations: [
     TarjetaTablaComponent,
     PastillaEstadoComponent,
     TarjetaFormularioComponent,
-    IconoTablaComponent
+    IconoTablaComponent,
+    TarjetaMiniFomularioComponent
   ],
   imports: [
     CommonModule
@@ -18,7 +20,8 @@ import { IconoTablaComponent } from './icono-tabla/icono-tabla.component';
     TarjetaTablaComponent,
     PastillaEstadoComponent,
     TarjetaFormularioComponent,
-    IconoTablaComponent
+    IconoTablaComponent,
+    TarjetaMiniFomularioComponent
   ]
 })
 export class ComponentsModule { }
