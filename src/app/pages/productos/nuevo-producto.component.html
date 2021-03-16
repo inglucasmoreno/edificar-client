@@ -35,10 +35,8 @@
             <div class="w-full mx-2 flex-1">
                 <div class="font-bold mt-3 text-gray-600 text-sm"> Unidad de medida </div>
                 <div class="bg-white my-2 flex">
-                    <select class="border rounded p-1 py-2 w-full text-sm shadow"
-                           formControlName="unidad_medida">
-                        <option value="USER_ROLE"> UNIDAD </option>
-                        <option value="ADMIN_ROLE"> KILOGRAMO </option>
+                    <select class="border rounded p-1 py-2 w-full text-sm shadow" formControlName="unidad_medida">
+                        <option *ngFor="let unidad of unidades" [value]="unidad._id"> {{ unidad.descripcion }} </option>
                     </select>
                 </div>
             </div>
@@ -56,23 +54,29 @@
         </div>
         <div class="flex flex-col lg:flex-row">
             <div class="w-full mx-2 flex-1">
-                <div class="font-bold mt-3 text-gray-600 text-sm"> ¿Stock minimo? </div>
+                <div class="font-bold mt-3 text-gray-600 text-sm"> ¿Stock mínimo? </div>
                 <div class="bg-white my-2 flex">
-                    <select class="border rounded p-1 py-2 w-full shadow"
+                    <select (change)="stockMinimo = !stockMinimo"
+                            class="border rounded p-1 py-2 w-full shadow"
                             formControlName="stock_minimo">
-                        <option value="USER_ROLE"> No </option>
-                        <option value="ADMIN_ROLE"> Si </option>
+                        <option value=false> No </option>
+                        <option value=true> Si </option>
                     </select>
                 </div>
             </div>
             <div class="w-full mx-2 flex-1">
-                <div class="font-bold mt-3 text-gray-600 text-sm"> Stock minimo </div>
-                <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
-                    <input type="number" 
+                <div class="font-bold mt-3 text-gray-600 text-sm"> Stock mínimo </div>
+                <div *ngIf="stockMinimo" class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
+                    <input
+                           type="number" 
                            placeholder="Ej. 20" 
                            min="0"
                            formControlName="cantidad_minima"
                            class="p-1 px-2 appearance-none outline-none w-full text-gray-800"> </div>
+                <div *ngIf="!stockMinimo"
+                     class="border shadow p-2 my-2 text-gray-500 rounded bg-gray-100">
+                    Sin stock mínimo
+                </div>        
             </div>
         </div>
         <div class="flex flex-col lg:flex-row">
@@ -103,8 +107,7 @@
                         [ngClass]="{'bg-yellow-400' : loading, 'bg-yellow-500' : !loading}"
                         class="p-2 bg-yellow-500 text-white w-full mt-3 rounded shadow"> 
                             <span *ngIf="loading">
-                                <i class="fas fa-spinner animate-spin mr-2"></i>
-                                Creando usuario
+                                <i class="fas fa-spinner animate-spin"></i> Cargando
                             </span>
                             <span *ngIf="!loading"> Crear producto </span>    
                         </button>
