@@ -38,6 +38,15 @@ export class ProductosService {
     });  
   }
 
+  // Producto por ID
+  getProducto(id: string): Observable<any> {
+    return this.http.get(`${base_url}/productos/${id}`, {
+      headers: {
+        'x-token': localStorage.getItem('token')
+      }
+    })
+  }
+
   // Nuevo producto
   nuevoProducto(data: Producto): Observable<any> {
     return this.http.post(`${base_url}/productos`, data, { 

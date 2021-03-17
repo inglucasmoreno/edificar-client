@@ -32,7 +32,7 @@ export class ProductosComponent implements OnInit {
   // Ordenar
   public ordenar = {
     direccion: 1,  // Asc (1) | Desc (-1)
-    columna: 'descripcion'
+    columna: 'codigo'
   }
 
   constructor(private productosService: ProductosService) {}
