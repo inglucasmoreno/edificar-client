@@ -87,6 +87,7 @@ export class NuevoProductoComponent implements OnInit {
   }
 
   reiniciarFormulario() {
+    this.stockMinimo = false;
     this.productoForm.setValue({
       codigo: '',
       descripcion: '',
