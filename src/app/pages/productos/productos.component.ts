@@ -54,7 +54,7 @@ export class ProductosComponent implements OnInit {
       this.productos = productos;
       this.total = total;
     });
-    this.loading = false;
+      this.loading = false;
   }
 
   // Actualizar estado Activo/Inactivo

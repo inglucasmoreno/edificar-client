@@ -18,6 +18,7 @@ import { UnidadMedidaComponent } from './productos/unidad-medida/unidad-medida.c
 import { NuevoProductoComponent } from './productos/nuevo-producto.component';
 import { EditarUnidadComponent } from './productos/unidad-medida/editar-unidad.component';
 import { ProductoComponent } from './productos/producto.component';
+import { EditarProductoComponent } from './productos/editar/editar-producto/editar-producto.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { ProductoComponent } from './productos/producto.component';
     NuevoProductoComponent,
     EditarUnidadComponent,
     ProductoComponent,
+    EditarProductoComponent,
   ],
   imports: [
     CommonModule,

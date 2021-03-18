@@ -136,7 +136,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr [routerLink]="['/dashboard/producto/', producto._id]" class="animate__animated animate__fadeIn hover:bg-yellow-100 cursor-pointer" *ngFor="let producto of productos">
+                                <tr [ngClass]="{'bg-red-100 border': producto.stock_minimo | alertaStock : producto.cantidad : producto.cantidad_minima }" [routerLink]="['/dashboard/producto/', producto._id]" class="animate__animated animate__fadeIn hover:bg-yellow-100 cursor-pointer" *ngFor="let producto of productos">
                                     <td class="px-5 py-5 border-b border-gray-200 text-sm">
                                         <p class="text-gray-700  whitespace-no-wrap font-semibold tracking-wider">
                                             {{ producto.codigo }}
@@ -159,7 +159,7 @@
                                     </td>
                                     <td class="px-5 py-5 border-b border-gray-200 text-sm font-semibold">
                                         <span class="text-gray-900 whitespace-no-wrap tracking-wider">
-                                            {{ producto.precio }}
+                                            ${{ producto.precio }}
                                         </span>
                                     </td>
                                     <td class="px-5 py-5 border-b border-gray-200 text-sm text-center">
