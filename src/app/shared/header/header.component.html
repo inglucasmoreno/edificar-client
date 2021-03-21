@@ -16,6 +16,8 @@
           <i class="fas fa-home mr-1"></i>
           Home 
         </a>
+        
+        <!-- Boton Usuarios -->
         <div class="relative">
           <button (click)="showUsuarios = !showUsuarios" class="flex flex-row items-center w-full px-4 py-2 mt-2 text-sm font-semibold text-left bg-transparent rounded-lg lg:block focus:outline-none focus:shadow-outline">
             <span> 
@@ -31,6 +33,8 @@
             <a routerLinkActive="text-yellow-500" [routerLinkActiveOptions]="{exact:true}" routerLink="usuarios/nuevo" class="cursor-pointer block mb-1 px-4 py-2 text-sm font-semibold text-gray-900 bg-transparent rounded-lg hover:text-yellow-500 hover:text-gray-900 focus:outline-none focus:shadow-outline"> Nuevo usuario </a>
           </div>
         </div>
+
+        <!-- Boton Productos -->
         <div class="relative">
           <button (click)="showProductos = !showProductos" class="flex flex-row items-center w-full px-4 py-2 mt-2 text-sm font-semibold text-left bg-transparent rounded-lg lg:block focus:outline-none focus:shadow-outline">
             <span> 
@@ -51,6 +55,26 @@
             </a>
           </div>
         </div>
+
+        <!-- Boton Ingreso/Egreso -->
+        <div class="relative">
+          <button (click)="showIngresoEgreso = !showIngresoEgreso" class="flex flex-row items-center w-full px-4 py-2 mt-2 text-sm font-semibold text-left bg-transparent rounded-lg lg:block focus:outline-none focus:shadow-outline">
+            <span> 
+              <i class="fas fa-exchange-alt"></i>
+              Ingreso/Egreso
+            </span>
+            <svg fill="currentColor" [ngClass]="{'rotate-180': !showIngresoEgreso, 'rotate-0': showIngresoEgreso}" viewBox="0 0 20 20"  class="inline w-4 h-4 mt-1 ml-1 transition-transform duration-200 transform lg:-mt-1"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+          </button>
+          <div *ngIf="showIngresoEgreso" class="border bg-gray-100 rounded">
+            <a routerLinkActive="text-yellow-500" [routerLinkActiveOptions]="{exact:true}" routerLink="ingreso_productos" class="cursor-pointer block px-4 py-2 mt-1 text-sm font-semibold text-gray-900 bg-transparent rounded-lg hover:text-yellow-500 hover:text-gray-900 focus:outline-none focus:shadow-outline"> 
+              Ingreso de productos 
+            </a>
+            <a routerLinkActive="text-yellow-500" [routerLinkActiveOptions]="{exact:true}" routerLink="egreso_productos" class="cursor-pointer block px-4 py-2 mt-1 text-sm font-semibold text-gray-900 bg-transparent rounded-lg hover:text-yellow-500 hover:text-gray-900 focus:outline-none focus:shadow-outline"> 
+              Egreso de productos 
+            </a>
+          </div>        
+        </div>
+
         <a (click)="logout()" class="block px-4 py-2 mt-2 text-sm font-semibold hover:text-red-500 focus:bg-gray-200 focus:outline-none focus:shadow-outline cursor-pointer">
           <i class="fas fa-door-open mr-1"></i>
           Cerrar Sesion

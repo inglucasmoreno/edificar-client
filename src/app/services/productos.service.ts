@@ -21,7 +21,6 @@ export class ProductosService {
     descripcion: string = '',
     direccion: number = 1,
     columna: string = 'descripcion'
-
   ): Observable<any> {
     return this.http.get(`${base_url}/productos`,{
       params: {

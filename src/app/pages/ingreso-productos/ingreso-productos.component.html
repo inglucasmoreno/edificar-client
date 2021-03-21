@@ -1,0 +1,184 @@
+<app-tarjeta-tabla>
+    <div class="antialiased font-sans bg-white">
+        <div class="container mx-auto px-4 sm:px-8">
+            <div class="py-8">
+                <div>
+                    <h2 class="text-2xl font-semibold leading-tight text-gray-600">
+                        Ingresos ({{ total }})
+                    </h2>
+                </div>
+                <div class="md:flex md:items-center md:justify-between">
+                    <div class="md:flex md:items-center md:justify-between">
+                        <div class="my-2 flex sm:flex-row flex-col">
+                            <div class="flex flex-row mb-1 sm:mb-0">
+                                <div class="relative">
+                                    <select
+                                        #txtActivo
+                                        (change)="filtrarActivos(txtActivo.value)"
+                                        class="appearance-none h-full rounded-r border-t border-l rounded-l sm:rounded-r-none sm:border-r-0 border-r border-b block appearance-none w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500">
+                                        <option value="En proceso"> En proceso </option>
+                                        <option value="Pendiente"> Pendientes </option>
+                                        <option value="Completado"> Completados </option>
+                                    </select>
+                                    <div
+                                        class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="block relative">
+                                    <span class="h-full absolute inset-y-0 left-0 flex items-center pl-2">
+                                        <svg viewBox="0 0 24 24" class="h-4 w-4 fill-current text-gray-500">
+                                            <path
+                                                d="M10 4a6 6 0 100 12 6 6 0 000-12zm-8 6a8 8 0 1114.32 4.906l5.387 5.387a1 1 0 01-1.414 1.414l-5.387-5.387A8 8 0 012 10z">
+                                            </path>
+                                        </svg>
+                                    </span>
+                                        <input
+                                            #txtDescripcion
+                                            placeholder="Buscar"
+                                            (keyup)="filtrarDescripcion(txtDescripcion.value)"
+                                            class="appearance-none rounded-r rounded-l sm:rounded-l-none border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none" />
+                                </div>
+                                <span *ngIf="loading">
+                                    <i class="fas fa-spinner animate-spin text-2xl text-gray-400 ml-2"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <button class="border p-2 rounded shadow bg-yellow-500 text-white">
+                            Nuevo ingreso
+                        </button>
+                    </div>
+                </div>
+                <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+                    <div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
+                        <table class="min-w-full leading-normal">
+                            <thead>
+                                <tr>
+                                    <th
+                                        (click)="ordenarPorColumna('numero_remito')"
+                                        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        <div class="cursor-pointer flex items-center focus:outline-none">
+                                            <span> N° Remito </span>
+                                            <span class="ml-2">
+                                                <i *ngIf="ordenar.columna == 'numero_remito' && ordenar.direccion == 1" class="fas fa-chevron-down"></i>
+                                                <i *ngIf="ordenar.columna == 'numero_remito' && ordenar.direccion == -1" class="fas fa-chevron-up"></i>
+                                            </span>
+                                        </div>
+                                    </th>
+                                    <th
+                                    (click)="ordenarPorColumna('razon_social_proveedor')"
+                                    class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    <div class="cursor-pointer flex items-center focus:outline-none">
+                                        <span> Proveedor </span>
+                                            <span class="ml-2">
+                                                <i *ngIf="ordenar.columna == 'razon_social_proveedor' && ordenar.direccion == 1" class="fas fa-chevron-down"></i>
+                                                <i *ngIf="ordenar.columna == 'razon_social_proveedor' && ordenar.direccion == -1" class="fas fa-chevron-up"></i>
+                                            </span>
+                                        </div>
+                                    </th>
+                                    <th
+                                    (click)="ordenarPorColumna('createdAt')"
+                                    class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    <div class="cursor-pointer flex items-center focus:outline-none">
+                                        <span> Fecha de creación </span>
+                                            <span class="ml-2">
+                                                <i *ngIf="ordenar.columna == 'createdAt' && ordenar.direccion == 1" class="fas fa-chevron-down"></i>
+                                                <i *ngIf="ordenar.columna == 'createdAt' && ordenar.direccion == -1" class="fas fa-chevron-up"></i>
+                                            </span>
+                                        </div>
+                                    </th>
+                                    <th
+                                    (click)="ordenarPorColumna('fecha_ingreso')"
+                                    class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    <div class="cursor-pointer flex items-center focus:outline-none">
+                                        <span> Fecha de ingreso </span>
+                                            <span class="ml-2">
+                                                <i *ngIf="ordenar.columna == 'fecha_ingreso' && ordenar.direccion == 1" class="fas fa-chevron-down"></i>
+                                                <i *ngIf="ordenar.columna == 'fecha_ingreso' && ordenar.direccion == -1" class="fas fa-chevron-up"></i>
+                                            </span>
+                                        </div>
+                                    </th>
+                                    <th
+                                    (click)="ordenarPorColumna('estado')"
+                                    class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    <div class="cursor-pointer flex items-center focus:outline-none">
+                                        <span> Estado </span>
+                                            <span class="ml-2">
+                                                <i *ngIf="ordenar.columna == 'estado' && ordenar.direccion == 1" class="fas fa-chevron-down"></i>
+                                                <i *ngIf="ordenar.columna == 'estado' && ordenar.direccion == -1" class="fas fa-chevron-up"></i>
+                                            </span>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="animate__animated animate__fadeIn" *ngFor="let ingreso of ingresos">
+                                    <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                                        <p class="text-gray-900 whitespace-no-wrap font-semibold">
+                                            {{ ingreso.numero_remito }}
+                                        </p>
+                                    </td>
+                                    <td class="px-5 py-5 border-b border-gray-200 text-xs">
+                                        <p class="text-gray-900 whitespace-no-wrap">
+                                            {{ ingreso.razon_social_proveedor }}
+                                        </p>
+                                    </td>
+                                    <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                                        <p class="text-gray-900 whitespace-no-wrap">
+                                            {{ ingreso.createdAt | fecha }}
+                                        </p>
+                                    </td>
+                                    <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                                        <p class="text-gray-900 whitespace-no-wrap">
+                                            {{ 
+                                                ingreso.estado !== 'Completado'
+                                                ? 'Sin ingresar'
+                                                : ingreso.fecha_despacho | fecha
+                                            }}
+                                        </p>
+                                    </td>
+                                    <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                                        <p class="text-gray-900 whitespace-no-wrap font-semibold">
+                                            {{ ingreso.estado }}
+                                        </p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div
+                            class="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between          ">
+
+                            <span class="text-xs xs:text-sm text-gray-900">
+                                Mostrando {{ total > 0 ? paginacion.desde + 1 : 0 }} - {{ paginacion.hasta < total ? paginacion.hasta : total }} de {{ total }} unidades
+                            </span>
+                            <div class="inline-flex mt-2 xs:mt-0">
+                                <button
+                                    (click)="actualizarDesdeHasta('anterior')"
+                                    [disabled]="loading"
+                                    [ngClass]="{'text-gray-400': loading, 'text-gray-800': !loading}"
+                                    class="text-sm bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded-l">
+                                    Anterior
+                                </button>
+                                <button
+                                    (click)="actualizarDesdeHasta('siguiente')"
+                                    [disabled]="loading"
+                                    [ngClass]="{'text-gray-400': loading, 'text-gray-800': !loading}"
+                                    class="text-sm bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded-r">
+                                    Proximo
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</app-tarjeta-tabla>
+<br>
+<br>
