@@ -14,6 +14,8 @@ import { ProductoComponent } from './productos/producto.component';
 import { EditarProductoComponent } from './productos/editar/editar-producto/editar-producto.component';
 import { IngresoProductosComponent } from './ingreso-productos/ingreso-productos.component';
 import { EgresoProductosComponent } from './egreso-productos/egreso-productos.component';
+import { NuevoIngresoComponent } from './ingreso-productos/nuevo-ingreso.component';
+import { NuevoEgresoComponent } from './egreso-productos/nuevo-egreso.component';
 
 const childRoutes: Routes = [
   { path: 'home' , component: HomeComponent },
@@ -32,9 +34,11 @@ const childRoutes: Routes = [
 
   // Ingreso de productos
   { path: 'ingreso_productos' , component: IngresoProductosComponent},
+  { path: 'ingreso_productos/nuevo' , component: NuevoIngresoComponent},
 
   // Egreso de productos
   { path: 'egreso_productos' , component: EgresoProductosComponent},
+  { path: 'egreso_productos/nuevo' , component: NuevoEgresoComponent},
 
   // Unidades de medida
   { path: 'unidad-medida' , component: UnidadMedidaComponent},

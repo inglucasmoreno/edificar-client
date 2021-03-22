@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import Swal from 'sweetalert2';
 import { Ingreso } from '../../models/ingreso.model';
 import { IngresosService } from '../../services/ingresos.service';
 
@@ -50,6 +51,13 @@ export class IngresoProductosComponent implements OnInit {
       this.ingresos = ingresos;
       this.total = total;
       this.loading = false;
+    },({error})=>{
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: error.msg,
+        confirmButtonText: 'Entendido'
+      })  
     });
   }
 

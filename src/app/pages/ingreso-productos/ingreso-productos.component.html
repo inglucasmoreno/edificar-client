@@ -50,7 +50,8 @@
                         </div>
                     </div>
                     <div>
-                        <button class="border p-2 rounded shadow bg-yellow-500 text-white">
+                        <button class="border p-2 rounded shadow bg-yellow-500 text-white"
+                                routerLink="nuevo">
                             Nuevo ingreso
                         </button>
                     </div>
@@ -118,10 +119,10 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr class="animate__animated animate__fadeIn" *ngFor="let ingreso of ingresos">
+                                <tr class="animate__animated animate__fadeIn hover:bg-yellow-100 cursor-pointer" *ngFor="let ingreso of ingresos">
                                     <td class="px-5 py-5 border-b border-gray-200 text-sm">
                                         <p class="text-gray-900 whitespace-no-wrap font-semibold">
-                                            {{ ingreso.numero_remito }}
+                                           {{ ingreso.numero_remito }}
                                         </p>
                                     </td>
                                     <td class="px-5 py-5 border-b border-gray-200 text-xs">
@@ -145,7 +146,7 @@
                                     </td>
                                     <td class="px-5 py-5 border-b border-gray-200 text-sm">
                                         <p class="text-gray-900 whitespace-no-wrap font-semibold">
-                                            {{ ingreso.estado }}
+                                            <app-pastilla-etapa [estado]=ingreso.estado ></app-pastilla-etapa>
                                         </p>
                                     </td>
                                 </tr>

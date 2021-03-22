@@ -5,6 +5,7 @@ import { PastillaEstadoComponent } from './pastilla-estado/pastilla-estado.compo
 import { TarjetaFormularioComponent } from './tarjeta-formulario/tarjeta-formulario.component';
 import { IconoTablaComponent } from './icono-tabla/icono-tabla.component';
 import { TarjetaMiniFomularioComponent } from './tarjeta-mini-fomulario/tarjeta-mini-fomulario.component';
+import { PastillaEtapaComponent } from './pastilla-etapa/pastilla-etapa.component';
 
 @NgModule({
   declarations: [
@@ -12,7 +13,8 @@ import { TarjetaMiniFomularioComponent } from './tarjeta-mini-fomulario/tarjeta-
     PastillaEstadoComponent,
     TarjetaFormularioComponent,
     IconoTablaComponent,
-    TarjetaMiniFomularioComponent
+    TarjetaMiniFomularioComponent,
+    PastillaEtapaComponent
   ],
   imports: [
     CommonModule
@@ -21,7 +23,8 @@ import { TarjetaMiniFomularioComponent } from './tarjeta-mini-fomulario/tarjeta-
     PastillaEstadoComponent,
     TarjetaFormularioComponent,
     IconoTablaComponent,
-    TarjetaMiniFomularioComponent
+    TarjetaMiniFomularioComponent,
+    PastillaEtapaComponent
   ]
 })
 export class ComponentsModule { }

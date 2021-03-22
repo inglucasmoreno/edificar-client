@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import Swal from 'sweetalert2';
 import { Egreso } from '../../models/egreso.model';
 import { EgresoService } from '../../services/egreso.service';
 
@@ -52,6 +53,13 @@ export class EgresoProductosComponent implements OnInit {
       this.egresos = egresos;
       this.total = total;
       this.loading = false;
+    },({error})=>{
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: error.msg,
+        confirmButtonText: 'Entendido'
+      })
     });
   }
 
