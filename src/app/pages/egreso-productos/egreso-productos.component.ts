@@ -60,6 +60,7 @@ export class EgresoProductosComponent implements OnInit {
         text: error.msg,
         confirmButtonText: 'Entendido'
       })
+      this.loading = false;
     });
   }
 

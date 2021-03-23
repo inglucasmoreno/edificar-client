@@ -119,7 +119,8 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr class="animate__animated animate__fadeIn hover:bg-yellow-100 cursor-pointer" *ngFor="let egreso of egresos">
+                                <tr [routerLink]="['/dashboard/egreso_productos/detalles/', egreso._id]"
+                                    class="animate__animated animate__fadeIn hover:bg-yellow-100 cursor-pointer" *ngFor="let egreso of egresos">
                                     <td class="px-5 py-5 border-b border-gray-200 text-sm">
                                         <p class="text-gray-900 whitespace-no-wrap font-semibold">
                                             {{ egreso.codigo }}
@@ -156,7 +157,7 @@
                             class="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between          ">
 
                             <span class="text-xs xs:text-sm text-gray-900">
-                                Mostrando {{ total > 0 ? paginacion.desde + 1 : 0 }} - {{ paginacion.hasta < total ? paginacion.hasta : total }} de {{ total }} unidades
+                                Mostrando {{ total > 0 ? paginacion.desde + 1 : 0 }} - {{ paginacion.hasta < total ? paginacion.hasta : total }} de {{ total }} egresos
                             </span>
                             <div class="inline-flex mt-2 xs:mt-0">
                                 <button

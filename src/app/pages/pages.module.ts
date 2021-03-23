@@ -23,6 +23,8 @@ import { IngresoProductosComponent } from './ingreso-productos/ingreso-productos
 import { EgresoProductosComponent } from './egreso-productos/egreso-productos.component';
 import { NuevoIngresoComponent } from './ingreso-productos/nuevo-ingreso.component';
 import { NuevoEgresoComponent } from './egreso-productos/nuevo-egreso.component';
+import { EgresoDetallesComponent } from './egreso-productos/egreso-detalles.component';
+import { IngresoDetallesComponent } from './ingreso-productos/ingreso-detalles.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +44,8 @@ import { NuevoEgresoComponent } from './egreso-productos/nuevo-egreso.component'
     EgresoProductosComponent,
     NuevoIngresoComponent,
     NuevoEgresoComponent,
+    EgresoDetallesComponent,
+    IngresoDetallesComponent,
   ],
   imports: [
     CommonModule,

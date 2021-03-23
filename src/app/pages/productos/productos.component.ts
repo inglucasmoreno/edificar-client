@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
 import { Producto } from 'src/app/models/producto.model';
 import Swal from 'sweetalert2';
 import { ProductosService } from '../../services/productos.service';
@@ -53,8 +52,15 @@ export class ProductosComponent implements OnInit {
     ).subscribe( ({productos, total}) => {
       this.productos = productos;
       this.total = total;
-    });
       this.loading = false;
+    },({error})=>{
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: error.msg,
+        confirmButtonText: 'Entendido'
+      });
+    });
   }
 
   // Actualizar estado Activo/Inactivo
@@ -79,14 +85,15 @@ export class ProductosComponent implements OnInit {
             showConfirmButton: false,
             timer: 1000
           });
-        }, ({error}) => {
           this.loading = false;
+        }, ({error}) => {
           Swal.fire({
             icon: 'error',
             title: 'Error',
             text: error.msg,
             confirmButtonText: 'Entendido'
           });
+          this.loading = false;
         });
       }
     });

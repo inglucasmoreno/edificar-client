@@ -16,6 +16,8 @@ import { IngresoProductosComponent } from './ingreso-productos/ingreso-productos
 import { EgresoProductosComponent } from './egreso-productos/egreso-productos.component';
 import { NuevoIngresoComponent } from './ingreso-productos/nuevo-ingreso.component';
 import { NuevoEgresoComponent } from './egreso-productos/nuevo-egreso.component';
+import { IngresoDetallesComponent } from './ingreso-productos/ingreso-detalles.component';
+import { EgresoDetallesComponent } from './egreso-productos/egreso-detalles.component';
 
 const childRoutes: Routes = [
   { path: 'home' , component: HomeComponent },
@@ -35,10 +37,13 @@ const childRoutes: Routes = [
   // Ingreso de productos
   { path: 'ingreso_productos' , component: IngresoProductosComponent},
   { path: 'ingreso_productos/nuevo' , component: NuevoIngresoComponent},
+  { path: 'ingreso_productos/detalles/:id' , component: IngresoDetallesComponent},
+
 
   // Egreso de productos
   { path: 'egreso_productos' , component: EgresoProductosComponent},
   { path: 'egreso_productos/nuevo' , component: NuevoEgresoComponent},
+  { path: 'egreso_productos/detalles/:id' , component: EgresoDetallesComponent},
 
   // Unidades de medida
   { path: 'unidad-medida' , component: UnidadMedidaComponent},

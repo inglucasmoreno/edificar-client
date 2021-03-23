@@ -11,6 +11,13 @@ const base_url = environment.base_url;
 export class IngresosService {
   constructor(private http : HttpClient) { }
   
+  // Nuevo ingreso
+  nuevoIngreso(data: any): Observable<any>{
+    return this.http.post(`${base_url}/ingresos`, data, {
+      headers: {'x-token' : localStorage.getItem('token')}
+    });
+  }
+
   // Listar ingresos
   listarIngresos(
     limit = 0, 

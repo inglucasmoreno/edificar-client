@@ -11,6 +11,13 @@ const base_url = environment.base_url;
 export class EgresoService {
   constructor(private http:HttpClient) { }
 
+  // Nuevo egreso
+  nuevoEgreso(data: any): Observable<any> {
+    return this.http.post(`${base_url}/egresos`, data, {
+      headers: {'x-token': localStorage.getItem('token')}
+    });  
+  }
+
   // Listar egresos
   listarEgresos(
     limit = 0, 

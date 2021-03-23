@@ -12,7 +12,9 @@
             </div>
         </h1>
         <div>
-          <button class="py-2 px-4 bg-gray-500 text-white rounded shadow"
+          <button [ngClass]="{'bg-gray-400': loading, 'bg-gray-500': !loading}"
+                  class="py-2 px-4 text-white rounded shadow"
+                  [disabled]="loading"
                   (click)="crearIngreso(txtNumeroRemito.value)"
           > <i class="fas fa-check"></i> </button>
         </div>
@@ -22,7 +24,7 @@
         <label for="numero_remito" class="font-semibold"> Número de remito </label>
         <input type="text"
                #txtNumeroRemito
-               class="block p-2 rounded border shadow mt-1"
+               class="block p-2 rounded border shadow mt-2"
                id="numero_remito"
                placeholder="N° de remito">
       </div>      
@@ -40,8 +42,15 @@
                    #txtBuscar 
                    placeholder="CUIT o Razón social" 
                    (keyup)="buscarProveedor(txtBuscar.value)"
-                   class="my-2 w-full text-sm bg-grey-light text-grey-darkest rounded h-10 p-3 focus:outline-none border shadow">
-            <div *ngIf="!proveedorSeleccionado" class="w-full">
+                   class="my-2 w-full text-sm bg-grey-light text-grey-darkest rounded h-10 p-3 focus:outline-none border shadow">          
+            
+            <!-- Loading -->
+            <div *ngIf="loading" class="text-gray-500 w-full">
+              <i class="fas fa-spinner animate-spin text-gray-400 ml-2"></i> cargando
+            </div>
+            
+            <!-- Proveedores -->
+            <div *ngIf="!proveedorSeleccionado && !loading" class="w-full">
               <div *ngFor="let proveedor of proveedores" 
                    class="animate__animated animate__fadeIn flex my-1 cursor-pointer hover:bg-blue-lightest rounded text-xs border shadow hover:bg-yellow-100"
                    (click)="seleccionarProveedor(proveedor)"
@@ -54,6 +63,7 @@
                 </div>
               </div>
             </div>
+          
           </div>            
     </div>
 

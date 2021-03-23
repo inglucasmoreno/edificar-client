@@ -57,7 +57,8 @@ export class IngresoProductosComponent implements OnInit {
         title: 'Error',
         text: error.msg,
         confirmButtonText: 'Entendido'
-      })  
+      })
+      this.loading = false;  
     });
   }
 
