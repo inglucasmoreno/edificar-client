@@ -2,25 +2,28 @@
 <app-tarjeta-formulario>
     <div class="p-4 flex items-center justify-between mr-2">
         <div class="flex items-center">
-            <h1 class="flex items-center text-gray-700">
-                <i routerLink="/dashboard/egreso_productos" class="fas fa-arrow-left border bg-gray-500 text-white border-gray-300 rounded p-2 px-3 shadow cursor-pointer"></i>
-                <div class="flex flex-col ml-2">
-                    <span class="ml-2 text-xl text-gray-600"> Egreso </span>
-                    <span class="text-xs mt-1 ml-1 font-semibold border py-1 px-2 rounded text-white bg-yellow-500"> 
-                        <i class="fas fa-plus-circle"></i>
-                        Nuevo egreso
-                    </span>
-                </div>
-            </h1>
+            <div class="flex items-center">
+                <h1  class="flex items-center text-gray-700">
+                    <i [routerLink]="['/dashboard/egreso_productos/detalles', id]" class="fas fa-arrow-left border bg-gray-500 text-white border-gray-300 rounded p-2 px-3 shadow cursor-pointer"></i>               
+                    <div class="flex flex-col ml-2">
+                        <span class="ml-2 text-xl text-gray-600"> Egreso </span>
+                        <span class="text-xs mt-1 ml-1 font-semibold border py-1 px-2 rounded text-white bg-yellow-500"> 
+                            <i class="fas fa-pencil-alt"></i>
+                            Editando egreso
+                        </span>
+                    </div>
+                </h1>
+                <i *ngIf="loadingFinal" class="fas fa-spinner animate-spin text-2xl text-gray-400 ml-3"></i>
+            </div>
             <div *ngIf="loading" class="ml-2">
                 <i class="fas fa-spinner animate-spin text-gray-400 ml-1 text-2xl"></i> 
             </div>
         </div>
         <div>
           <button   class="py-2 px-4 text-white rounded shadow"
-                    [ngClass]="{'bg-gray-400':loading, 'bg-gray-500': !loading}"
-                    [disabled]="loading"
-                    (click)="crearEgreso()" 
+                    [ngClass]="{'bg-gray-400':loading || loadingFinal, 'bg-gray-500': !loading && !loadingFinal}"
+                    [disabled]="loading || loadingFinal"
+                    (click)="actualizarEgreso()" 
           > <i class="fas fa-check"></i> </button>
         </div>
     </div>

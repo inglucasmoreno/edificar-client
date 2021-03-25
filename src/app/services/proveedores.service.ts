@@ -10,7 +10,15 @@ const base_url = environment.base_url;
 })
 export class ProveedoresService {
   constructor(private http: HttpClient) {}
-  
+
+  // Proveedor por ID
+  getProveedor(id: string): Observable<any> {
+    return this.http.get(`${base_url}/proveedores/${id}`, {
+      headers: {'x-token': localStorage.getItem('token')}
+    })
+  }
+
+  // Listar proveedores
   listarProveedores(
     limit = 0, 
     desde = 0, 
@@ -31,5 +39,20 @@ export class ProveedoresService {
       headers:{'x-token': localStorage.getItem('token')}
     });
   }
+
+  // Nuevo proveedor
+  nuevoProveedor(data: any): Observable<any> {
+    return this.http.post(`${base_url}/proveedores`, data, {
+      headers: {'x-token': localStorage.getItem('token')}
+    })
+  }
+
+  // Actualizar proveedor
+  actualizarProveedor(id: string, data: any): Observable<any> {
+    return this.http.put(`${base_url}/proveedores/${id}`, data, {
+      headers: {'x-token': localStorage.getItem('token')}
+    })  
+  }
+
 
 }

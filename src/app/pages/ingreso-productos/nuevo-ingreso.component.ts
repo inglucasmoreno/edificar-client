@@ -15,6 +15,7 @@ import { ProveedoresService } from '../../services/proveedores.service';
 export class NuevoIngresoComponent implements OnInit {
 
   public loading = false;
+  public loadingFinal = false;
   public numero_remito = '';
   public proveedores: Proveedor[] = [];
   public proveedor: Proveedor;
@@ -44,21 +45,23 @@ export class NuevoIngresoComponent implements OnInit {
     
     // Se crea nuevo ingreso  
     const data = {
+      proveedor: this.proveedor._id,
       numero_remito: numeroRemito,
       razon_social_proveedor: this.proveedor.razon_social,
       cuit_proveedor: this.proveedor.cuit
     }
 
-    this.loading = true;
-    this.ingresosService.nuevoIngreso(data).subscribe(() => {
+    this.loadingFinal = true;
+    this.ingresosService.nuevoIngreso(data).subscribe(({ingreso}) => {
       Swal.fire({
         icon: 'success',
         title: 'Completado',
         text: 'Nuevo ingreso creado correctamente',
         showConfirmButton: false,
         timer: 1000
-      });  
-      this.router.navigateByUrl('dashboard/ingreso_productos');
+      });
+      this.loadingFinal = false;  
+      this.router.navigateByUrl(`dashboard/ingreso_productos/detalles/${ingreso._id}`);
     },({error}) => {
       Swal.fire({
         icon: 'error',
@@ -66,7 +69,7 @@ export class NuevoIngresoComponent implements OnInit {
         text: error.msg,
         confirmButtonText: 'Entendido'
       }),
-      this.loading = false;
+      this.loadingFinal = false;
     });
   }
 

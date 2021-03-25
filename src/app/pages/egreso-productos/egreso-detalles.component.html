@@ -1,1 +1,65 @@
-<p>egreso-detalles works!</p>
+<app-tarjeta-formulario >
+    <h1 class="flex items-center text-gray-700 px-2 pt-1">
+        <i routerLink="/dashboard/egreso_productos" class="fas fa-arrow-left border bg-gray-500 text-white border-gray-300 rounded p-2 px-3 shadow cursor-pointer"></i>
+        <div *ngIf="loading" class="flex flex-col ml-2">
+            <span class="ml-2 text-xl text-gray-600"> Egreso </span>
+            <span class="text-xs mt-1 ml-1 font-semibold border py-1 px-2 rounded text-white bg-gray-500"> 
+                <i class="fas fa-spinner animate-spin text-gray-600 mr-1"></i>          
+                Cargando estado
+            </span>
+        </div>
+        <div *ngIf="!loading" class="flex flex-col ml-2">
+            <span class="ml-2 text-xl text-gray-600"> Egreso </span>
+            <span [ngClass]="{'bg-yellow-500':egreso.estado == 'En proceso', 'bg-blue-500':egreso.estado == 'Pendiente', 'bg-green-500':egreso.estado == 'Completado'}"
+                  class="text-xs mt-1 ml-1 font-semibold border py-1 px-2 rounded text-white">
+                {{ egreso.estado }} 
+            </span>
+        </div>
+    </h1>    
+    
+    <div *ngIf="loading">
+        <i class="fas fa-spinner animate-spin text-gray-400 ml-2 text-gray-500 mt-5"></i> Cargando egreso
+    </div>
+    <div *ngIf="!loading" class="p-4">
+        <div class="flex items-center justify-between bg-yellow-100 p-2 rounded border">
+            <h1 class="font-semibold text-gray-600"> Datos del egreso </h1>
+            <i [routerLink]="['/dashboard/egreso_productos/editar', egreso._id]" *ngIf="egreso.estado == 'En proceso'" class="fas fa-pencil-alt text-gray-600 mr-2 cursor-pointer hover:text-yellow-500"></i>
+        </div>
+        <div class="flex flex-col lg:flex-row">
+            <div class="w-full mx-2 flex-1 svelte-1l8159u">
+                <div class="font-bold mt-3 text-gray-600 text-sm"> Codigo de egreso </div>
+                <div class="block p-2 rounded border shadow mt-2 bg-gray-100">
+                    {{ egreso.codigo }}
+                </div>
+            </div>
+            <div class="w-full mx-2 flex-1 svelte-1l8159u"></div>
+        </div> 
+        <div class="flex flex-col lg:flex-row">
+            <div class="w-full mx-2 flex-1 svelte-1l8159u">
+                <div class="font-bold mt-3 text-gray-600 text-sm"> Cliente </div>
+                <div class="block p-2 rounded border shadow mt-2 bg-gray-100">
+                    {{ egreso.descripcion_cliente }}
+                </div>
+            </div>
+            <div class="w-full mx-2 flex-1 svelte-1l8159u">
+                <div class="font-bold mt-3 text-gray-600 text-sm"> {{ egreso.tipo_identificacion_cliente }} </div>
+                <div class="block p-2 rounded border shadow mt-2 bg-gray-100">
+                    {{ egreso.identificacion_cliente }}    
+                </div>
+            </div>
+        </div> 
+        <div class="flex items-center justify-between bg-yellow-100 p-2 rounded border mt-4">
+            <h1 class="font-semibold text-gray-600"> Detalles de productos </h1>
+            <i *ngIf="egreso.estado == 'En proceso'" class="fas fa-pencil-alt text-gray-600 mr-2 cursor-pointer hover:text-yellow-500"></i>
+        </div>
+        <button class="border rounded p-2 mt-3 bg-yellow-500 text-white">
+            <i class="fas fa-plus text-xs"></i>
+            Agregar productos
+        </button>  
+    </div>
+       
+    <br>
+
+</app-tarjeta-formulario>
+
+

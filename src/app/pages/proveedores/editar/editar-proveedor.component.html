@@ -1,0 +1,85 @@
+<app-tarjeta-formulario>
+    <div class="p-4">
+        <h1 class="flex items-center text-gray-700">
+            <i routerLink="/dashboard/proveedores" class="fas fa-arrow-left border bg-gray-500 text-white border-gray-300 rounded p-2 px-3 shadow cursor-pointer"></i>
+            <div class="flex flex-col ml-2">
+                <span class="ml-2 text-xl text-gray-600"> Proveedores </span>
+                <span class="text-xs mt-1 ml-1 font-semibold border py-1 px-2 rounded text-white bg-yellow-500"> 
+                    <i class="fas fa-pencil-alt"></i>
+                    Editando proveedor
+                </span>
+            </div>
+        </h1>
+    </div>
+    <form
+        [formGroup]="proveedorForm"
+        class="px-5 pb-5">
+        <div class="flex flex-col lg:flex-row">
+            <div class="w-full mx-2 flex-1 svelte-1l8159u">
+                <div class="font-bold mt-3 text-gray-600 text-sm"> Razón Social </div>
+                <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
+                    <input placeholder="Ej. Equinoccio Technology"
+                           formControlName="razon_social" 
+                           class="p-1 px-2 appearance-none outline-none w-full text-gray-800"
+                           ></div>
+            </div>
+            <div class="w-full mx-2 flex-1 svelte-1l8159u">
+                <div class="font-bold mt-3 text-gray-600 text-sm"> CUIT </div>
+                <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
+                    <input placeholder="Ej. 24340603989"
+                           formControlName="cuit"
+                           class="p-1 px-2 appearance-none outline-none w-full text-gray-800"></div>
+            </div>
+        </div>
+        <div class="flex flex-col lg:flex-row">
+            <div class="w-full mx-2 flex-1 svelte-1l8159u">
+                <div class="font-bold mt-3 text-gray-600 text-sm"> Domicilio </div>
+                <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
+                    <input placeholder="No es obligatorio" 
+                           formControlName="domicilio"
+                           class="p-1 px-2 appearance-none outline-none w-full text-gray-800"
+                           ></div>
+            </div>
+        </div>
+        <div class="flex flex-col lg:flex-row">
+            <div class="w-full mx-2 flex-1">
+                <div class="font-bold mt-3 text-gray-600 text-sm"> Estado </div>
+                <div class="bg-white my-2 flex">
+                    <select
+                            formControlName="activo"
+                            class="border rounded p-1 py-2 w-full shadow">
+                        <option value=true> Activo </option>
+                        <option value=false> Inactivo </option>
+                    </select>
+                </div>
+            </div>
+            <div class="w-full mx-2 flex-1 svelte-1l8159u"></div>
+        </div>
+        <div class="flex flex-col lg:flex-row mt-2">
+            <div class="w-full mx-2 flex-1">
+                <button 
+                        (click)="actualizarProveedor()"
+                        [disabled]="loading"
+                        [ngClass]="{'bg-yellow-400' : loading, 'bg-yellow-500' : !loading}"
+                        class="p-2 bg-yellow-500 text-white w-full mt-3 rounded shadow"> 
+                            <span *ngIf="loading">
+                                <i class="fas fa-spinner animate-spin"></i> Cargando
+                            </span>
+                            <span *ngIf="!loading"> Actualizar proveedor </span>    
+                        </button>
+            </div>
+            <div class="w-full mx-2 flex-1">
+                <button 
+                        [disabled]="loading"
+                        [ngClass]="{'bg-gray-400' : loading, 'bg-gray-500' : !loading }"
+                        routerLink="/dashboard/proveedores" 
+                        class="p-2 text-white w-full mt-3 rounded shadow"> Regresar </button>
+            </div>
+        </div> 
+    </form>
+</app-tarjeta-formulario>
+<br>
+<br>
+
+
+

@@ -30,7 +30,7 @@ export class NuevoEgresoComponent implements OnInit {
   crearEgreso(): void {
     if(this.egresoForm.valid){
       this.loading = true;
-      this.egresoService.nuevoEgreso(this.egresoForm.value).subscribe(()=>{
+      this.egresoService.nuevoEgreso(this.egresoForm.value).subscribe(({egreso})=>{
         Swal.fire({
           icon: 'success',
           title: 'Completado',
@@ -39,7 +39,7 @@ export class NuevoEgresoComponent implements OnInit {
           timer: 1000
         });
         this.loading = false;
-        this.router.navigateByUrl('/dashboard/egreso_productos');
+        this.router.navigateByUrl(`/dashboard/egreso_productos/detalles/${egreso._id}`);
       },({error})=>{
         Swal.fire({
           icon: 'error',

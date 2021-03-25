@@ -25,6 +25,11 @@ import { NuevoIngresoComponent } from './ingreso-productos/nuevo-ingreso.compone
 import { NuevoEgresoComponent } from './egreso-productos/nuevo-egreso.component';
 import { EgresoDetallesComponent } from './egreso-productos/egreso-detalles.component';
 import { IngresoDetallesComponent } from './ingreso-productos/ingreso-detalles.component';
+import { ProveedoresComponent } from './proveedores/proveedores.component';
+import { NuevoProveedorComponent } from './proveedores/nuevo-proveedor.component';
+import { EditarProveedorComponent } from './proveedores/editar/editar-proveedor.component';
+import { EditarEgresoComponent } from './egreso-productos/editar/editar-egreso.component';
+import { EditarIngresoComponent } from './ingreso-productos/editar/editar-ingreso.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +51,11 @@ import { IngresoDetallesComponent } from './ingreso-productos/ingreso-detalles.c
     NuevoEgresoComponent,
     EgresoDetallesComponent,
     IngresoDetallesComponent,
+    ProveedoresComponent,
+    NuevoProveedorComponent,
+    EditarProveedorComponent,
+    EditarEgresoComponent,
+    EditarIngresoComponent,
   ],
   imports: [
     CommonModule,

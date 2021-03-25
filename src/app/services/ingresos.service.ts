@@ -18,6 +18,13 @@ export class IngresosService {
     });
   }
 
+  // Ingreso por ID
+  getIngreso(id: string): Observable<any> {
+    return this.http.get(`${base_url}/ingresos/${id}`,{
+      headers: {'x-token': localStorage.getItem('token')}
+    })
+  }
+
   // Listar ingresos
   listarIngresos(
     limit = 0, 
@@ -40,6 +47,12 @@ export class IngresosService {
         'x-token': localStorage.getItem('token')
       }
   })  
+  }
+
+  actualizarIngreso(id: string, data: any): Observable<any>{
+    return this.http.put(`${base_url}/ingresos/${id}`, data, {
+      headers: {'x-token': localStorage.getItem('token')}
+    });
   }
 
 }
