@@ -1,29 +1,44 @@
 <app-tarjeta-formulario >
-    <h1 class="flex items-center text-gray-700 px-2 pt-1">
-        <i routerLink="/dashboard/ingreso_productos" class="fas fa-arrow-left border bg-gray-500 text-white border-gray-300 rounded p-2 px-3 shadow cursor-pointer"></i>
-        <div *ngIf="loading" class="flex flex-col ml-2">
-            <span class="ml-2 text-xl text-gray-600"> Ingreso </span>
-            <span class="text-xs mt-1 ml-1 font-semibold border py-1 px-2 rounded text-white bg-gray-500"> 
-                <i class="fas fa-spinner animate-spin text-gray-600 mr-1"></i>          
-                Cargando estado
-            </span>
+    <div class="flex items-center justify-between mr-4">
+        <h1 class="flex items-center text-gray-700 px-2 pt-1">
+            <i routerLink="/dashboard/ingreso_productos" class="fas fa-arrow-left border bg-gray-500 text-white border-gray-300 rounded p-2 px-3 shadow cursor-pointer"></i>
+            <div *ngIf="loading" class="flex flex-col ml-2">
+                <span class="ml-2 text-xl text-gray-600"> Ingreso </span>
+                <span class="text-xs mt-1 ml-1 font-semibold border py-1 px-2 rounded text-white bg-gray-500"> 
+                    <i class="fas fa-spinner animate-spin text-gray-600 mr-1"></i>          
+                    Cargando estado
+                </span>
+            </div>
+            <div *ngIf="!loading" class="flex flex-col ml-2">
+                <span class="ml-2 text-xl text-gray-600"> Ingreso </span>
+                <span [ngClass]="{'bg-yellow-500':ingreso.estado == 'Pendiente', 'bg-red-500':ingreso.estado == 'Cancelado' , 'bg-green-500':ingreso.estado == 'Completado'}" 
+                      class="text-xs mt-1 ml-1 font-semibold border py-1 px-2 rounded text-white"> 
+                      {{ ingreso.estado }}
+                </span>
+            </div>
+        </h1>    
+        
+        <div *ngIf="!loading">
+            <div *ngIf="ingreso.estado === 'Pendiente'">
+                <span title="Completar ingreso" class="py-2 px-3 rounded border bg-green-500 text-white mr-2 cursor-pointer"> <i class="fas fa-check"></i> </span>
+            </div>
         </div>
-        <div *ngIf="!loading" class="flex flex-col ml-2">
-            <span class="ml-2 text-xl text-gray-600"> Ingreso </span>
-            <span [ngClass]="{'bg-yellow-500':ingreso.estado == 'En proceso', 'bg-blue-500':ingreso.estado == 'Pendiente' , 'bg-green-500':ingreso.estado == 'Completado'}" 
-                  class="text-xs mt-1 ml-1 font-semibold border py-1 px-2 rounded text-white"> 
-                  {{ ingreso.estado }}
-            </span>
-        </div>
-    </h1>    
+    
+    </div>
     
     <div *ngIf="loading">
         <i class="fas fa-spinner animate-spin text-gray-400 ml-2 text-gray-500 mt-5"></i> Cargando ingreso
     </div>
+
+    <!-- Datos de ingreso -->
+
     <div *ngIf="!loading" class="p-4">
         <div class="flex items-center justify-between bg-yellow-100 p-2 rounded border">
             <h1 class="font-semibold text-gray-600"> Datos del ingreso </h1>
-            <i [routerLink]="['/dashboard/ingreso_productos/editar', ingreso._id]" *ngIf="ingreso.estado == 'En proceso'" class="fas fa-pencil-alt text-gray-600 mr-2 cursor-pointer hover:text-yellow-500"></i>
+            <i [routerLink]="['/dashboard/ingreso_productos/editar', ingreso._id]" 
+               *ngIf="ingreso.estado == 'Pendiente'"
+               title="Editar ingreso" 
+               class="fas fa-pencil-alt text-gray-600 mr-2 cursor-pointer text-xl hover:text-yellow-500"></i>
         </div>
         <div class="flex flex-col lg:flex-row">
             <div class="w-full mx-2 flex-1 svelte-1l8159u">
@@ -48,14 +63,53 @@
                 </div>
             </div>
         </div> 
+
+        <!-- Detalle de productos -->
+
         <div class="flex items-center justify-between bg-yellow-100 p-2 rounded border mt-4">
-            <h1 class="font-semibold text-gray-600"> Detalles de productos </h1>
-            <i *ngIf="ingreso.estado == 'En proceso'" class="fas fa-pencil-alt text-gray-600 mr-2 cursor-pointer hover:text-yellow-500"></i>
+            <h1 class="font-semibold text-gray-600"> Detalles de productos ({{ total }}) </h1>
+            <i [routerLink]="['/dashboard/ingreso_productos/nuevo-producto', ingreso._id]" 
+               *ngIf="ingreso.estado == 'Pendiente'" 
+               title="Agregar productos"
+               class="fas fa-plus-circle text-gray-600 mr-2 cursor-pointer text-xl hover:text-yellow-500"></i>
         </div>
-        <button class="border rounded p-2 mt-3 bg-yellow-500 text-white">
+        <button *ngIf="productos.length === 0"
+                [routerLink]="['/dashboard/ingreso_productos/nuevo-producto', ingreso._id]" 
+                class="border rounded p-2 mt-3 bg-yellow-500 text-white">
             <i class="fas fa-plus text-xs"></i>
             Agregar productos
         </button>  
+        <div *ngFor="let producto of productos" 
+             class="border shadow rounded p-2 m-2 font-semibold flex items-center justify-between"
+             [ngClass]="{'bg-green-100': !producto.activo}"
+             >
+            <div>
+                <span class="block"> {{ producto.producto.codigo }} </span>
+                <span class="block text-xs text-gray-600"> {{ producto.producto.descripcion }}  </span>
+                <span class="block text-sm font-semibold"> cantidad: {{ producto.cantidad }} ({{ producto.producto.unidad_medida.descripcion }}) </span>
+            </div>
+
+            <div *ngIf="producto.activo">
+                <span title="Ingreso parcial" 
+                      class="py-1 px-2 rounded border bg-green-500 text-white mr-2 cursor-pointer"
+                      (click)="ingresoParcial(producto._id)"
+                      > 
+                      <i class="fas fa-check"></i> 
+                </span>
+                
+                <span title="Eliminar producto" 
+                      class="py-1 px-3 rounded border bg-red-500 text-white cursor-pointer"
+                      (click)="eliminarProducto(producto._id)"
+                      > 
+                    <i class="fas fa-times"></i> 
+                </span>
+            </div>
+
+            <span *ngIf="!producto.activo" class="py-1 px-2 rounded bg-green-500 text-white text-sm"> 
+                <i class="fas fa-check"></i> 
+                Ingresado 
+            </span>
+        </div>
     </div>
        
     <br>

@@ -23,6 +23,8 @@ import { NuevoProveedorComponent } from './proveedores/nuevo-proveedor.component
 import { EditarProveedorComponent } from './proveedores/editar/editar-proveedor.component';
 import { EditarIngresoComponent } from './ingreso-productos/editar/editar-ingreso.component';
 import { EditarEgresoComponent } from './egreso-productos/editar/editar-egreso.component';
+import { NuevoProductoIngresoComponent } from './ingreso-productos/nuevo-producto-ingreso.component';
+import { NuevoProductoEgresoComponent } from './egreso-productos/nuevo-producto-egreso.component';
 
 const childRoutes: Routes = [
   { path: 'home' , component: HomeComponent },
@@ -44,12 +46,14 @@ const childRoutes: Routes = [
   { path: 'ingreso_productos/nuevo' , component: NuevoIngresoComponent},
   { path: 'ingreso_productos/detalles/:id' , component: IngresoDetallesComponent},
   { path: 'ingreso_productos/editar/:id' , component: EditarIngresoComponent},
+  { path: 'ingreso_productos/nuevo-producto/:id' , component: NuevoProductoIngresoComponent},
 
   // Egreso de productos
   { path: 'egreso_productos' , component: EgresoProductosComponent},
   { path: 'egreso_productos/nuevo' , component: NuevoEgresoComponent},
   { path: 'egreso_productos/detalles/:id' , component: EgresoDetallesComponent},
   { path: 'egreso_productos/editar/:id' , component: EditarEgresoComponent},
+  { path: 'egreso_productos/nuevo-producto/:id' , component: NuevoProductoEgresoComponent},
 
   // Unidades de medida
   { path: 'unidad-medida' , component: UnidadMedidaComponent},

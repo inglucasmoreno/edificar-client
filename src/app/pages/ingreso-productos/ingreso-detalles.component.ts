@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Producto } from 'src/app/models/producto.model';
-import { ProductosService } from '../../services/productos.service';
 import { IngresosService } from '../../services/ingresos.service';
 import Swal from 'sweetalert2';
+import { IngresoProductosService } from '../../services/ingreso-productos.service';
 
 @Component({
   selector: 'app-ingreso-detalles',
@@ -13,22 +12,23 @@ import Swal from 'sweetalert2';
 })
 export class IngresoDetallesComponent implements OnInit {
 
-  public limit = 3;
+  public id;
+  public total;
   public loading = true;
   public ingreso = {};
-  public productos: Producto[] = [];
-  public producto: Producto;
-  public productoSeleccionado: false;
+  public productos = [];
 
-  constructor(private productosService: ProductosService,
-              private ingresoService: IngresosService,
-              private activatedRoute: ActivatedRoute) { }
+  constructor(private ingresoService: IngresosService,
+              private activatedRoute: ActivatedRoute,
+              private ingresoProductosService: IngresoProductosService) { }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(({ id }) => {  
+      this.id = id;
       this.ingresoService.getIngreso(id).subscribe( ({ ingreso }) => {
        this.ingreso = ingreso;
        this.loading = false;
+       this.listarProductosPorIngreso();
       });  
     },({error}) => {
       Swal.fire({
@@ -40,41 +40,88 @@ export class IngresoDetallesComponent implements OnInit {
     })
   }
 
-  // Listar productos
-  listarProductos(parametro: string): void {
-    this.loading = true;
-    this.productosService.listarProductos(
-      this.limit,
-      0,
-      true,
-      parametro
-    ).subscribe(({ productos }) => {
+  // Listar productos por ingreso
+  listarProductosPorIngreso(): void {
+    this.ingresoProductosService.listarProductosPorIngreso(this.id).subscribe( ({ productos, total }) => {
       this.productos = productos;
-      this.loading = false;  
-    },({error}) => {
+      this.total = total;
+      console.log(productos);
+    },({error})=>{
       Swal.fire({
         icon: 'error',
         title: 'Error',
         text: error.msg,
         confirmButtonText: 'Entendido'
-      })
+      })  
     });
   }
 
-  // Buscar productos
-  buscarProductos(parametro): void {
-    if(parametro.trim() != ''){
-      this.listarProductos(parametro);  
-    }else{
-      this.productos = [];
-    } 
-  }
+    // Eliminar producto
+    eliminarProducto(producto: string): void {
+      Swal.fire({
+        title: '¿Estas seguro?',
+        text: "Estas por eliminar un producto",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Eliminar',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.ingresoProductosService.eliminarProducto(producto).subscribe(() => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Completado',
+              text: 'El producto fue eliminado',
+              timer: 1000,
+              showConfirmButton: false
+            });
+            this.listarProductosPorIngreso();  
+          },({error})=>{
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: error.msg,
+              confirmButtonText: 'Entendido'
+            })        
+          });
+        }
+      })
+    }
 
-  // Borrar proveedor seleccionado
-  borrarProductoSeleccionado(){
-    this.loading = false;
-    this.productoSeleccionado = false;
-    this.productos = [];
+  // Ingreso parcial de producto
+  ingresoParcial(producto: string): void {
+    Swal.fire({
+      title: '¿Estas seguro?',
+      text: "Estas por ingresar un producto",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Ingresar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.ingresoProductosService.ingresoParcial(producto).subscribe(() => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Completado',
+            text: 'El producto fue ingresado',
+            timer: 1000,
+            showConfirmButton: false
+          });
+          this.listarProductosPorIngreso();  
+        },({error})=>{
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: error.msg,
+            confirmButtonText: 'Entendido'
+          })        
+        });
+      }
+    })
   }
 
 }

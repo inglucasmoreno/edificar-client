@@ -30,6 +30,8 @@ import { NuevoProveedorComponent } from './proveedores/nuevo-proveedor.component
 import { EditarProveedorComponent } from './proveedores/editar/editar-proveedor.component';
 import { EditarEgresoComponent } from './egreso-productos/editar/editar-egreso.component';
 import { EditarIngresoComponent } from './ingreso-productos/editar/editar-ingreso.component';
+import { NuevoProductoIngresoComponent } from './ingreso-productos/nuevo-producto-ingreso.component';
+import { NuevoProductoEgresoComponent } from './egreso-productos/nuevo-producto-egreso.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +58,8 @@ import { EditarIngresoComponent } from './ingreso-productos/editar/editar-ingres
     EditarProveedorComponent,
     EditarEgresoComponent,
     EditarIngresoComponent,
+    NuevoProductoIngresoComponent,
+    NuevoProductoEgresoComponent,
   ],
   imports: [
     CommonModule,
