@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Producto } from 'src/app/models/producto.model';
+import { ProductosService } from 'src/app/services/productos.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-nuevo-producto-egreso',
@@ -8,9 +12,101 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NuevoProductoEgresoComponent implements OnInit {
 
-  constructor() { }
+  public id;
+  public loading = false;
+  public loadingCreacion = false;
+  public limit = 10;
+  public productos = [];
+  public producto: Producto;
+  public productoSeleccionado = false;
+  public ultimoIngresado = { codigo: '' }
+
+  constructor(private activatedRoute: ActivatedRoute,
+              private productosService: ProductosService) { }
 
   ngOnInit(): void {
+    this.activatedRoute.params.subscribe( ({ id }) => {
+      this.id = id;
+    });
+  }
+
+  // Egregar producto a egreso
+  nuevoProducto(cantidad: any): void {
+    if(cantidad.trim() == '' || Number(cantidad) < 0){
+      Swal.fire({
+        icon: 'info',
+        title: 'Información',
+        text: 'Cantidad inválida',
+        confirmButtonText: 'Entendido'
+      });
+      return;
+    }
+
+    if(Number(cantidad) > this.producto.cantidad){
+      Swal.fire({
+        icon: 'info',
+        title: 'Información',
+        text: 'La cantidad es superior al stock actual',
+        confirmButtonText: 'Entendido'        
+      });
+      return;
+    }
+
+    const data = {
+      egreso: this.id,
+      producto: this.producto._id,
+      cantidad  
+    }
+
+    console.log(data);
+
+  }
+
+  // Listar productos
+  listarProductos(parametro: string): void {
+    this.loading = true;
+    this.productosService.listarProductos(
+      this.limit,
+      0,
+      true,
+      parametro,
+      1,
+      'codigo'
+    ).subscribe(({ productos }) => {
+      this.productos = productos;
+      this.loading = false;  
+    },({error}) => {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: error.msg,
+        confirmButtonText: 'Entendido'
+      })
+      this.loading = false;  
+    });
+  }
+
+  // Seleccionar producto
+  seleccionarProducto(producto: Producto): void {
+    this.productoSeleccionado = true;
+    this.producto = producto;
+    this.productos = [];
+  }
+
+  // Buscar productos
+  buscarProductos(parametro): void {
+    if(parametro.trim() != ''){
+      this.listarProductos(parametro);  
+    }else{
+      this.productos = [];
+    } 
+  }
+
+  // Borrar proveedor seleccionado
+  borrarProductoSeleccionado(){
+    this.loading = false;
+    this.productoSeleccionado = false;
+    this.productos = [];
   }
 
 }

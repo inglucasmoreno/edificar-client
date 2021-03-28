@@ -11,7 +11,14 @@ const base_url = environment.base_url;
 export class IngresoProductosService {
 
   constructor(private http: HttpClient) { }
-  
+
+  // Completar ingreso
+  completarIngreso(ingreso: string): Observable<any>{
+    return this.http.put(`${base_url}/ingreso_productos/completar/${ingreso}`,{},{
+      headers: { 'x-token': localStorage.getItem('token') }
+    });   
+  }
+
   // Nuevo producto para el ingreso
   nuevoProducto(data: any): Observable<any>{
     return this.http.post(`${base_url}/ingreso_productos`, data, {

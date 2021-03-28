@@ -37,7 +37,7 @@
       <div class="flex-grow mt-3">
             <span class="font-normal leading-tight font-semibold"> Proveedor </span>
             <div *ngIf="proveedorSeleccionado" class="mt-2 animate__animated animate__zoomIn">
-              <span class="text-xs bg-green-500 text-white p-2 rounded"> {{ proveedor.razon_social }} </span>
+              <span class="text-xs bg-green-500 text-white p-2 rounded font-semibold"> {{ proveedor.razon_social }} </span>
               <span class="bg-red-500 text-white py-1 px-2 ml-2 rounded cursor-pointer"
                     (click)="borrarProveedorSeleccionado()">
                 <i class="far fa-trash-alt"></i>

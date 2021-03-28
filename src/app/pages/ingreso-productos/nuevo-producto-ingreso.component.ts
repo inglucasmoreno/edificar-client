@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Producto } from 'src/app/models/producto.model';
 import Swal from 'sweetalert2';
+
+import { Producto } from 'src/app/models/producto.model';
 import { ProductosService } from '../../services/productos.service';
 import { IngresoProductosService } from '../../services/ingreso-productos.service';
 
@@ -24,6 +25,7 @@ export class NuevoProductoIngresoComponent implements OnInit {
   public productos = [];
   public producto: Producto;
   public productoSeleccionado = false;
+  public ultimoIngresado = { codigo: '' }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe( ({ id }) => {
@@ -32,7 +34,7 @@ export class NuevoProductoIngresoComponent implements OnInit {
   }
 
   // Ingresar nuevo producto
-  ingresarProducto(cantidad): void {
+  ingresarProducto(cantidad: any): void {
 
     if(cantidad.trim() == '' || Number(cantidad) < 0){
       Swal.fire({
@@ -62,6 +64,8 @@ export class NuevoProductoIngresoComponent implements OnInit {
       });      
       this.productoSeleccionado = false;
       this.loadingCreacion = false;
+      this.ultimoIngresado = this.producto;
+      this.ultimoIngresado['cantidad'] = cantidad; 
     },({error})=>{
       Swal.fire({
         icon: 'error',

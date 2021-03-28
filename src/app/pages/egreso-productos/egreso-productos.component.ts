@@ -25,7 +25,7 @@ export class EgresoProductosComponent implements OnInit {
   // Filtrado
   public filtro = {
     descripcion: '',
-    estado: 'En proceso'
+    estado: 'Pendiente'
   }
 
   // Ordenar

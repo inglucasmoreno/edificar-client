@@ -1,1 +1,101 @@
-<p>nuevo-producto-egreso works!</p>
+<app-tarjeta-formulario>
+    <div class="flex items-center">
+        <h1 class="flex items-center text-gray-700 p-3">
+            <button [routerLink]="['/dashboard/egreso_productos/detalles', id]"
+                    [disabled]="loadingCreacion">
+                <i class="fas fa-arrow-left border text-white border-gray-300 rounded p-2 px-3 shadow cursor-pointer"
+                   [ngClass]="{'bg-gray-400': loadingCreacion, 'bg-gray-500': !loadingCreacion}"
+                ></i>
+            </button>
+            <div class="flex flex-col ml-2">
+                <span class="ml-2 text-xl text-gray-600"> Egreso </span>
+                <span class="text-xs mt-1 ml-1 font-semibold border py-1 px-2 rounded text-white bg-yellow-500"> 
+                    <i class="fas fa-plus-circle"></i>
+                    Nuevo producto
+                </span>
+            </div>
+        </h1>
+        <i *ngIf="loadingCreacion" class="fas fa-spinner animate-spin text-2xl text-gray-400 ml-2"></i>
+    </div>
+
+    <div class="px-5 pb-4">
+                    
+        <div *ngIf="ultimoIngresado.codigo != ''" class="bg-gray-100 p-2 rounded border shadow text-gray-600 text-sm">
+            <span class="block"> {{ ultimoIngresado.codigo }} - {{ ultimoIngresado.descripcion }} </span>
+            <span class="font-semibold text-xs"> Cantidad: {{ ultimoIngresado.cantidad }} </span>
+        </div>
+
+        <div class="flex-grow mt-3">
+            <span class="font-normal leading-tight font-semibold"> Nuevo producto </span>
+            
+            <!-- Producto seleccionado -->
+            
+            <div *ngIf="productoSeleccionado" class="mt-2 animate__animated animate__zoomIn border shadow rounded p-2 flex items-center justify-between">
+                <div>
+                    <span class="text-sm font-semibold"> Producto seleccionado </span>
+                    <span class="text-gray-700 block text-sm"> {{ producto.codigo }} - {{ producto.descripcion }} </span>
+                    
+                    <span class="text-sm font-semibold mt-2 block"> Cantidad </span>
+                    <input type="number"
+                           #txtCantidad 
+                           [placeholder]="producto.unidad_medida.descripcion"
+                           class="border mt-1 rounded p-1 text-sm"
+                           min="0"
+                           >
+                    <span class="text-sm font-semibold mt-2 block"> Stock actual </span>
+                    <div class="border mt-1 rounded p-1 text-sm bg-gray-100 font-semibold">
+                    {{ producto.cantidad }}
+                    </div>
+                </div>
+                <div>
+                    <button class="text-white py-1 px-2 ml-2 rounded cursor-pointer"
+                            [ngClass]="{'bg-green-400': loadingCreacion, 'bg-green-500': !loadingCreacion}"
+                            (click)="nuevoProducto(txtCantidad.value)"
+                            title="Agregar producto"
+                            [disabled]="loadingCreacion"
+                          >
+                            <i class="fas fa-check"></i>
+                    </button>
+                    <button class="text-white py-1 px-2 ml-2 rounded cursor-pointer"
+                            [ngClass]="{'bg-red-400': loadingCreacion, 'bg-red-500': !loadingCreacion}"
+                            (click)="borrarProductoSeleccionado()"
+                            title="Cancelar producto"
+                            [disabled]="loadingCreacion"
+                            >
+                            <i class="far fa-trash-alt"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Buscardor producto -->
+            
+            <input type="text"
+                    *ngIf="!productoSeleccionado"
+                    #txtBuscar 
+                    placeholder="Código o descripción" 
+                    (keyup)="buscarProductos(txtBuscar.value)"
+                    class="my-2 w-full text-sm bg-grey-light text-grey-darkest rounded h-10 p-3 focus:outline-none border shadow">          
+            
+            <!-- Loading -->
+            <div *ngIf="loading" class="text-gray-500 w-full">
+                <i class="fas fa-spinner animate-spin text-gray-400 ml-2"></i> cargando
+            </div>
+            
+            <!-- Lista de productos buscados -->
+            <div *ngIf="!productoSeleccionado && !loading" class="w-full">
+                <div *ngFor="let producto of productos" 
+                    class="animate__animated animate__fadeIn flex my-1 cursor-pointer hover:bg-blue-lightest rounded text-xs border shadow hover:bg-yellow-100"
+                    (click)="seleccionarProducto(producto)"
+                    >
+                <div class="w-8 h-10 text-center py-1">
+                    <p class="text-xl p-0 text-grey-dark">•</p>
+                </div>
+                <div class="w-4/5  h-10 py-3 px-1">
+                    <p class="hover:text-blue-dark"> {{ producto.codigo }} - {{ producto.descripcion }}</p>
+                </div>
+                </div>
+            </div>   
+        </div> 
+    </div>
+</app-tarjeta-formulario>
+

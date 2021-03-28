@@ -20,6 +20,11 @@
 
     <div class="px-5 pb-4">
                     
+        <div *ngIf="ultimoIngresado.codigo != ''" class="bg-gray-100 p-2 rounded border shadow text-gray-600 text-sm">
+            <span class="block"> {{ ultimoIngresado.codigo }} - {{ ultimoIngresado.descripcion }} </span>
+            <span class="font-semibold text-xs"> Cantidad: {{ ultimoIngresado.cantidad }} </span>
+        </div>
+
         <div class="flex-grow mt-3">
             <span class="font-normal leading-tight font-semibold"> Nuevo producto </span>
             
@@ -87,5 +92,5 @@
                 </div>
             </div>   
         </div> 
-        </div>
+    </div>
 </app-tarjeta-formulario>
