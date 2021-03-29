@@ -64,11 +64,49 @@
                 [routerLink]="['/dashboard/egreso_productos/nuevo-producto', egreso._id]" 
                 class="fas fa-plus-circle text-xl text-gray-600 mr-2 cursor-pointer hover:text-yellow-500"></i>
         </div>
-        <button [routerLink]="['/dashboard/egreso_productos/nuevo-producto', egreso._id]" 
+        <button *ngIf="productos.length === 0"
+                [routerLink]="['/dashboard/egreso_productos/nuevo-producto', egreso._id]" 
                 class="border rounded p-2 mt-3 bg-yellow-500 text-white">
             <i class="fas fa-plus text-xs"></i>
             Agregar productos
-        </button>  
+        </button> 
+
+        <!-- Lista de productos -->
+
+        <div *ngFor="let producto of productos" 
+            class="border shadow rounded p-2 m-2 font-semibold flex items-center justify-between"
+            [ngClass]="{'bg-green-100': !producto.activo}">
+            
+            <div>
+                <span class="block"> {{ producto.producto.codigo }} </span>
+                <span class="block text-xs text-gray-600"> {{ producto.producto.descripcion }}  </span>
+                <span class="block text-sm font-semibold"> cantidad: {{ producto.cantidad }} ({{ producto.producto.unidad_medida.descripcion }}) </span>
+            </div>
+
+            <div *ngIf="producto.activo">
+                <button title="Ingreso parcial" 
+                        [disabled]="loadingCargando"
+                        class="py-1 px-2 rounded border bg-green-500 text-white mr-2 cursor-pointer"
+                        (click)="egresoParcial(producto._id)"
+                        > 
+                        <i class="fas fa-check"></i> 
+                </button>
+                
+                <button title="Eliminar producto"
+                        [disabled]="loadingCargando" 
+                        class="py-1 px-3 rounded border bg-red-500 text-white cursor-pointer"
+                        (click)="eliminarProducto(producto._id)"
+                        > 
+                    <i class="fas fa-times"></i> 
+                </button>
+            </div>
+
+            <span *ngIf="!producto.activo" class="py-1 px-2 rounded bg-green-500 text-white text-sm"> 
+                <i class="fas fa-check"></i> 
+                Entregado
+            </span>
+        </div> 
+    
     </div>
        
     <br>

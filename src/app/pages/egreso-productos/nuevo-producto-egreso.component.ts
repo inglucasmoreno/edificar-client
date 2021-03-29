@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Producto } from 'src/app/models/producto.model';
+import { EgresoProductosService } from 'src/app/services/egreso-productos.service';
 import { ProductosService } from 'src/app/services/productos.service';
 import Swal from 'sweetalert2';
 
@@ -22,7 +23,8 @@ export class NuevoProductoEgresoComponent implements OnInit {
   public ultimoIngresado = { codigo: '' }
 
   constructor(private activatedRoute: ActivatedRoute,
-              private productosService: ProductosService) { }
+              private productosService: ProductosService,
+              private egresoProductoService: EgresoProductosService) { }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe( ({ id }) => {
@@ -58,7 +60,26 @@ export class NuevoProductoEgresoComponent implements OnInit {
       cantidad  
     }
 
-    console.log(data);
+    this.egresoProductoService.nuevoProducto(data).subscribe(()=>{
+      Swal.fire({
+        icon: 'success',
+        title: 'Completado',
+        text: 'Producto agregado correctamente',
+        timer: 1000,
+        showConfirmButton: false
+      });
+      this.productos = [];
+      this.productoSeleccionado = false;
+      this.ultimoIngresado = this.producto;
+      this.ultimoIngresado['cantidad'] = cantidad; 
+    },({error})=>{
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: error.msg,
+        confirmButtonText: 'Entendido'
+      })    
+    });
 
   }
 

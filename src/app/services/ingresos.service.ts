@@ -49,6 +49,7 @@ export class IngresosService {
   })  
   }
 
+  // Actualizar ingreso
   actualizarIngreso(id: string, data: any): Observable<any>{
     return this.http.put(`${base_url}/ingresos/${id}`, data, {
       headers: {'x-token': localStorage.getItem('token')}

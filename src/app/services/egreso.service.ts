@@ -47,6 +47,7 @@ export class EgresoService {
     })
   }
 
+  // Actualizar egreso
   actualizarEgreso(id: string, data: any): Observable<any>{
     return this.http.put(`${base_url}/egresos/${id}`, data, {
       headers: {'x-token': localStorage.getItem('token')}

@@ -31,7 +31,7 @@ export class EgresoProductosComponent implements OnInit {
   // Ordenar
   public ordenar = {
     direccion: -1,  // Asc (1) | Desc (-1)
-    columna: 'codigo'
+    columna: 'createdAt'
   }
 
   constructor(private egresoService: EgresoService) { }

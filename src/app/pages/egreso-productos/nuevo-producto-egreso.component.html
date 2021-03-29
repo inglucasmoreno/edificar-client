@@ -28,8 +28,7 @@
         <div class="flex-grow mt-3">
             <span class="font-normal leading-tight font-semibold"> Nuevo producto </span>
             
-            <!-- Producto seleccionado -->
-            
+            <!-- Producto seleccionado -->          
             <div *ngIf="productoSeleccionado" class="mt-2 animate__animated animate__zoomIn border shadow rounded p-2 flex items-center justify-between">
                 <div>
                     <span class="text-sm font-semibold"> Producto seleccionado </span>
@@ -67,8 +66,7 @@
                 </div>
             </div>
             
-            <!-- Buscardor producto -->
-            
+            <!-- Buscardor producto -->         
             <input type="text"
                     *ngIf="!productoSeleccionado"
                     #txtBuscar 

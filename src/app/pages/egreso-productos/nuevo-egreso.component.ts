@@ -24,9 +24,9 @@ export class NuevoEgresoComponent implements OnInit {
     identificacion_cliente: ['', Validators.required],
   });
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
+  // Nuevo egreso
   crearEgreso(): void {
     if(this.egresoForm.valid){
       this.loading = true;
