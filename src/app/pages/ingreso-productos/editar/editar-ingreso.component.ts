@@ -31,7 +31,8 @@ export class EditarIngresoComponent implements OnInit {
   public limit = 3;
 
   public ingresoForm = this.fb.group({
-    numero_remito: ['', Validators.required],
+    punto_venta: ['', Validators.required],
+    numero_comprobante: ['', Validators.required],
   });
 
   constructor(private activatedRoute: ActivatedRoute,
@@ -45,8 +46,10 @@ export class EditarIngresoComponent implements OnInit {
       this.id = id;
       this.ingresosService.getIngreso(id).subscribe(({ingreso})=>{
         this.ingreso = ingreso;
+        const tempRemito = ingreso.numero_remito.split('-');
         this.ingresoForm.setValue({
-          numero_remito: ingreso.numero_remito
+          punto_venta: tempRemito[0],
+          numero_comprobante: tempRemito[1],
         });
         this.proveedoresService.getProveedor(ingreso.proveedor._id).subscribe(({proveedor})=>{
           this.proveedor = proveedor;
@@ -124,11 +127,12 @@ export class EditarIngresoComponent implements OnInit {
     };
   }
 
+  // Actualizar ingreso
   actualizarIngreso(): void {
     if(this.ingresoForm.valid && this.proveedorSeleccionado){
       this.loadingFinal = true;
       const data = {
-        numero_remito: this.ingresoForm.value.numero_remito,
+        numero_remito: `${this.ingresoForm.value.punto_venta}-${this.ingresoForm.value.numero_comprobante}`,
         proveedor: this.proveedor._id,
       };
       this.ingresosService.actualizarIngreso(this.id, data).subscribe(()=>{

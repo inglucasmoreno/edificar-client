@@ -30,10 +30,10 @@ export class NuevoIngresoComponent implements OnInit {
   ngOnInit(): void {}
 
   // Nuevo ingreso
-  crearIngreso(numeroRemito: string): void {
+  crearIngreso(puntoVenta: string, nroComprobante: string): void {
     
     // Se verifica validacion de formulario
-    if(numeroRemito.trim() == '' || !this.proveedorSeleccionado){
+    if(puntoVenta.trim() == '' || nroComprobante.trim() == '' || !this.proveedorSeleccionado){
       Swal.fire({
         icon: 'info',
         title: 'Información',
@@ -45,7 +45,7 @@ export class NuevoIngresoComponent implements OnInit {
     
     // Se crea nuevo ingreso  
     const data = {
-      numero_remito: numeroRemito,
+      numero_remito: `${puntoVenta}-${nroComprobante}`,
       proveedor: this.proveedor._id,
     }
 

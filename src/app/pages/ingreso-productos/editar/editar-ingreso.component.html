@@ -27,12 +27,24 @@
       <form
         [formGroup]="ingresoForm"
       >
-        <label for="numero_remito" class="font-semibold"> Número de remito </label>
-        <input type="text"
-               class="block p-2 rounded border shadow mt-2"
-               id="numero_remito"
-               formControlName="numero_remito"
-               placeholder="N° de remito">
+        <div class="flex flex-col lg:flex-row">
+          <div class="w-full mx-2 flex-1 svelte-1l8159u">
+              <div class="font-bold mt-3 text-gray-600 text-sm"> Punto de venta </div>
+              <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
+                  <input placeholder="Ej. 00001" 
+                        class="p-1 px-2 appearance-none outline-none w-full text-gray-800"
+                        formControlName="punto_venta"
+                        ></div>
+          </div>
+          <div class="w-full mx-2 flex-1 svelte-1l8159u">
+              <div class="font-bold mt-3 text-gray-600 text-sm"> N° comprobante </div>
+              <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
+                  <input placeholder="Ej. 00000610"
+                         class="p-1 px-2 appearance-none outline-none w-full text-gray-800"
+                         formControlName="numero_comprobante"
+                    ></div>
+          </div>
+      </div>      
       </form>      
       <div class="flex-grow mt-3">
             <span class="font-normal leading-tight font-semibold"> Proveedor </span>
@@ -67,9 +79,8 @@
                   <p class="text-xs text-gray-500"> CUIT - {{ proveedor.cuit }} </p>
                 </div>
               </div>
-            </div>
-          
-          </div>            
+            </div>      
+        </div>            
     </div>
     <div *ngIf="loadingInicial" class="pb-3 ml-2">
         <i class="fas fa-spinner animate-spin text-gray-400 ml-2"></i> Cargando ingreso     
