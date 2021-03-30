@@ -15,6 +15,7 @@ export class EgresoDetallesComponent implements OnInit {
   public id;
   public total = 0;
   public loading = true;
+  public loadingCargando = false;
   public egreso = {};
   public productos = [];
 
@@ -30,7 +31,7 @@ export class EgresoDetallesComponent implements OnInit {
       this.egresosService.getEgreso(id).subscribe(({egreso}) => {
         this.egreso = egreso;
         this.listarProductos();
-        this.loading = false;    
+        this.loading = false;
       })         
     },({error}) => {
       Swal.fire({
@@ -38,22 +39,24 @@ export class EgresoDetallesComponent implements OnInit {
         title: 'Error',
         text: error.msg,
         confirmButtonText: 'Entendido'
-      })
-    })   
-  }
+      });
+    });
+  };
 
   // Listar productos de egreso
   listarProductos(): void {
     this.egresoProductosService.listarProductosPorEgreso(this.id).subscribe(({productos, total})=>{
       this.productos = productos;
       this.total = total;
+      this.loadingCargando = false;
     },({error})=>{
       Swal.fire({
         icon: 'error',
         title: 'Error',
         text: error.msg,
         confirmButtonText: 'Entendido'
-      })        
+      });
+      this.loadingCargando = false;
     })
   }
 
@@ -70,6 +73,7 @@ export class EgresoDetallesComponent implements OnInit {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
+        this.loadingCargando = true;
         this.egresoProductosService.completarEgreso(this.id).subscribe(() => {
           Swal.fire({
             icon: 'success',
@@ -78,6 +82,7 @@ export class EgresoDetallesComponent implements OnInit {
             timer: 1000,
             showConfirmButton: false
           });
+          this.loadingCargando = false;
           this.router.navigateByUrl('/dashboard/egreso_productos'); 
         },({error})=>{
           Swal.fire({
@@ -85,7 +90,8 @@ export class EgresoDetallesComponent implements OnInit {
             title: 'Error',
             text: error.msg,
             confirmButtonText: 'Entendido'
-          })
+          });
+          this.loadingCargando = false;
         });
       }
     })
@@ -104,6 +110,7 @@ export class EgresoDetallesComponent implements OnInit {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
+        this.loadingCargando = true;
         this.egresoProductosService.egresoParcial(producto).subscribe(()=>{
           Swal.fire({
             icon: 'success',
@@ -119,7 +126,8 @@ export class EgresoDetallesComponent implements OnInit {
             title: 'Error',
             text: error.msg,
             confirmButtonText: 'Entendido'
-          })
+          });
+          this.loadingCargando = false;
         });    
       }
     })
@@ -138,6 +146,7 @@ export class EgresoDetallesComponent implements OnInit {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
+        this.loadingCargando = true;
         this.egresoProductosService.eliminarProducto(producto).subscribe(()=>{
           Swal.fire({
             icon: 'success',
@@ -153,10 +162,10 @@ export class EgresoDetallesComponent implements OnInit {
             title: 'Error',
             text: error.msg,
             confirmButtonText: 'Entendido'
-          })
+          });
+          this.loadingCargando = false;
         });    
       }
     })
   }
-
 }

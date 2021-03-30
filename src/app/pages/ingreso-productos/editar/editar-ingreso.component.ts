@@ -48,7 +48,7 @@ export class EditarIngresoComponent implements OnInit {
         this.ingresoForm.setValue({
           numero_remito: ingreso.numero_remito
         });
-        this.proveedoresService.getProveedor(ingreso.proveedor).subscribe(({proveedor})=>{
+        this.proveedoresService.getProveedor(ingreso.proveedor._id).subscribe(({proveedor})=>{
           this.proveedor = proveedor;
           this.loadingInicial = false;
         },({error})=>{
@@ -130,8 +130,6 @@ export class EditarIngresoComponent implements OnInit {
       const data = {
         numero_remito: this.ingresoForm.value.numero_remito,
         proveedor: this.proveedor._id,
-        razon_social_proveedor: this.proveedor.razon_social,
-        cuit_proveedor: this.proveedor.cuit
       };
       this.ingresosService.actualizarIngreso(this.id, data).subscribe(()=>{
         Swal.fire({

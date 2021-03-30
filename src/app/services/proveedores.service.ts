@@ -13,6 +13,7 @@ export class ProveedoresService {
 
   // Proveedor por ID
   getProveedor(id: string): Observable<any> {
+    console.log(id);
     return this.http.get(`${base_url}/proveedores/${id}`, {
       headers: {'x-token': localStorage.getItem('token')}
     })

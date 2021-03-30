@@ -4,6 +4,7 @@ export class Proveedor {
         public cuit: string,
         public activo: boolean,   
         public domicilio?: string,
+        public condicion_iva?: string,
         public _id?: string,
     ){}
 }

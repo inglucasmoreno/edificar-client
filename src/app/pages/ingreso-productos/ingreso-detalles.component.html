@@ -5,7 +5,8 @@
                 <button routerLink="/dashboard/ingreso_productos"
                         [disabled]="loadingCargando"
                 >
-                    <i class="fas fa-arrow-left border bg-gray-500 text-white border-gray-300 rounded p-2 px-3 shadow cursor-pointer"></i>
+                    <i class="fas fa-arrow-left border text-white border-gray-300 rounded p-2 px-3 shadow cursor-pointer"
+                       [ngClass]="{'bg-gray-400':loadingCargando, 'bg-gray-500':!loadingCargando}"></i>
                 </button>
                 <div *ngIf="loading" class="flex flex-col ml-2">
                     <span class="ml-2 text-xl text-gray-600"> Ingreso </span>
@@ -32,9 +33,14 @@
         <div *ngIf="!loading">
             <div (click)="completarIngreso()" *ngIf="ingreso.estado === 'Pendiente'">
                 <button title="Completar ingreso" 
-                        class="py-2 px-3 rounded border bg-green-500 text-white mr-2 cursor-pointer"
+                        class="py-2 px-3 rounded border bg-green-500 text-white mr-2 cursor-pointer shadow"
                         [disabled]="loadingCargando"
-                        > <i class="fas fa-check"></i> </button>
+                        [ngClass]="{'bg-green-400':loadingCargando, 'bg-green-500':!loadingCargando}">
+                        <i class="fas fa-check"></i> </button>
+            </div>
+            <div *ngIf="ingreso.estado === 'Completado'" class="mr-4 p-2 border bg-green-500 text-white rounded">
+                <i class="far fa-calendar-check mr-1 font-semibold"></i>
+                {{ ingreso.fecha_egreso | fecha }}
             </div>
         </div>
     
@@ -57,26 +63,39 @@
         <div class="flex flex-col lg:flex-row">
             <div class="w-full mx-2 flex-1 svelte-1l8159u">
                 <div class="font-bold mt-3 text-gray-600 text-sm"> Número de remito </div>
-                <div class="block p-2 rounded border shadow mt-2 bg-gray-100">
+                <div class="block p-2 rounded border shadow mt-2 bg-gray-100 text-sm">
                     {{ ingreso.numero_remito }}
                 </div>
             </div>
-            <div class="w-full mx-2 flex-1 svelte-1l8159u"></div>
+            <div class="w-full mx-2 flex-1 svelte-1l8159u">
+                <div class="font-bold mt-3 text-gray-600 text-sm"> Condición frente al IVA </div>
+                <div class="block p-2 rounded border shadow mt-2 bg-gray-100 text-sm">
+                    {{ ingreso.proveedor.condicion_iva }}
+                </div>
+            </div>
         </div> 
         <div class="flex flex-col lg:flex-row">
             <div class="w-full mx-2 flex-1 svelte-1l8159u">
                 <div class="font-bold mt-3 text-gray-600 text-sm"> Proveedor </div>
-                <div class="block p-2 rounded border shadow mt-2 bg-gray-100">
-                    {{ ingreso.razon_social_proveedor }}
+                <div class="block p-2 rounded border shadow mt-2 bg-gray-100 text-sm">
+                    {{ ingreso.proveedor.razon_social}}
                 </div>
             </div>
             <div class="w-full mx-2 flex-1 svelte-1l8159u">
                 <div class="font-bold mt-3 text-gray-600 text-sm"> CUIT </div>
-                <div class="block p-2 rounded border shadow mt-2 bg-gray-100">
-                    {{ ingreso.cuit_proveedor }}
+                <div class="block p-2 rounded border shadow mt-2 bg-gray-100 text-sm">
+                    {{ ingreso.proveedor.cuit }}
                 </div>
             </div>
         </div> 
+        <div class="flex flex-col lg:flex-row">
+            <div class="w-full mx-2 flex-1 svelte-1l8159u">
+                <div class="font-bold mt-3 text-gray-600 text-sm"> Domicilio comercial </div>
+                <div class="block p-2 rounded border shadow mt-2 bg-gray-100 text-sm">
+                    {{ ingreso.proveedor.domicilio }}
+                </div>
+            </div>
+        </div>
 
         <!-- Detalle de productos -->
 
@@ -106,7 +125,8 @@
             <div *ngIf="producto.activo">
                 <button title="Ingreso parcial" 
                         [disabled]="loadingCargando"
-                        class="py-1 px-2 rounded border bg-green-500 text-white mr-2 cursor-pointer"
+                        class="py-1 px-2 rounded border text-white mr-2 cursor-pointer"
+                        [ngClass]="{'bg-green-400':loadingCargando, 'bg-green-500':!loadingCargando}"
                         (click)="ingresoParcial(producto._id)"
                       > 
                       <i class="fas fa-check"></i> 
@@ -114,7 +134,8 @@
                 
                 <button title="Eliminar producto"
                         [disabled]="loadingCargando" 
-                        class="py-1 px-3 rounded border bg-red-500 text-white cursor-pointer"
+                        class="py-1 px-3 rounded border text-white cursor-pointer"
+                        [ngClass]="{'bg-red-400':loadingCargando, 'bg-red-500':!loadingCargando}"
                         (click)="eliminarProducto(producto._id)"
                       > 
                     <i class="fas fa-times"></i> 

@@ -26,7 +26,7 @@
         </div>
 
         <div class="flex-grow mt-3">
-            <span class="font-normal leading-tight font-semibold"> Nuevo producto </span>
+            <span class="font-normal text-gray-700 leading-tight font-semibold"> Nuevo producto </span>
             
             <!-- Producto seleccionado -->          
             <div *ngIf="productoSeleccionado" class="mt-2 animate__animated animate__zoomIn border shadow rounded p-2 flex items-center justify-between">
@@ -41,7 +41,7 @@
                            class="border mt-1 rounded p-1 text-sm"
                            min="0"
                            >
-                    <span class="text-sm font-semibold mt-2 block"> Stock actual </span>
+                    <span class="text-sm font-semibold mt-2 block"> Disponibles </span>
                     <div class="border mt-1 rounded p-1 text-sm bg-gray-100 font-semibold">
                     {{ producto.cantidad }}
                     </div>
@@ -75,21 +75,21 @@
                     class="my-2 w-full text-sm bg-grey-light text-grey-darkest rounded h-10 p-3 focus:outline-none border shadow">          
             
             <!-- Loading -->
-            <div *ngIf="loading" class="text-gray-500 w-full">
-                <i class="fas fa-spinner animate-spin text-gray-400 ml-2"></i> cargando
+            <div *ngIf="loading" class="text-gray-400 w-full text-sm">
+                <i class="fas fa-spinner animate-spin text-gray-400 ml-2"></i> Cargando productos 
             </div>
             
             <!-- Lista de productos buscados -->
             <div *ngIf="!productoSeleccionado && !loading" class="w-full">
                 <div *ngFor="let producto of productos" 
-                    class="animate__animated animate__fadeIn flex my-1 cursor-pointer hover:bg-blue-lightest rounded text-xs border shadow hover:bg-yellow-100"
-                    (click)="seleccionarProducto(producto)"
+                     class="animate__animated animate__fadeIn flex mb-2 cursor-pointer border shadow hover:bg-yellow-100"
+                     [ngClass]="{'bg-red-100': (producto.stock_minimo && producto.cantidad < producto.cantidad_minima)}"
+                     (click)="seleccionarProducto(producto)"
                     >
-                <div class="w-8 h-10 text-center py-1">
-                    <p class="text-xl p-0 text-grey-dark">•</p>
-                </div>
-                <div class="w-4/5  h-10 py-3 px-1">
-                    <p class="hover:text-blue-dark"> {{ producto.codigo }} - {{ producto.descripcion }}</p>
+                <div class="p-2">
+                    <span class="block text-sm font-semibold"> {{ producto.codigo }} </span>
+                    <span class="block text-sm text-gray-800"> Disponibles: {{ producto.cantidad }} </span>
+                    <span class="block text-xs text-gray-800"> {{ producto.descripcion }} </span>
                 </div>
                 </div>
             </div>   

@@ -45,10 +45,8 @@ export class NuevoIngresoComponent implements OnInit {
     
     // Se crea nuevo ingreso  
     const data = {
-      proveedor: this.proveedor._id,
       numero_remito: numeroRemito,
-      razon_social_proveedor: this.proveedor.razon_social,
-      cuit_proveedor: this.proveedor.cuit
+      proveedor: this.proveedor._id,
     }
 
     this.loadingFinal = true;

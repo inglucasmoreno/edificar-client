@@ -122,12 +122,12 @@
                                     class="animate__animated animate__fadeIn hover:bg-yellow-100 cursor-pointer" *ngFor="let ingreso of ingresos">
                                     <td class="px-5 py-5 border-b border-gray-200 text-sm">
                                         <p class="text-gray-900 whitespace-no-wrap font-semibold">
-                                           {{ ingreso.numero_remito }}
+                                           {{  ingreso.numero_remito }}
                                         </p>
                                     </td>
                                     <td class="px-5 py-5 border-b border-gray-200 text-xs">
                                         <p class="text-gray-900 whitespace-no-wrap">
-                                            {{ ingreso.razon_social_proveedor }}
+                                            {{ ingreso.proveedor.razon_social }}
                                         </p>
                                     </td>
                                     <td class="px-5 py-5 border-b border-gray-200 text-sm">

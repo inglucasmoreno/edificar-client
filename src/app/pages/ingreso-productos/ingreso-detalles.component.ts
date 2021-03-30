@@ -15,7 +15,7 @@ export class IngresoDetallesComponent implements OnInit {
   public id;
   public total;
   public loading = true;
-  public loadingCargando = false;
+  public loadingCargando = true;
   public ingreso = {};
   public productos = [];
 

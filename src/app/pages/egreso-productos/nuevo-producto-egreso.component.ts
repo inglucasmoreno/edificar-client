@@ -48,7 +48,7 @@ export class NuevoProductoEgresoComponent implements OnInit {
       Swal.fire({
         icon: 'info',
         title: 'Información',
-        text: 'La cantidad es superior al stock actual',
+        text: 'La cantidad es superior al disponible',
         confirmButtonText: 'Entendido'        
       });
       return;
@@ -59,7 +59,8 @@ export class NuevoProductoEgresoComponent implements OnInit {
       producto: this.producto._id,
       cantidad  
     }
-
+    
+    this.loadingCreacion = true;
     this.egresoProductoService.nuevoProducto(data).subscribe(()=>{
       Swal.fire({
         icon: 'success',
@@ -72,13 +73,15 @@ export class NuevoProductoEgresoComponent implements OnInit {
       this.productoSeleccionado = false;
       this.ultimoIngresado = this.producto;
       this.ultimoIngresado['cantidad'] = cantidad; 
+      this.loadingCreacion = false;
     },({error})=>{
       Swal.fire({
         icon: 'error',
         title: 'Error',
         text: error.msg,
         confirmButtonText: 'Entendido'
-      })    
+      })  
+      this.loadingCreacion = false; 
     });
 
   }

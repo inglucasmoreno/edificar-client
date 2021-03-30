@@ -58,14 +58,13 @@
             <!-- Proveedores -->
             <div *ngIf="!proveedorSeleccionado && !loading" class="w-full">
               <div *ngFor="let proveedor of proveedores" 
-                   class="animate__animated animate__fadeIn flex my-1 cursor-pointer hover:bg-blue-lightest rounded text-xs border shadow hover:bg-yellow-100"
+                   class="animate__animated animate__fadeIn flex my-1 cursor-pointer rounded text-sm border shadow hover:bg-yellow-100"
                    (click)="seleccionarProveedor(proveedor)"
                    >
-                <div class="w-8 h-10 text-center py-1">
-                  <p class="text-xl p-0 text-grey-dark">•</p>
-                </div>
-                <div class="w-4/5  h-10 py-3 px-1">
-                  <p class="hover:text-blue-dark">{{ proveedor.razon_social }}</p>
+                <div class="p-2">
+                  <p class="font-semibold">{{ proveedor.razon_social }}</p>
+                  <p class="text-gray-500"> {{ proveedor.condicion_iva }} </p>
+                  <p class="text-xs text-gray-500"> CUIT - {{ proveedor.cuit }} </p>
                 </div>
               </div>
             </div>
