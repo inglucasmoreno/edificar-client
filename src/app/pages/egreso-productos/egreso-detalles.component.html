@@ -1,7 +1,7 @@
 <app-tarjeta-formulario >
     <div class="flex items-center justify-between">
         <div class="flex items-center">
-            <h1 class="flex items-center text-gray-700 px-2 py-1 pt-1">
+            <h1 class="flex items-center text-gray-700 px-4 py-1 pt-2">
                 <button routerLink="/dashboard/egreso_productos"
                         [disabled]="loadingCargando">
                     <i class="fas fa-arrow-left border text-white border-gray-300 rounded p-2 px-3 shadow cursor-pointer"
@@ -9,16 +9,16 @@
                     ></i>
                 </button>
                 <div *ngIf="loading" class="flex flex-col ml-2">
-                    <span class="ml-2 text-xl text-gray-600"> Egreso </span>
-                    <span class="text-xs mt-1 ml-1 font-semibold border py-1 px-2 rounded text-white bg-gray-500"> 
+                    <span class="ml-2 text-xl text-gray-600"> Nota de venta </span>
+                    <span class="text-xs w-max mt-1 ml-1 font-semibold border py-1 px-2 rounded text-white bg-gray-500"> 
                         <i class="fas fa-spinner animate-spin text-gray-600 mr-1"></i>          
                         Cargando estado
                     </span>
                 </div>
                 <div *ngIf="!loading" class="flex flex-col ml-2">
-                    <span class="ml-2 text-xl text-gray-600"> Egreso </span>
+                    <span class="ml-2 text-xl text-gray-600"> Nota de venta </span>
                     <span [ngClass]="{'bg-yellow-500':egreso.estado == 'Pendiente', 'bg-green-500':egreso.estado == 'Completado'}"
-                          class="text-xs mt-1 ml-1 font-semibold border py-1 px-2 rounded text-white">
+                          class="text-xs mt-1 w-max ml-1 font-semibold border py-1 px-2 rounded text-white">
                         {{ egreso.estado }} 
                     </span>
                 </div>
@@ -119,8 +119,7 @@
             </div>
 
             <span *ngIf="!producto.activo" class="py-1 px-2 rounded bg-green-500 text-white text-sm"> 
-                <i class="fas fa-check"></i> 
-                Entregado
+                {{ producto.fecha_egreso | fecha }}
             </span>
         </div> 
     

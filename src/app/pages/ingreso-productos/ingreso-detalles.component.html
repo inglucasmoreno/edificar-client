@@ -1,7 +1,7 @@
 <app-tarjeta-formulario >
     <div class="flex items-center justify-between mr-4">
         <div class="flex items-center justify-between">
-            <h1 class="flex items-center text-gray-700 px-3 pt-2">
+            <h1 class="flex items-center text-gray-700 px-4 pt-2">
                 <button routerLink="/dashboard/ingreso_productos"
                         [disabled]="loadingCargando"
                 >
@@ -9,16 +9,16 @@
                        [ngClass]="{'bg-gray-400':loadingCargando, 'bg-gray-500':!loadingCargando}"></i>
                 </button>
                 <div *ngIf="loading" class="flex flex-col ml-2">
-                    <span class="ml-2 text-xl text-gray-600"> Ingreso </span>
-                    <span class="text-xs mt-1 ml-1 font-semibold border py-1 px-2 rounded text-white bg-gray-500"> 
+                    <span class="ml-2 text-xl text-gray-600"> Remito de ingreso </span>
+                    <span class="text-xs mt-1 ml-1 w-max font-semibold border py-1 px-2 rounded text-white bg-gray-500"> 
                         <i class="fas fa-spinner animate-spin text-gray-600 mr-1"></i>          
                         Cargando estado
                     </span>
                 </div>
                 <div *ngIf="!loading" class="flex flex-col ml-2">
-                    <span class="ml-2 text-xl text-gray-600"> Ingreso </span>
+                    <span class="ml-2 text-xl text-gray-600"> Remito de ingreso </span>
                     <span [ngClass]="{'bg-yellow-500':ingreso.estado == 'Pendiente', 'bg-green-500':ingreso.estado == 'Completado'}" 
-                          class="text-xs mt-1 ml-1 font-semibold border py-1 px-2 rounded text-white"> 
+                          class="text-xs mt-1 w-max ml-1 font-semibold border py-1 px-2 rounded text-white"> 
                           {{ ingreso.estado }}
                     </span>
                 </div>
@@ -68,17 +68,17 @@
                 </div>
             </div>
             <div class="w-full mx-2 flex-1 svelte-1l8159u">
-                <div class="font-bold mt-3 text-gray-600 text-sm"> Condición frente al IVA </div>
+                <div class="font-bold mt-3 text-gray-600 text-sm"> Proveedor </div>
                 <div class="block p-2 rounded border shadow mt-2 bg-gray-100 text-sm">
-                    {{ ingreso.proveedor.condicion_iva }}
+                    {{ ingreso.proveedor.razon_social}}
                 </div>
             </div>
         </div> 
         <div class="flex flex-col lg:flex-row">
             <div class="w-full mx-2 flex-1 svelte-1l8159u">
-                <div class="font-bold mt-3 text-gray-600 text-sm"> Proveedor </div>
+                <div class="font-bold mt-3 text-gray-600 text-sm"> Condición frente al IVA </div>
                 <div class="block p-2 rounded border shadow mt-2 bg-gray-100 text-sm">
-                    {{ ingreso.proveedor.razon_social}}
+                    {{ ingreso.proveedor.condicion_iva }}
                 </div>
             </div>
             <div class="w-full mx-2 flex-1 svelte-1l8159u">

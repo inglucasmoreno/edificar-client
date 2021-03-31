@@ -46,14 +46,26 @@ export class NuevoProductoEgresoComponent implements OnInit {
 
     if(Number(cantidad) > this.producto.cantidad){
       Swal.fire({
-        icon: 'info',
-        title: 'Información',
-        text: 'La cantidad es superior al disponible',
-        confirmButtonText: 'Entendido'        
-      });
-      return;
+        title: '¿Estas seguro?',
+        text: "La cantidad es superior al disponible",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Continuar',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.crearProducto(cantidad);
+        }
+      })
+    }else{
+      this.crearProducto(cantidad);
     }
-
+  }
+  
+  // Se agrega el producto al egreso
+  crearProducto(cantidad: any): void {
     const data = {
       egreso: this.id,
       producto: this.producto._id,
@@ -83,7 +95,6 @@ export class NuevoProductoEgresoComponent implements OnInit {
       })  
       this.loadingCreacion = false; 
     });
-
   }
 
   // Listar productos
