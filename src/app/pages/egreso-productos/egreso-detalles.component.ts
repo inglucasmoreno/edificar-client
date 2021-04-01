@@ -15,7 +15,7 @@ export class EgresoDetallesComponent implements OnInit {
   public id;
   public total = 0;
   public loading = true;
-  public loadingCargando = false;
+  public loadingCargando = true;
   public egreso = {};
   public productos = [];
 
@@ -31,7 +31,6 @@ export class EgresoDetallesComponent implements OnInit {
       this.egresosService.getEgreso(id).subscribe(({egreso}) => {
         this.egreso = egreso;
         this.listarProductos();
-        this.loading = false;
       })         
     },({error}) => {
       Swal.fire({
@@ -49,6 +48,7 @@ export class EgresoDetallesComponent implements OnInit {
       this.productos = productos;
       this.total = total;
       this.loadingCargando = false;
+      this.loading = false;
     },({error})=>{
       Swal.fire({
         icon: 'error',

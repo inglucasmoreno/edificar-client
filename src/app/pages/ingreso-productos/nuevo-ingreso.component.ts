@@ -30,10 +30,10 @@ export class NuevoIngresoComponent implements OnInit {
   ngOnInit(): void {}
 
   // Nuevo ingreso
-  crearIngreso(puntoVenta: string, nroComprobante: string): void {
+  crearIngreso(punto_venta: string, nro_comprobante: string): void {
     
     // Se verifica validacion de formulario
-    if(puntoVenta.trim() == '' || nroComprobante.trim() == '' || !this.proveedorSeleccionado){
+    if(punto_venta.trim() == '' || nro_comprobante.trim() == '' || !this.proveedorSeleccionado){
       Swal.fire({
         icon: 'info',
         title: 'Información',
@@ -45,7 +45,8 @@ export class NuevoIngresoComponent implements OnInit {
     
     // Se crea nuevo ingreso  
     const data = {
-      numero_remito: `${puntoVenta}-${nroComprobante}`,
+      punto_venta,
+      nro_comprobante,
       proveedor: this.proveedor._id,
     }
 
@@ -61,6 +62,7 @@ export class NuevoIngresoComponent implements OnInit {
       this.loadingFinal = false;  
       this.router.navigateByUrl(`dashboard/ingreso_productos/detalles/${ingreso._id}`);
     },({error}) => {
+      console.log(error);
       Swal.fire({
         icon: 'error',
         title: 'Error',

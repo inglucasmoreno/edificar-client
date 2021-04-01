@@ -1,20 +1,13 @@
 <app-tarjeta-formulario >
     <div class="flex items-center justify-between">
         <div class="flex items-center">
-            <h1 class="flex items-center text-gray-700 px-4 py-1 pt-2">
+            <h1 *ngIf="!loading" class="flex items-center text-gray-700 px-4 py-1 pt-2">
                 <button routerLink="/dashboard/egreso_productos"
                         [disabled]="loadingCargando">
                     <i class="fas fa-arrow-left border text-white border-gray-300 rounded p-2 px-3 shadow cursor-pointer"
                        [ngClass]="{'bg-gray-400': loadingCargando, 'bg-gray-500': !loadingCargando}"
                     ></i>
                 </button>
-                <div *ngIf="loading" class="flex flex-col ml-2">
-                    <span class="ml-2 text-xl text-gray-600"> Nota de venta </span>
-                    <span class="text-xs w-max mt-1 ml-1 font-semibold border py-1 px-2 rounded text-white bg-gray-500"> 
-                        <i class="fas fa-spinner animate-spin text-gray-600 mr-1"></i>          
-                        Cargando estado
-                    </span>
-                </div>
                 <div *ngIf="!loading" class="flex flex-col ml-2">
                     <span class="ml-2 text-xl text-gray-600"> Nota de venta </span>
                     <span [ngClass]="{'bg-yellow-500':egreso.estado == 'Pendiente', 'bg-green-500':egreso.estado == 'Completado'}"
@@ -27,7 +20,7 @@
                 <i class="fas fa-spinner animate-spin text-2xl text-gray-400 ml-2"></i>
             </span>    
         </div>
-        <div *ngIf="!loading">
+        <div *ngIf="!loading && productos.length !== 0">
             <div (click)="completarEgreso()" *ngIf="egreso.estado === 'Pendiente'" class="mr-5">
                 <button title="Completar egreso" 
                         class="py-2 px-3 rounded border text-white cursor-pointer shadow"
@@ -35,26 +28,31 @@
                         [disabled]="loadingCargando"
                         > <i class="fas fa-check"></i> </button>
             </div>
-            <div *ngIf="egreso.estado === 'Completado'" class="mr-4 p-2 border bg-green-500 text-white rounded">
+            <div *ngIf="egreso.estado === 'Completado'" class="mr-4 px-2 py-1 border bg-green-500 text-white rounded">
                 <i class="far fa-calendar-check mr-1 font-semibold"></i>
                 {{ egreso.fecha_egreso | fecha }}
             </div>
         </div>
     </div>
     
-    <div *ngIf="loading">
-        <i class="fas fa-spinner animate-spin text-gray-400 ml-2 text-gray-500 mt-5"></i> Cargando egreso
+    <div *ngIf="loading" class="p-3 text-gray-500">
+        <i class="fas fa-spinner animate-spin ml-2 text-gray-500"></i> 
+        Cargando nota de venta
     </div>
+
     <div *ngIf="!loading" class="p-4">
         <div class="flex items-center justify-between bg-yellow-100 p-2 rounded border">
             <h1 class="font-semibold text-gray-600"> Datos del egreso </h1>
-            <i [routerLink]="['/dashboard/egreso_productos/editar', egreso._id]" *ngIf="egreso.estado == 'Pendiente'" class="fas text-xl fa-pencil-alt text-gray-600 mr-2 cursor-pointer hover:text-yellow-500"></i>
+            <i [routerLink]="['/dashboard/egreso_productos/editar', egreso._id]" 
+               *ngIf="egreso.estado == 'Pendiente'" 
+               title="Editar egreso"
+               class="fas text-xl fa-pencil-alt text-gray-600 mr-2 cursor-pointer hover:text-yellow-500"></i>
         </div>
         <div class="flex flex-col lg:flex-row">
             <div class="w-full mx-2 flex-1 svelte-1l8159u">
                 <div class="font-bold mt-3 text-gray-600 text-sm"> Codigo de egreso </div>
                 <div class="block p-2 rounded border shadow mt-2 bg-gray-100 text-sm">
-                    {{ egreso.codigo }}
+                    {{ egreso.codigo_cadena }}
                 </div>
             </div>
             <div class="w-full mx-2 flex-1 svelte-1l8159u"></div>
@@ -76,10 +74,11 @@
         <div class="flex items-center justify-between bg-yellow-100 p-2 rounded border mt-4">
             <h1 class="font-semibold text-gray-600"> Detalles de productos ({{ total }}) </h1>
             <i *ngIf="egreso.estado == 'Pendiente'"
+                title="Agregar productos"
                 [routerLink]="['/dashboard/egreso_productos/nuevo-producto', egreso._id]" 
                 class="fas fa-plus-circle text-xl text-gray-600 mr-2 cursor-pointer hover:text-yellow-500"></i>
         </div>
-        <button *ngIf="productos.length === 0"
+        <button *ngIf="productos.length === 0 && !loadingCargando"
                 [routerLink]="['/dashboard/egreso_productos/nuevo-producto', egreso._id]" 
                 class="border rounded p-2 mt-3 bg-yellow-500 text-white">
             <i class="fas fa-plus text-xs"></i>
@@ -118,15 +117,13 @@
                 </button>
             </div>
 
-            <span *ngIf="!producto.activo" class="py-1 px-2 rounded bg-green-500 text-white text-sm"> 
-                {{ producto.fecha_egreso | fecha }}
-            </span>
+            <div *ngIf="!producto.activo" class="py-1 px-2 rounded bg-green-500 text-white text-sm"> 
+                <span> {{ producto.fecha_egreso | fecha }} </span>         
+            </div>
         </div> 
     
     </div>
        
-    <br>
-
 </app-tarjeta-formulario>
 
 

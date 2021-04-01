@@ -8,8 +8,8 @@
                 ></i>
             </button>
             <div class="flex flex-col ml-2">
-                <span class="ml-2 text-xl text-gray-600"> Ingreso </span>
-                <span class="text-xs mt-1 ml-1 font-semibold border py-1 px-2 rounded text-white bg-yellow-500"> 
+                <span class="ml-2 text-xl text-gray-600"> Remito de ingreso </span>
+                <span class="text-xs mt-1 ml-1 w-max font-semibold border py-1 px-2 rounded text-white bg-yellow-500"> 
                     <i class="fas fa-plus-circle"></i>
                     Nuevo producto
                 </span>
@@ -86,7 +86,10 @@
                 >
                     <div class="p-2">
                         <span class="block text-sm font-semibold"> {{ producto.codigo }} </span>
-                        <span class="block text-sm text-gray-800"> Disponibles: {{ producto.cantidad }} </span>
+                        <span class="block text-sm text-gray-800"
+                              [ngClass]="{'text-red-500 font-semibold' : producto.cantidad < 0}"> 
+                            Disponibles: {{ producto.cantidad }} 
+                        </span>
                         <span class="block text-xs text-gray-800"> {{ producto.descripcion }} </span>
                     </div>
                 </div>

@@ -65,7 +65,8 @@ export class NuevoUsuarioComponent implements OnInit {
         icon: 'success',
         title: 'Completado',
         text: 'El usuario ha sido creado',
-        confirmButtonText: 'Entendido'
+        timer: 1000,
+        showConfirmButton: false
       });
       this.loading = false;  // Finaliza la creacion de usuario
       this.router.navigateByUrl('dashboard/usuarios');

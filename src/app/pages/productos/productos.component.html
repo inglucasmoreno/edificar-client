@@ -68,8 +68,9 @@
                                         <div class="cursor-pointer flex items-center focus:outline-none">
                                             <span> Código </span>
                                             <span class="ml-2">
-                                                <i *ngIf="ordenar.columna == 'codigo' && ordenar.direccion == 1" class="fas fa-chevron-down"></i>
-                                                <i *ngIf="ordenar.columna == 'codigo' && ordenar.direccion == -1" class="fas fa-chevron-up"></i>
+                                                <i *ngIf="ordenar.columna == 'codigo' && ordenar.direccion == 1" class="fas fa-sort-down"></i>
+                                                <i *ngIf="ordenar.columna == 'codigo' && ordenar.direccion == -1" class="fas fa-sort-up"></i>
+                                                <i *ngIf="ordenar.columna != 'codigo'" class="fas fa-sort text-gray-500"></i>
                                             </span>
                                         </div>
                                     </th>
@@ -79,8 +80,9 @@
                                         <div class="cursor-pointer flex items-center focus:outline-none">
                                             <span> Descripción </span>
                                             <span class="ml-2">
-                                                <i *ngIf="ordenar.columna == 'descripcion' && ordenar.direccion == 1" class="fas fa-chevron-down"></i>
-                                                <i *ngIf="ordenar.columna == 'descripcion' && ordenar.direccion == -1" class="fas fa-chevron-up"></i>
+                                                <i *ngIf="ordenar.columna == 'descripcion' && ordenar.direccion == 1" class="fas fa-sort-down"></i>
+                                                <i *ngIf="ordenar.columna == 'descripcion' && ordenar.direccion == -1" class="fas fa-sort-up"></i>
+                                                <i *ngIf="ordenar.columna != 'descripcion'" class="fas fa-sort text-gray-500"></i>
                                             </span>
                                         </div>
                                     </th>
@@ -90,34 +92,37 @@
                                         <div class="cursor-pointer flex items-center focus:outline-none">
                                             <span> Unidad de medida </span>
                                             <span class="ml-2">
-                                                <i *ngIf="ordenar.columna == 'unidad_medida' && ordenar.direccion == 1" class="fas fa-chevron-down"></i>
-                                                <i *ngIf="ordenar.columna == 'unidad_medida' && ordenar.direccion == -1" class="fas fa-chevron-up"></i>
+                                                <i *ngIf="ordenar.columna == 'unidad_medida' && ordenar.direccion == 1" class="fas fa-sort-down"></i>
+                                                <i *ngIf="ordenar.columna == 'unidad_medida' && ordenar.direccion == -1" class="fas fa-sort-up"></i>
+                                                <i *ngIf="ordenar.columna != 'unidad_medida'" class="fas fa-sort text-gray-500"></i>
                                             </span>
                                         </div>
                                     </th>
                                     <th
                                         (click)="ordenarPorColumna('cantidad')"
-                                        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                        <div class="cursor-pointer flex focus:outline-none">
+                                        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        <div class="cursor-pointer flex focus:outline-none items-center justify-center">
                                             <span>
                                                 Stock actual
                                             </span>
                                             <span class="ml-2">
-                                                <i *ngIf="ordenar.columna == 'cantidad' && ordenar.direccion == 1" class="fas fa-chevron-down"></i>
-                                                <i *ngIf="ordenar.columna == 'cantidad' && ordenar.direccion == -1" class="fas fa-chevron-up"></i>
+                                                <i *ngIf="ordenar.columna == 'cantidad' && ordenar.direccion == 1" class="fas fa-sort-down"></i>
+                                                <i *ngIf="ordenar.columna == 'cantidad' && ordenar.direccion == -1" class="fas fa-sort-up"></i>
+                                                <i *ngIf="ordenar.columna != 'cantidad'" class="fas fa-sort text-gray-500"></i>
                                             </span>
                                         </div>
                                     </th>
                                     <th
-                                    (click)="ordenarPorColumna('cantidad')"
+                                    (click)="ordenarPorColumna('precio')"
                                     class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                        <div class="cursor-pointer flex focus:outline-none">
+                                        <div class="cursor-pointer flex focus:outline-none items-center justify-center">
                                             <span>
                                                 Precio ($)
                                             </span>
                                             <span class="ml-2">
-                                                <i *ngIf="ordenar.columna == 'cantidad' && ordenar.direccion == 1" class="fas fa-chevron-down"></i>
-                                                <i *ngIf="ordenar.columna == 'cantidad' && ordenar.direccion == -1" class="fas fa-chevron-up"></i>
+                                                <i *ngIf="ordenar.columna == 'precio' && ordenar.direccion == 1" class="fas fa-sort-down"></i>
+                                                <i *ngIf="ordenar.columna == 'precio' && ordenar.direccion == -1" class="fas fa-sort-up"></i>
+                                                <i *ngIf="ordenar.columna != 'precio'" class="fas fa-sort text-gray-500"></i>
                                             </span>
                                         </div>
                                     </th>                             
@@ -128,8 +133,9 @@
                                                 Estado                                               
                                             </span>
                                             <span class="ml-2">
-                                                <i *ngIf="ordenar.columna == 'activo' && ordenar.direccion == 1" class="fas fa-chevron-down"></i>
-                                                <i *ngIf="ordenar.columna == 'activo' && ordenar.direccion == -1" class="fas fa-chevron-up"></i>
+                                                <i *ngIf="ordenar.columna == 'activo' && ordenar.direccion == 1" class="fas fa-sort-down"></i>
+                                                <i *ngIf="ordenar.columna == 'activo' && ordenar.direccion == -1" class="fas fa-sort-up"></i>
+                                                <i *ngIf="ordenar.columna != 'activo'" class="fas fa-sort text-gray-500"></i>
                                             </span>
                                         </div>
                                     </th>
@@ -137,32 +143,33 @@
                             </thead>
                             <tbody>
                                 <tr [ngClass]="{'bg-red-100 border': producto.stock_minimo | alertaStock : producto.cantidad : producto.cantidad_minima }" [routerLink]="['/dashboard/producto/', producto._id]" class="animate__animated animate__fadeIn hover:bg-yellow-100 cursor-pointer" *ngFor="let producto of productos">
-                                    <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                                    <td class="px-5 py-2 border-b border-gray-200 text-sm">
                                         <p class="text-gray-700  whitespace-no-wrap font-semibold tracking-wider">
                                             {{ producto.codigo }}
                                         </p>
                                     </td>
-                                    <td class="px-5 py-5 border-b border-gray-200 text-xs">
+                                    <td class="px-5 py-2 border-b border-gray-200 text-xs">
                                         <p class="text-gray-900 whitespace-no-wrap tracking-wider">
                                             {{ producto.descripcion }}
                                         </p>
                                     </td>
-                                    <td class="px-5 py-5 border-b border-gray-200 text-xs">
+                                    <td class="px-5 py-2 border-b border-gray-200 text-xs">
                                         <p class="text-gray-900 whitespace-no-wrap tracking-wider">
                                             {{ producto.unidad_medida['descripcion'] }}
                                         </p>
                                     </td>
-                                    <td class="px-5 py-5 border-b border-gray-200 text-sm font-semibold">
-                                        <p class="text-gray-900 whitespace-no-wrap tracking-wider">
+                                    <td class="px-5 py-2 border-b border-gray-200 text-sm text-center"
+                                        [ngClass]="{'text-red-500 font-semibold' : producto.cantidad < 0, 'text-gray-900' : producto.cantidad >= 0}">
+                                        <p class="whitespace-no-wrap tracking-wider font-semibold">
                                             {{ producto.cantidad }}
                                         </p>
                                     </td>
-                                    <td class="px-5 py-5 border-b border-gray-200 text-sm font-semibold">
+                                    <td class="px-5 py-2 border-b border-gray-200 text-sm text-center">
                                         <span class="text-gray-900 whitespace-no-wrap tracking-wider">
                                             ${{ producto.precio }}
                                         </span>
                                     </td>
-                                    <td class="px-5 py-5 border-b border-gray-200 text-sm text-center">
+                                    <td class="px-5 py-2 border-b border-gray-200 text-sm text-center">
                                         <app-pastilla-estado [activo]="producto.activo"></app-pastilla-estado>   
                                     </td>
                                 </tr>

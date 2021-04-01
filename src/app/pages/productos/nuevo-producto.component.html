@@ -19,7 +19,7 @@
                 <div class="font-bold mt-3 text-gray-600 text-sm"> Código </div>
                 <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
                     <input placeholder="Ej. LB0001" 
-                           class="p-1 px-2 appearance-none outline-none w-full text-gray-800"
+                           class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"
                            formControlName="codigo"
                            ></div>
             </div>
@@ -28,14 +28,14 @@
                 <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
                     <input placeholder="Ej. Ladrillos"
                            formControlName="descripcion" 
-                           class="p-1 px-2 appearance-none outline-none w-full text-gray-800"></div>
+                           class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"></div>
             </div>
         </div>
         <div class="flex flex-col lg:flex-row">
             <div class="w-full mx-2 flex-1">
                 <div class="font-bold mt-3 text-gray-600 text-sm"> Unidad de medida </div>
                 <div class="bg-white my-2 flex">
-                    <select class="border rounded p-1 py-2 w-full text-sm shadow" formControlName="unidad_medida">
+                    <select class="border rounded p-1 py-2 w-full text-sm shadow text-sm" formControlName="unidad_medida">
                         <option *ngFor="let unidad of unidades" [value]="unidad._id"> {{ unidad.descripcion }} </option>
                     </select>
                 </div>
@@ -49,7 +49,7 @@
                            type="number"
                            formControlName="cantidad"
                            min="0"
-                           class="p-1 px-2 appearance-none outline-none w-full text-gray-800"> </div>
+                           class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"> </div>
             </div>
         </div>
         <div class="flex flex-col lg:flex-row">
@@ -57,7 +57,7 @@
                 <div class="font-bold mt-3 text-gray-600 text-sm"> ¿Stock mínimo? </div>
                 <div class="bg-white my-2 flex">
                     <select (change)="stockMinimo = !stockMinimo"
-                            class="border rounded p-1 py-2 w-full shadow"
+                            class="border rounded p-1 py-2 w-full shadow text-sm"
                             formControlName="stock_minimo">
                         <option value=false> No </option>
                         <option value=true> Si </option>
@@ -72,9 +72,9 @@
                            placeholder="Ej. 20" 
                            min="0"
                            formControlName="cantidad_minima"
-                           class="p-1 px-2 appearance-none outline-none w-full text-gray-800"> </div>
+                           class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"> </div>
                 <div *ngIf="!stockMinimo"
-                     class="border shadow p-2 my-2 text-gray-500 rounded bg-gray-100">
+                     class="border shadow p-2 my-2 text-gray-500 rounded bg-gray-100 text-sm">
                     Sin stock mínimo
                 </div>        
             </div>
@@ -87,12 +87,12 @@
                            placeholder="Ej. 2500"
                            formControlName="precio" 
                            step="0.01"                           
-                           class="p-1 px-2 appearance-none outline-none w-full text-gray-800"></div>
+                           class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"></div>
             </div>
             <div class="w-full mx-2 flex-1">
                 <div class="font-bold mt-3 text-gray-600 text-sm"> Estado </div>
                 <div class="bg-white my-2 flex">
-                    <select class="border rounded p-1 py-2 w-full shadow">
+                    <select class="border rounded p-1 py-2 w-full shadow text-sm">
                         <option value=true> Activo </option>
                         <option value=false> Inactivo </option>
                     </select>

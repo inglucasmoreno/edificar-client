@@ -63,8 +63,9 @@
                                             <div class="cursor-pointer flex items-center focus:outline-none">
                                                 <span> Razón social </span>
                                                 <span class="ml-2">
-                                                    <i *ngIf="ordenar.columna == 'razon_social' && ordenar.direccion == 1" class="fas fa-chevron-down"></i>
-                                                    <i *ngIf="ordenar.columna == 'razon_social' && ordenar.direccion == -1" class="fas fa-chevron-up"></i>
+                                                    <i *ngIf="ordenar.columna == 'razon_social' && ordenar.direccion == 1" class="fas fa-sort-down"></i>
+                                                    <i *ngIf="ordenar.columna == 'razon_social' && ordenar.direccion == -1" class="fas fa-sort-up"></i>
+                                                    <i *ngIf="ordenar.columna != 'razon_social'" class="fas fa-sort text-gray-500"></i>
                                                 </span>
                                             </div>
                                         </th>
@@ -74,8 +75,9 @@
                                             <div class="cursor-pointer flex items-center focus:outline-none">
                                                 <span> CUIT </span>
                                                 <span class="ml-2">
-                                                    <i *ngIf="ordenar.columna == 'cuit' && ordenar.direccion == 1" class="fas fa-chevron-down"></i>
-                                                    <i *ngIf="ordenar.columna == 'cuit' && ordenar.direccion == -1" class="fas fa-chevron-up"></i>
+                                                    <i *ngIf="ordenar.columna == 'cuit' && ordenar.direccion == 1" class="fas fa-sort-down"></i>
+                                                    <i *ngIf="ordenar.columna == 'cuit' && ordenar.direccion == -1" class="fas fa-sort-up"></i>
+                                                    <i *ngIf="ordenar.columna != 'cuit'" class="fas fa-sort text-gray-500"></i>
                                                 </span>
                                             </div>
                                         </th>
@@ -85,8 +87,9 @@
                                             <div class="cursor-pointer flex items-center focus:outline-none">
                                                 <span> Condición frente al IVA </span>
                                                 <span class="ml-2">
-                                                    <i *ngIf="ordenar.columna == 'condicion_iva' && ordenar.direccion == 1" class="fas fa-chevron-down"></i>
-                                                    <i *ngIf="ordenar.columna == 'condicion_iva' && ordenar.direccion == -1" class="fas fa-chevron-up"></i>
+                                                    <i *ngIf="ordenar.columna == 'condicion_iva' && ordenar.direccion == 1" class="fas fa-sort-down"></i>
+                                                    <i *ngIf="ordenar.columna == 'condicion_iva' && ordenar.direccion == -1" class="fas fa-sort-up"></i>
+                                                    <i *ngIf="ordenar.columna != 'condicion_iva'" class="fas fa-sort text-gray-500"></i>
                                                 </span>
                                             </div>
                                         </th>
@@ -98,8 +101,9 @@
                                                     Estado
                                                 </span>
                                                 <span class="ml-2">
-                                                    <i *ngIf="ordenar.columna == 'activo' && ordenar.direccion == 1" class="fas fa-chevron-down"></i>
-                                                    <i *ngIf="ordenar.columna == 'activo' && ordenar.direccion == -1" class="fas fa-chevron-up"></i>
+                                                    <i *ngIf="ordenar.columna == 'activo' && ordenar.direccion == 1" class="fas fa-sort-down"></i>
+                                                    <i *ngIf="ordenar.columna == 'activo' && ordenar.direccion == -1" class="fas fa-sort-up"></i>
+                                                    <i *ngIf="ordenar.columna != 'activo'" class="fas fa-sort text-gray-500"></i>
                                                 </span>
                                             </div>
                                         </th>
@@ -111,27 +115,27 @@
                                 </thead>
                                 <tbody>
                                     <tr class="animate__animated animate__fadeIn" *ngFor="let proveedor of proveedores">
-                                        <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                                        <td class="px-5 py-2 border-b border-gray-200 text-sm">
                                             <p class="text-gray-900 whitespace-no-wrap">
                                                 {{ proveedor.razon_social }}
                                             </p>
                                         </td>
-                                        <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                                        <td class="px-5 py-2 border-b border-gray-200 text-sm">
                                             <p class="text-gray-900 whitespace-no-wrap">
                                                 {{ proveedor.cuit }}
                                             </p>
                                         </td>
-                                        <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                                        <td class="px-5 py-2 border-b border-gray-200 text-sm">
                                             <p class="text-gray-900 whitespace-no-wrap">
                                                 {{ proveedor.condicion_iva }}
                                             </p>
                                         </td>
-                                        <td class="px-5 py-5 border-b border-gray-200 text-sm text-center">
+                                        <td class="px-5 py-2 border-b border-gray-200 text-sm text-center">
                                             <app-pastilla-estado [activo]="proveedor.activo"
                                                                  (click)="actualizarEstado(proveedor)"
                                             ></app-pastilla-estado>
                                         </td>
-                                        <td class="px-5 py-5 border-b border-gray-200 text-sm text-center">
+                                        <td class="px-5 py-2 border-b border-gray-200 text-sm text-center">
                                             <p class="flex items-center justify-center text-gray-900 whitespace-no-wrap">
                                                 <app-icono-tabla
                                                     [routerLink]="['/dashboard/proveedores/editar', proveedor._id]"

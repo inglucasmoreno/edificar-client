@@ -66,8 +66,9 @@
                                         <div class="cursor-pointer flex items-center focus:outline-none">
                                             <span> Codigo </span>
                                             <span class="ml-2">
-                                                <i *ngIf="ordenar.columna == 'codigo' && ordenar.direccion == 1" class="fas fa-chevron-down"></i>
-                                                <i *ngIf="ordenar.columna == 'codigo' && ordenar.direccion == -1" class="fas fa-chevron-up"></i>
+                                                <i *ngIf="ordenar.columna == 'codigo' && ordenar.direccion == 1" class="fas fa-sort-down"></i>
+                                                <i *ngIf="ordenar.columna == 'codigo' && ordenar.direccion == -1" class="fas fa-sort-up"></i>
+                                                <i *ngIf="ordenar.columna != 'codigo'" class="fas fa-sort text-gray-500"></i>
                                             </span>
                                         </div>
                                     </th>
@@ -77,8 +78,9 @@
                                     <div class="cursor-pointer flex items-center focus:outline-none">
                                         <span> Cliente </span>
                                             <span class="ml-2">
-                                                <i *ngIf="ordenar.columna == 'descripcion_cliente' && ordenar.direccion == 1" class="fas fa-chevron-down"></i>
-                                                <i *ngIf="ordenar.columna == 'descripcion_cliente' && ordenar.direccion == -1" class="fas fa-chevron-up"></i>
+                                                <i *ngIf="ordenar.columna == 'descripcion_cliente' && ordenar.direccion == 1" class="fas fa-sort-down"></i>
+                                                <i *ngIf="ordenar.columna == 'descripcion_cliente' && ordenar.direccion == -1" class="fas fa-sort-up"></i>
+                                                <i *ngIf="ordenar.columna != 'descripcion_cliente'" class="fas fa-sort text-gray-500"></i>
                                             </span>
                                         </div>
                                     </th>
@@ -88,8 +90,9 @@
                                     <div class="cursor-pointer flex items-center focus:outline-none">
                                         <span> Fecha de creación </span>
                                             <span class="ml-2">
-                                                <i *ngIf="ordenar.columna == 'createdAt' && ordenar.direccion == 1" class="fas fa-chevron-down"></i>
-                                                <i *ngIf="ordenar.columna == 'createdAt' && ordenar.direccion == -1" class="fas fa-chevron-up"></i>
+                                                <i *ngIf="ordenar.columna == 'createdAt' && ordenar.direccion == 1" class="fas fa-sort-down"></i>
+                                                <i *ngIf="ordenar.columna == 'createdAt' && ordenar.direccion == -1" class="fas fa-sort-up"></i>
+                                                <i *ngIf="ordenar.columna != 'createdAt'" class="fas fa-sort text-gray-500"></i>
                                             </span>
                                         </div>
                                     </th>
@@ -99,8 +102,9 @@
                                     <div class="cursor-pointer flex items-center focus:outline-none">
                                         <span> Fecha de cierre </span>
                                             <span class="ml-2">
-                                                <i *ngIf="ordenar.columna == 'fecha_egreso' && ordenar.direccion == 1" class="fas fa-chevron-down"></i>
-                                                <i *ngIf="ordenar.columna == 'fecha_egreso' && ordenar.direccion == -1" class="fas fa-chevron-up"></i>
+                                                <i *ngIf="ordenar.columna == 'fecha_egreso' && ordenar.direccion == 1" class="fas fa-sort-down"></i>
+                                                <i *ngIf="ordenar.columna == 'fecha_egreso' && ordenar.direccion == -1" class="fas fa-sort-up"></i>
+                                                <i *ngIf="ordenar.columna != 'fecha_egreso'" class="fas fa-sort text-gray-500"></i>
                                             </span>
                                         </div>
                                     </th>
@@ -110,8 +114,9 @@
                                     <div class="cursor-pointer flex items-center focus:outline-none">
                                         <span> Estado </span>
                                             <span class="ml-2">
-                                                <i *ngIf="ordenar.columna == 'estado' && ordenar.direccion == 1" class="fas fa-chevron-down"></i>
-                                                <i *ngIf="ordenar.columna == 'estado' && ordenar.direccion == -1" class="fas fa-chevron-up"></i>
+                                                <i *ngIf="ordenar.columna == 'estado' && ordenar.direccion == 1" class="fas fa-sort-down"></i>
+                                                <i *ngIf="ordenar.columna == 'estado' && ordenar.direccion == -1" class="fas fa-sort-up"></i>
+                                                <i *ngIf="ordenar.columna != 'estado'" class="fas fa-sort text-gray-500"></i>
                                             </span>
                                         </div>
                                     </th>
@@ -120,22 +125,22 @@
                             <tbody>
                                 <tr [routerLink]="['/dashboard/egreso_productos/detalles/', egreso._id]"
                                     class="animate__animated animate__fadeIn hover:bg-yellow-100 cursor-pointer" *ngFor="let egreso of egresos">
-                                    <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                                    <td class="px-5 py-2 border-b border-gray-200 text-sm">
                                         <p class="text-gray-900 whitespace-no-wrap font-semibold">
-                                            {{ egreso.codigo }}
+                                            {{ egreso.codigo_cadena }}
                                         </p>
                                     </td>
-                                    <td class="px-5 py-5 border-b border-gray-200 text-xs">
+                                    <td class="px-5 py-2 border-b border-gray-200 text-xs">
                                         <p class="text-gray-900 whitespace-no-wrap">
                                             {{ egreso.descripcion_cliente }}
                                         </p>
                                     </td>
-                                    <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                                    <td class="px-5 py-2 border-b border-gray-200 text-sm">
                                         <p class="text-gray-900 whitespace-no-wrap">
                                             {{ egreso.createdAt | fecha }}
                                         </p>
                                     </td>
-                                    <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                                    <td class="px-5 py-2 border-b border-gray-200 text-sm">
                                         <p class="text-gray-900 whitespace-no-wrap">
                                             {{ 
                                                 egreso.estado !== 'Completado'
@@ -144,7 +149,7 @@
                                             }}
                                         </p>
                                     </td>
-                                    <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                                    <td class="px-5 py-2 border-b border-gray-200 text-sm">
                                         <p class="text-gray-900 whitespace-no-wrap font-semibold">
                                             <app-pastilla-etapa [estado]="egreso.estado"></app-pastilla-etapa>
                                         </p>

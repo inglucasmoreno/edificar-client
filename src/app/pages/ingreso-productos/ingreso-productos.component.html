@@ -66,8 +66,9 @@
                                         <div class="cursor-pointer flex items-center focus:outline-none">
                                             <span> N° Remito </span>
                                             <span class="ml-2">
-                                                <i *ngIf="ordenar.columna == 'numero_remito' && ordenar.direccion == 1" class="fas fa-chevron-down"></i>
-                                                <i *ngIf="ordenar.columna == 'numero_remito' && ordenar.direccion == -1" class="fas fa-chevron-up"></i>
+                                                <i *ngIf="ordenar.columna == 'numero_remito' && ordenar.direccion == 1" class="fas fa-sort-down"></i>
+                                                <i *ngIf="ordenar.columna == 'numero_remito' && ordenar.direccion == -1" class="fas fa-sort-up"></i>
+                                                <i *ngIf="ordenar.columna != 'numero_remito'" class="fas fa-sort text-gray-500"></i>
                                             </span>
                                         </div>
                                     </th>
@@ -77,8 +78,9 @@
                                     <div class="cursor-pointer flex items-center focus:outline-none">
                                         <span> Proveedor </span>
                                             <span class="ml-2">
-                                                <i *ngIf="ordenar.columna == 'razon_social_proveedor' && ordenar.direccion == 1" class="fas fa-chevron-down"></i>
-                                                <i *ngIf="ordenar.columna == 'razon_social_proveedor' && ordenar.direccion == -1" class="fas fa-chevron-up"></i>
+                                                <i *ngIf="ordenar.columna == 'razon_social_proveedor' && ordenar.direccion == 1" class="fas fa-sort-down"></i>
+                                                <i *ngIf="ordenar.columna == 'razon_social_proveedor' && ordenar.direccion == -1" class="fas fa-sort-up"></i>
+                                                <i *ngIf="ordenar.columna != 'razon_social_proveedor'" class="fas fa-sort text-gray-500"></i>
                                             </span>
                                         </div>
                                     </th>
@@ -88,8 +90,9 @@
                                     <div class="cursor-pointer flex items-center focus:outline-none">
                                         <span> Fecha de creación </span>
                                             <span class="ml-2">
-                                                <i *ngIf="ordenar.columna == 'createdAt' && ordenar.direccion == 1" class="fas fa-chevron-down"></i>
-                                                <i *ngIf="ordenar.columna == 'createdAt' && ordenar.direccion == -1" class="fas fa-chevron-up"></i>
+                                                <i *ngIf="ordenar.columna == 'createdAt' && ordenar.direccion == 1" class="fas fa-sort-down"></i>
+                                                <i *ngIf="ordenar.columna == 'createdAt' && ordenar.direccion == -1" class="fas fa-sort-up"></i>
+                                                <i *ngIf="ordenar.columna != 'createdAt'" class="fas fa-sort text-gray-500"></i>
                                             </span>
                                         </div>
                                     </th>
@@ -99,8 +102,9 @@
                                     <div class="cursor-pointer flex items-center focus:outline-none">
                                         <span> Fecha de cierre </span>
                                             <span class="ml-2">
-                                                <i *ngIf="ordenar.columna == 'fecha_ingreso' && ordenar.direccion == 1" class="fas fa-chevron-down"></i>
-                                                <i *ngIf="ordenar.columna == 'fecha_ingreso' && ordenar.direccion == -1" class="fas fa-chevron-up"></i>
+                                                <i *ngIf="ordenar.columna == 'fecha_ingreso' && ordenar.direccion == 1" class="fas fa-sort-down"></i>
+                                                <i *ngIf="ordenar.columna == 'fecha_ingreso' && ordenar.direccion == -1" class="fas fa-sort-up"></i>
+                                                <i *ngIf="ordenar.columna != 'fecha_ingreso'" class="fas fa-sort text-gray-500"></i>
                                             </span>
                                         </div>
                                     </th>
@@ -110,8 +114,9 @@
                                     <div class="cursor-pointer flex items-center focus:outline-none">
                                         <span> Estado </span>
                                             <span class="ml-2">
-                                                <i *ngIf="ordenar.columna == 'estado' && ordenar.direccion == 1" class="fas fa-chevron-down"></i>
-                                                <i *ngIf="ordenar.columna == 'estado' && ordenar.direccion == -1" class="fas fa-chevron-up"></i>
+                                                <i *ngIf="ordenar.columna == 'estado' && ordenar.direccion == 1" class="fas fa-sort-down"></i>
+                                                <i *ngIf="ordenar.columna == 'estado' && ordenar.direccion == -1" class="fas fa-sort-up"></i>
+                                                <i *ngIf="ordenar.columna != 'estado'" class="fas fa-sort text-gray-500"></i>
                                             </span>
                                         </div>
                                     </th>
@@ -120,22 +125,22 @@
                             <tbody>
                                 <tr  [routerLink]="['/dashboard/ingreso_productos/detalles/', ingreso._id]"
                                     class="animate__animated animate__fadeIn hover:bg-yellow-100 cursor-pointer" *ngFor="let ingreso of ingresos">
-                                    <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                                    <td class="px-5 py-2 border-b border-gray-200 text-sm">
                                         <p class="text-gray-900 whitespace-no-wrap font-semibold">
                                            {{  ingreso.numero_remito }}
                                         </p>
                                     </td>
-                                    <td class="px-5 py-5 border-b border-gray-200 text-xs">
+                                    <td class="px-5 py-2 border-b border-gray-200 text-xs">
                                         <p class="text-gray-900 whitespace-no-wrap">
                                             {{ ingreso.proveedor.razon_social }}
                                         </p>
                                     </td>
-                                    <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                                    <td class="px-5 py-2 border-b border-gray-200 text-sm">
                                         <p class="text-gray-900 whitespace-no-wrap">
                                             {{ ingreso.createdAt | fecha }}
                                         </p>
                                     </td>
-                                    <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                                    <td class="px-5 py-2 border-b border-gray-200 text-sm">
                                         <p class="text-gray-900 whitespace-no-wrap">
                                             {{ 
                                                 ingreso.estado === 'Pendiente'
@@ -144,7 +149,7 @@
                                             }}
                                         </p>
                                     </td>
-                                    <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                                    <td class="px-5 py-2 border-b border-gray-200 text-sm">
                                         <p class="text-gray-900 whitespace-no-wrap font-semibold">
                                             <app-pastilla-etapa [estado]=ingreso.estado ></app-pastilla-etapa>
                                         </p>

@@ -64,7 +64,7 @@ export class NuevoProductoComponent implements OnInit {
       Swal.fire({
         icon: 'info',
         title: 'Información',
-        text: 'Formulario invalido',
+        text: 'Formulario inválido',
         confirmButtonText: 'Entendido'
       });
     }

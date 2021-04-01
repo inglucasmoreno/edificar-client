@@ -29,7 +29,6 @@ export class IngresoDetallesComponent implements OnInit {
       this.id = id;
       this.ingresoService.getIngreso(id).subscribe( ({ ingreso }) => {
        this.ingreso = ingreso;
-       this.loading = false;
        this.listarProductosPorIngreso();
       });  
     },({error}) => {
@@ -87,6 +86,7 @@ export class IngresoDetallesComponent implements OnInit {
       this.productos = productos;
       this.total = total;
       this.loadingCargando = false;
+      this.loading = false;
     },({error})=>{
       Swal.fire({
         icon: 'error',

@@ -20,7 +20,7 @@
                 <div class="font-bold mt-3 text-gray-600 text-sm"> Nombre de usuario </div>
                 <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
                     <input placeholder="Ej. lmoreno" 
-                           class="p-1 px-2 appearance-none outline-none w-full text-gray-800"
+                           class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"
                            formControlName="dni"
                            ></div>
             </div>
@@ -30,7 +30,7 @@
                     <input type="email"
                            formControlName="email" 
                            placeholder="Ej. lucasmoreno@gmail.com" 
-                           class="p-1 px-2 appearance-none outline-none w-full text-gray-800"></div>
+                           class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"></div>
             </div>
         </div>
         <div class="flex flex-col lg:flex-row">
@@ -39,7 +39,7 @@
                 <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
                     <input placeholder="Ej. Moreno" 
                            formControlName="apellido"
-                           class="p-1 px-2 appearance-none outline-none w-full text-gray-800"> 
+                           class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"> 
                 </div>
             </div>
             <div class="w-full mx-2 flex-1 svelte-1l8159u">
@@ -47,7 +47,7 @@
                 <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
                     <input placeholder="Ej. Lucas" 
                            formControlName="nombre"
-                           class="p-1 px-2 appearance-none outline-none w-full text-gray-800"> </div>
+                           class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"> </div>
             </div>
         </div>
         <div class="flex flex-col lg:flex-row">
@@ -57,7 +57,7 @@
                     <input type="password" 
                            formControlName="password"
                            placeholder="******" 
-                           class="p-1 px-2 appearance-none outline-none w-full text-gray-800"> 
+                           class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"> 
                 </div>
             </div>
             <div class="w-full mx-2 flex-1">
@@ -66,14 +66,14 @@
                     <input type="password" 
                            formControlName="repetir"
                            placeholder="******" 
-                           class="p-1 px-2 appearance-none outline-none w-full text-gray-800"> </div>
+                           class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"> </div>
             </div>
         </div>
         <div class="flex flex-col lg:flex-row">
             <div class="w-full mx-2 flex-1">
                 <div class="font-bold mt-3 text-gray-600 text-sm"> Rol </div>
                 <div class="bg-white my-2 flex">
-                    <select class="border rounded p-1 py-2 w-full shadow"
+                    <select class="border rounded p-1 py-2 w-full shadow text-sm"
                             formControlName="role">
                         <option value="USER_ROLE"> Consulta </option>
                         <option value="ADMIN_ROLE"> Administrador </option>
@@ -83,7 +83,7 @@
             <div class="w-full mx-2 flex-1">
                 <div class="font-bold mt-3 text-gray-600 text-sm"> Estado </div>
                 <div class="bg-white my-2 flex">
-                    <select class="border rounded p-1 py-2 w-full shadow"
+                    <select class="border rounded p-1 py-2 w-full shadow text-sm"
                             formControlName="activo">
                         <option value=true> Activo </option>
                         <option value=false> Inactivo </option>

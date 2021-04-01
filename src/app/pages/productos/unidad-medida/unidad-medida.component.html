@@ -49,7 +49,7 @@
                                 <select
                                     #txtActivo
                                     (change)="filtrarActivos(txtActivo.value)"
-                                    class="appearance-none h-full rounded-r border-t border-l rounded-l sm:rounded-r-none sm:border-r-0 border-r border-b block appearance-none w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500">
+                                    class="appearance-none h-full text-sm rounded-r border-t border-l rounded-l sm:rounded-r-none sm:border-r-0 border-r border-b block appearance-none w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500">
                                     <option value=true> Activos </option>
                                     <option value=false> Inactivos </option>
                                     <option value=''> Todos </option>
@@ -75,7 +75,7 @@
                                         #txtDescripcion
                                         placeholder="Descripción"
                                         (keyup)="filtrarDescripcion(txtDescripcion.value)"
-                                        class="appearance-none rounded-r rounded-l sm:rounded-l-none border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none" />
+                                        class="appearance-none text-sm rounded-r rounded-l sm:rounded-l-none border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none" />
                             </div>
                             <span *ngIf="loading">
                                 <i class="fas fa-spinner animate-spin text-2xl text-gray-400 ml-2"></i>
@@ -94,8 +94,9 @@
                                         <div class="cursor-pointer flex items-center focus:outline-none">
                                             <span> Descripción </span>
                                             <span class="ml-2">
-                                                <i *ngIf="ordenar.columna == 'descripcion' && ordenar.direccion == 1" class="fas fa-chevron-down"></i>
-                                                <i *ngIf="ordenar.columna == 'descripcion' && ordenar.direccion == -1" class="fas fa-chevron-up"></i>
+                                                <i *ngIf="ordenar.columna == 'descripcion' && ordenar.direccion == 1" class="fas fa-sort-down"></i>
+                                                <i *ngIf="ordenar.columna == 'descripcion' && ordenar.direccion == -1" class="fas fa-sort-up"></i>
+                                                <i *ngIf="ordenar.columna != 'descripcion'" class="fas fa-sort text-gray-500"></i>
                                             </span>
                                         </div>
                                     </th>
@@ -107,8 +108,9 @@
                                                 Estado
                                             </span>
                                             <span class="ml-2">
-                                                <i *ngIf="ordenar.columna == 'activo' && ordenar.direccion == 1" class="fas fa-chevron-down"></i>
-                                                <i *ngIf="ordenar.columna == 'activo' && ordenar.direccion == -1" class="fas fa-chevron-up"></i>
+                                                <i *ngIf="ordenar.columna == 'activo' && ordenar.direccion == 1" class="fas fa-sort-down"></i>
+                                                <i *ngIf="ordenar.columna == 'activo' && ordenar.direccion == -1" class="fas fa-sort-up"></i>
+                                                <i *ngIf="ordenar.columna != 'activo'" class="fas fa-sort text-gray-500"></i>
                                             </span>
                                         </div>
                                     </th>
@@ -120,17 +122,17 @@
                             </thead>
                             <tbody>
                                 <tr class="animate__animated animate__fadeIn" *ngFor="let unidad of unidades">
-                                    <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                                    <td class="px-5 py-2 border-b border-gray-200 text-sm">
                                         <p class="text-gray-900 whitespace-no-wrap">
                                             {{ unidad.descripcion }}
                                         </p>
                                     </td>
-                                    <td class="px-5 py-5 border-b border-gray-200 text-sm text-center">
+                                    <td class="px-5 py-2 border-b border-gray-200 text-sm text-center">
                                         <app-pastilla-estado [activo]="unidad.activo"
                                                              (click)="actualizarEstado(unidad)"
                                         ></app-pastilla-estado>
                                     </td>
-                                    <td class="px-5 py-5 border-b border-gray-200 text-sm text-center">
+                                    <td class="px-5 py-2 border-b border-gray-200 text-sm text-center">
                                         <p class="flex items-center justify-center text-gray-900 whitespace-no-wrap">
                                             <app-icono-tabla
                                                 [routerLink]="['/dashboard/unidad-medida/editar', unidad._id]"
@@ -141,7 +143,7 @@
                             </tbody>
                         </table>
                         <div
-                            class="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between          ">
+                            class="px-5 py-2 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between          ">
 
                             <span class="text-xs xs:text-sm text-gray-900">
                                 Mostrando {{ total > 0 ? paginacion.desde + 1 : 0 }} - {{ paginacion.hasta < total ? paginacion.hasta : total }} de {{ total }} unidades

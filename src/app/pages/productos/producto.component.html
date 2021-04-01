@@ -25,8 +25,10 @@
                 </span>
             </div>
         </h1>
-        <div *ngIf="!loading" [routerLink]="['/dashboard/productos/editar', producto._id]" class="text-gray-600 px-4 py-3 border border-gray-300 bg-gray-100 rounded shadow cursor-pointer hover:text-yellow-500">
-            <i class="fas fa-pencil-alt mr-1 text-xl"></i>
+        <div *ngIf="!loading" 
+             [routerLink]="['/dashboard/productos/editar', producto._id]" 
+             class="text-gray-600 border border-gray-300 bg-gray-100 rounded shadow cursor-pointer hover:text-yellow-500">
+            <i class="fas fa-pencil-alt px-3 py-2 text-xl"></i>
         </div>
     </div>
     
@@ -79,7 +81,9 @@
                     <div class="border bg-gray-100 rounded shadow py-2 px-3">
                         <i class="fas fa-circle text-green-500 mr-1 text-sm"></i>
                         <span class="text-gray-900 text-sm"> Stock actual </span>
-                        <span class="ml-2 rounded font-semibold text-md"> {{ producto.cantidad }} </span>
+                        <span class="ml-2 rounded font-semibold text-md"
+                              [ngClass]="{ 'text-red-500' : producto.cantidad < 0, 'text-gray-900' : producto.cantidad >= 0}"
+                        > {{ producto.cantidad }} </span>
                     </div>
                 </div>
                 <div class="flex">

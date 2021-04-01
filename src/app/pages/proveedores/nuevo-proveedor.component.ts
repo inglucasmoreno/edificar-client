@@ -29,9 +29,7 @@ export class NuevoProveedorComponent implements OnInit {
   ngOnInit(): void {}
 
   crearProveedor(): void {
-    
     if(this.proveedorForm.valid){
-      this.loading = true;
       const {razon_social, cuit, domicilio, condicion_iva, activo} = this.proveedorForm.value;
       let data = {
         razon_social,
@@ -40,6 +38,7 @@ export class NuevoProveedorComponent implements OnInit {
         activo
       }
       if(domicilio.trim() != '') data['domicilio'] = domicilio;
+      this.loading = true;
       this.proveedorService.nuevoProveedor(data).subscribe(()=>{
         Swal.fire({
           icon: 'success',

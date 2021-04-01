@@ -1,21 +1,15 @@
-<app-tarjeta-formulario >
+<app-tarjeta-formulario>
     <div class="flex items-center justify-between mr-4">
         <div class="flex items-center justify-between">
-            <h1 class="flex items-center text-gray-700 px-4 pt-2">
-                <button routerLink="/dashboard/ingreso_productos"
-                        [disabled]="loadingCargando"
-                >
+            <h1 *ngIf="!loading"
+                class="flex items-center text-gray-700 px-4 pt-2">
+                <button
+                    routerLink="/dashboard/ingreso_productos"
+                    [disabled]="loadingCargando" >
                     <i class="fas fa-arrow-left border text-white border-gray-300 rounded p-2 px-3 shadow cursor-pointer"
                        [ngClass]="{'bg-gray-400':loadingCargando, 'bg-gray-500':!loadingCargando}"></i>
                 </button>
-                <div *ngIf="loading" class="flex flex-col ml-2">
-                    <span class="ml-2 text-xl text-gray-600"> Remito de ingreso </span>
-                    <span class="text-xs mt-1 ml-1 w-max font-semibold border py-1 px-2 rounded text-white bg-gray-500"> 
-                        <i class="fas fa-spinner animate-spin text-gray-600 mr-1"></i>          
-                        Cargando estado
-                    </span>
-                </div>
-                <div *ngIf="!loading" class="flex flex-col ml-2">
+                <div  class="flex flex-col ml-2">
                     <span class="ml-2 text-xl text-gray-600"> Remito de ingreso </span>
                     <span [ngClass]="{'bg-yellow-500':ingreso.estado == 'Pendiente', 'bg-green-500':ingreso.estado == 'Completado'}" 
                           class="text-xs mt-1 w-max ml-1 font-semibold border py-1 px-2 rounded text-white"> 
@@ -30,7 +24,7 @@
             </div>
         </div>
         
-        <div *ngIf="!loading">
+        <div *ngIf="!loading && productos.length !== 0">
             <div (click)="completarIngreso()" *ngIf="ingreso.estado === 'Pendiente'">
                 <button title="Completar ingreso" 
                         class="py-2 px-3 rounded border bg-green-500 text-white mr-2 cursor-pointer shadow"
@@ -38,7 +32,7 @@
                         [ngClass]="{'bg-green-400':loadingCargando, 'bg-green-500':!loadingCargando}">
                         <i class="fas fa-check"></i> </button>
             </div>
-            <div *ngIf="ingreso.estado === 'Completado'" class="mr-4 p-2 border bg-green-500 text-white rounded">
+            <div *ngIf="ingreso.estado === 'Completado'" class="mr-4 px-2 py-1 border bg-green-500 text-white rounded">
                 <i class="far fa-calendar-check mr-1 font-semibold"></i>
                 {{ ingreso.fecha_egreso | fecha }}
             </div>
@@ -46,8 +40,9 @@
     
     </div>
     
-    <div *ngIf="loading">
-        <i class="fas fa-spinner animate-spin text-gray-400 ml-2 text-gray-500 mt-5"></i> Cargando ingreso
+    <div *ngIf="loading" class="text-gray-500 px-3 pb-3">
+        <i class="fas fa-spinner animate-spin ml-2 mt-5"></i> 
+        Cargando remito de ingreso
     </div>
 
     <!-- Datos de ingreso -->
@@ -106,7 +101,7 @@
                title="Agregar productos"
                class="fas fa-plus-circle text-gray-600 mr-2 cursor-pointer text-xl hover:text-yellow-500"></i>
         </div>
-        <button *ngIf="productos.length === 0"
+        <button *ngIf="productos.length === 0 && !loadingCargando"
                 [routerLink]="['/dashboard/ingreso_productos/nuevo-producto', ingreso._id]" 
                 class="border rounded p-2 mt-3 bg-yellow-500 text-white">
             <i class="fas fa-plus text-xs"></i>
@@ -142,14 +137,11 @@
                 </button>
             </div>
 
-            <span *ngIf="!producto.activo" class="py-1 px-2 rounded bg-green-500 text-white text-sm"> 
-                <i class="fas fa-check"></i> 
-                Ingresado 
-            </span>
+            <div *ngIf="!producto.activo" class="py-1 px-2 rounded bg-green-500 text-white text-sm"> 
+                <span> {{ producto.fecha_ingreso | fecha }} </span>
+            </div>
         </div>
     </div>
-       
-    <br>
 
 </app-tarjeta-formulario>
 

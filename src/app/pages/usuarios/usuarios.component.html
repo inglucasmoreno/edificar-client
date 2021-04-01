@@ -65,8 +65,9 @@
                                         <div (click)="ordenarPorColumna('apellido')" class="cursor-pointer flex items-center focus:outline-none">
                                             <span> Apellido </span>
                                             <span class="ml-2">
-                                                <i *ngIf="ordenar.columna == 'apellido' && ordenar.direccion == 1" class="fas fa-chevron-down"></i>
-                                                <i *ngIf="ordenar.columna == 'apellido' && ordenar.direccion == -1" class="fas fa-chevron-up"></i>
+                                                <i *ngIf="ordenar.columna == 'apellido' && ordenar.direccion == 1" class="fas fa-sort-down"></i>
+                                                <i *ngIf="ordenar.columna == 'apellido' && ordenar.direccion == -1" class="fas fa-sort-up"></i>
+                                                <i *ngIf="ordenar.columna != 'apellido'" class="fas fa-sort text-gray-500"></i>
                                             </span>
                                         </div>
                                     </th>
@@ -77,8 +78,9 @@
                                                 Nombre
                                             </span>
                                             <span class="ml-2">
-                                                <i *ngIf="ordenar.columna == 'nombre' && ordenar.direccion == 1" class="fas fa-chevron-down"></i>
-                                                <i *ngIf="ordenar.columna == 'nombre' && ordenar.direccion == -1" class="fas fa-chevron-up"></i>
+                                                <i *ngIf="ordenar.columna == 'nombre' && ordenar.direccion == 1" class="fas fa-sort-down"></i>
+                                                <i *ngIf="ordenar.columna == 'nombre' && ordenar.direccion == -1" class="fas fa-sort-up"></i>
+                                                <i *ngIf="ordenar.columna != 'nombre'" class="fas fa-sort text-gray-500"></i>
                                             </span>
                                         </div>
                                     </th>   
@@ -89,8 +91,9 @@
                                                 Usuario                                               
                                             </span>
                                             <span class="ml-2">
-                                                <i *ngIf="ordenar.columna == 'dni' && ordenar.direccion == 1" class="fas fa-chevron-down"></i>
-                                                <i *ngIf="ordenar.columna == 'dni' && ordenar.direccion == -1" class="fas fa-chevron-up"></i>
+                                                <i *ngIf="ordenar.columna == 'dni' && ordenar.direccion == 1" class="fas fa-sort-down"></i>
+                                                <i *ngIf="ordenar.columna == 'dni' && ordenar.direccion == -1" class="fas fa-sort-up"></i>
+                                                <i *ngIf="ordenar.columna != 'dni'" class="fas fa-sort text-gray-500"></i>
                                             </span>
                                         </div>
                                     </th>
@@ -101,8 +104,9 @@
                                                 Rol                                                
                                             </span>
                                             <span class="ml-2">
-                                                <i *ngIf="ordenar.columna == 'role' && ordenar.direccion == 1" class="fas fa-chevron-down"></i>
-                                                <i *ngIf="ordenar.columna == 'role' && ordenar.direccion == -1" class="fas fa-chevron-up"></i>
+                                                <i *ngIf="ordenar.columna == 'role' && ordenar.direccion == 1" class="fas fa-sort-down"></i>
+                                                <i *ngIf="ordenar.columna == 'role' && ordenar.direccion == -1" class="fas fa-sort-up"></i>
+                                                <i *ngIf="ordenar.columna != 'role'" class="fas fa-sort text-gray-500"></i>
                                             </span>
                                         </div>
                                     </th>
@@ -113,8 +117,9 @@
                                                 Fecha de creación                                                
                                             </span>
                                             <span class="ml-2">
-                                                <i *ngIf="ordenar.columna == 'createdAt' && ordenar.direccion == 1" class="fas fa-chevron-down"></i>
-                                                <i *ngIf="ordenar.columna == 'createdAt' && ordenar.direccion == -1" class="fas fa-chevron-up"></i>
+                                                <i *ngIf="ordenar.columna == 'createdAt' && ordenar.direccion == 1" class="fas fa-sort-down"></i>
+                                                <i *ngIf="ordenar.columna == 'createdAt' && ordenar.direccion == -1" class="fas fa-sort-up"></i>
+                                                <i *ngIf="ordenar.columna != 'createdAt'" class="fas fa-sort text-gray-500"></i>
                                             </span>
                                         </div>
                                     </th>
@@ -125,8 +130,9 @@
                                                 Estado                                               
                                             </span>
                                             <span class="ml-2">
-                                                <i *ngIf="ordenar.columna == 'activo' && ordenar.direccion == 1" class="fas fa-chevron-down"></i>
-                                                <i *ngIf="ordenar.columna == 'activo' && ordenar.direccion == -1" class="fas fa-chevron-up"></i>
+                                                <i *ngIf="ordenar.columna == 'activo' && ordenar.direccion == 1" class="fas fa-sort-down"></i>
+                                                <i *ngIf="ordenar.columna == 'activo' && ordenar.direccion == -1" class="fas fa-sort-up"></i>
+                                                <i *ngIf="ordenar.columna != 'activo'" class="fas fa-sort text-gray-500"></i>
                                             </span>
                                         </div>
                                     </th>
@@ -138,37 +144,37 @@
                             </thead>
                             <tbody>
                                 <tr class="animate__animated animate__fadeIn" *ngFor="let usuario of usuarios">
-                                    <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                                    <td class="px-5 py-2 border-b border-gray-200 text-sm">
                                         <p class="text-gray-900 whitespace-no-wrap">
                                             {{ usuario.apellido }}
                                         </p>
                                     </td>
-                                    <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                                    <td class="px-5 py-2 border-b border-gray-200 text-sm">
                                         <p class="text-gray-900 whitespace-no-wrap">
                                             {{ usuario.nombre }}
                                         </p>
                                     </td>
-                                    <td class="px-5 py-5 border-b border-gray-200 text-sm text-center">
+                                    <td class="px-5 py-2 border-b border-gray-200 text-sm text-center">
                                         <p class="text-gray-900 whitespace-no-wrap">
                                             {{ usuario.dni }}
                                         </p>
                                     </td>
-                                    <td class="px-5 py-5 border-b border-gray-200 text-sm text-center">
+                                    <td class="px-5 py-2 border-b border-gray-200 text-sm text-center">
                                         <p class="text-gray-900 whitespace-no-wrap">
                                             {{ usuario.role | rol }}
                                         </p>
                                     </td>
-                                    <td class="px-5 py-5 border-b border-gray-200 text-sm text-center">
+                                    <td class="px-5 py-2 border-b border-gray-200 text-sm text-center">
                                         <p class="text-gray-900 whitespace-no-wrap">
                                             {{ usuario.createdAt | fecha }}
                                         </p>
                                     </td>
-                                    <td class="px-5 py-5 border-b border-gray-200 text-sm text-center">
+                                    <td class="px-5 py-2 border-b border-gray-200 text-sm text-center">
                                         <app-pastilla-estado [activo]="usuario.activo"
                                                              (click)="actualizarEstado(usuario)"
                                         ></app-pastilla-estado>   
                                     </td>
-                                    <td class="px-5 py-5 border-b border-gray-200 text-sm text-center">
+                                    <td class="px-5 py-2 border-b border-gray-200 text-sm text-center">
                                         <p class="flex items-center justify-center text-gray-900 whitespace-no-wrap">
                                             <app-icono-tabla
                                                 [routerLink]="['/dashboard/usuarios/editar', usuario.uid]"

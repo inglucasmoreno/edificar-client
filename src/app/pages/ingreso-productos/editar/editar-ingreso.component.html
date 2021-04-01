@@ -6,10 +6,10 @@
               <i [routerLink]="['/dashboard/ingreso_productos/detalles', id]" 
                  class="fas fa-arrow-left border bg-gray-500 text-white border-gray-300 rounded p-2 px-3 shadow cursor-pointer"></i>
               <div class="flex flex-col ml-2">
-                  <span class="ml-2 text-xl text-gray-600"> Ingreso </span>
-                  <span class="text-xs mt-1 ml-1 font-semibold border py-1 px-2 rounded text-white bg-yellow-500"> 
+                  <span class="ml-2 text-xl text-gray-600"> Remito de ingreso </span>
+                  <span class="text-xs mt-1 w-max ml-1 font-semibold border py-1 px-2 rounded text-white bg-yellow-500"> 
                       <i class="fas fa-pencil-alt"></i>
-                      Editando ingreso
+                      Editando
                   </span>
               </div>
           </h1>
@@ -46,7 +46,7 @@
           </div>
       </div>      
       </form>      
-      <div class="flex-grow mt-3">
+      <div class="flex-grow mt-3 px-2">
             <span class="font-normal leading-tight font-semibold"> Proveedor </span>
             <div *ngIf="proveedorSeleccionado" class="mt-2 animate__animated animate__zoomIn">
               <span class="text-xs bg-green-500 text-white p-2 rounded font-semibold"> {{ proveedor.razon_social }} </span>
