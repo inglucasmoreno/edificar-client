@@ -61,14 +61,14 @@
                             <thead>
                                 <tr>
                                     <th
-                                        (click)="ordenarPorColumna('codigo')"
+                                        (click)="ordenarPorColumna('codigo_cadena')"
                                         class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         <div class="cursor-pointer flex items-center focus:outline-none">
                                             <span> Codigo </span>
                                             <span class="ml-2">
-                                                <i *ngIf="ordenar.columna == 'codigo' && ordenar.direccion == 1" class="fas fa-sort-down"></i>
-                                                <i *ngIf="ordenar.columna == 'codigo' && ordenar.direccion == -1" class="fas fa-sort-up"></i>
-                                                <i *ngIf="ordenar.columna != 'codigo'" class="fas fa-sort text-gray-500"></i>
+                                                <i *ngIf="ordenar.columna == 'codigo_cadena' && ordenar.direccion == 1" class="fas fa-sort-down"></i>
+                                                <i *ngIf="ordenar.columna == 'codigo_cadena' && ordenar.direccion == -1" class="fas fa-sort-up"></i>
+                                                <i *ngIf="ordenar.columna != 'codigo_cadena'" class="fas fa-sort text-gray-500"></i>
                                             </span>
                                         </div>
                                     </th>

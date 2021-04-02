@@ -131,10 +131,17 @@ export class UsuariosComponent implements OnInit {
 
   }
 
+  reiniciarPaginacion(): void {
+    this.paginacion.desde = 0;
+    this.paginacion.hasta = 10;
+    this.paginacion.limit = 10;
+  }
+
   // Filtrar Activo/Inactivo
   filtrarActivos(activo: any): void{
     this.loading = true;
     this.filtro.activo = activo;
+    this.reiniciarPaginacion();
     this.listarUsuarios();
   }
 
@@ -142,6 +149,7 @@ export class UsuariosComponent implements OnInit {
   filtrarParametro(parametro: string): void{
     this.loading = true;
     this.filtro.parametro = parametro;
+    this.reiniciarPaginacion();
     this.listarUsuarios();
   }
   

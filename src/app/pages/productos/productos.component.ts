@@ -100,10 +100,17 @@ export class ProductosComponent implements OnInit {
 
   }
 
+  reiniciarPaginacion(): void {
+    this.paginacion.desde = 0;
+    this.paginacion.hasta = 10;
+    this.paginacion.limit = 10;
+  }
+
   // Filtrar Activo/Inactivo
   filtrarActivos(activo: any): void{
     this.loading = true;
     this.filtro.activo = activo;
+    this.reiniciarPaginacion();
     this.listarProductos();
   }
 
@@ -111,6 +118,7 @@ export class ProductosComponent implements OnInit {
   filtrarDescripcion(descripcion: string): void{
     this.loading = true;
     this.filtro.descripcion= descripcion;
+    this.reiniciarPaginacion();
     this.listarProductos();
   }
 

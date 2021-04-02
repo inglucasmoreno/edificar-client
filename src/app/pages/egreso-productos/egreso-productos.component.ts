@@ -64,10 +64,17 @@ export class EgresoProductosComponent implements OnInit {
     });
   }
 
+  reiniciarPaginacion(): void {
+    this.paginacion.desde = 0;
+    this.paginacion.hasta = 10;
+    this.paginacion.limit = 10;
+  }
+
   // Filtro por Estado
   filtrarActivos(estado: string): void{
     this.loading = true;
     this.filtro.estado = estado;
+    this.reiniciarPaginacion();
     this.listarEgresos();
   }
 
@@ -75,6 +82,7 @@ export class EgresoProductosComponent implements OnInit {
   filtrarDescripcion(descripcion: string): void{
     this.loading = true;
     this.filtro.descripcion= descripcion;
+    this.reiniciarPaginacion();
     this.listarEgresos();
   }
 

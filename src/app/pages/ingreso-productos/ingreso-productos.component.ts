@@ -41,7 +41,7 @@ export class IngresoProductosComponent implements OnInit {
 
   listarIngresos(): void {
     this.ingresosService.listarIngresos(
-      this.paginacion.limit,
+      this.paginacion.hasta,
       this.paginacion.desde,
       this.filtro.estado,
       this.filtro.descripcion,
@@ -62,10 +62,17 @@ export class IngresoProductosComponent implements OnInit {
     });
   }
 
+  reiniciarPaginacion(): void {
+    this.paginacion.desde = 0;
+    this.paginacion.hasta = 10;
+    this.paginacion.limit = 10;    
+  }
+
   // Filtro por Estado
    filtrarActivos(estado: string): void{
     this.loading = true;
     this.filtro.estado = estado;
+    this.reiniciarPaginacion();
     this.listarIngresos();
   }
 
@@ -73,6 +80,7 @@ export class IngresoProductosComponent implements OnInit {
   filtrarDescripcion(descripcion: string): void{
     this.loading = true;
     this.filtro.descripcion= descripcion;
+    this.reiniciarPaginacion();
     this.listarIngresos();
   }
 
