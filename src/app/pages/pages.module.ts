@@ -32,6 +32,7 @@ import { EditarEgresoComponent } from './egreso-productos/editar/editar-egreso.c
 import { EditarIngresoComponent } from './ingreso-productos/editar/editar-ingreso.component';
 import { NuevoProductoIngresoComponent } from './ingreso-productos/nuevo-producto-ingreso.component';
 import { NuevoProductoEgresoComponent } from './egreso-productos/nuevo-producto-egreso.component';
+import { TrazabilidadComponent } from './trazabilidad/trazabilidad.component';
 
 @NgModule({
   declarations: [
@@ -60,6 +61,7 @@ import { NuevoProductoEgresoComponent } from './egreso-productos/nuevo-producto-
     EditarIngresoComponent,
     NuevoProductoIngresoComponent,
     NuevoProductoEgresoComponent,
+    TrazabilidadComponent,
   ],
   imports: [
     CommonModule,

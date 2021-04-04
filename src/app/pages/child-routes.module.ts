@@ -25,6 +25,7 @@ import { EditarIngresoComponent } from './ingreso-productos/editar/editar-ingres
 import { EditarEgresoComponent } from './egreso-productos/editar/editar-egreso.component';
 import { NuevoProductoIngresoComponent } from './ingreso-productos/nuevo-producto-ingreso.component';
 import { NuevoProductoEgresoComponent } from './egreso-productos/nuevo-producto-egreso.component';
+import { TrazabilidadComponent } from './trazabilidad/trazabilidad.component';
 
 const childRoutes: Routes = [
   { path: 'home' , component: HomeComponent },
@@ -63,6 +64,9 @@ const childRoutes: Routes = [
   { path: 'proveedores' , component: ProveedoresComponent},
   { path: 'proveedores/nuevo' , component: NuevoProveedorComponent},
   { path: 'proveedores/editar/:id' , component: EditarProveedorComponent},
+
+  // Trazabilidad
+  { path: 'trazabilidad' , component: TrazabilidadComponent},
 
 ]
 

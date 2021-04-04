@@ -13,8 +13,8 @@ export class EgresoProductosService {
   constructor(private http: HttpClient) { }
 
   // Completar egreso
-  completarEgreso(egreso: string): Observable<any>{
-    return this.http.put(`${base_url}/egreso_productos/completar/${egreso}`,{},{
+  completarEgreso(egreso: string, data: any): Observable<any>{
+    return this.http.put(`${base_url}/egreso_productos/completar/${egreso}`, data,{
       headers: { 'x-token': localStorage.getItem('token') }
     });   
   }
@@ -27,16 +27,27 @@ export class EgresoProductosService {
   }
 
   // Listar productos por egreso
-  listarProductosPorEgreso(egreso: string): Observable<any> {
+  listarProductosPorEgreso(
+    egreso: string,
+    limit = 0, 
+    desde = 0,
+    estado = ''  
+  ): Observable<any> {
     return this.http.get(`${base_url}/egreso_productos/${egreso}`, {
-      params: { direccion: '-1', columna: 'createdAt' },
+      params: {
+        limit: String(limit),
+        desde: String(desde),
+        activo: String(estado), 
+        direccion: '-1', 
+        columna: 'createdAt' 
+      },
       headers: {'x-token': localStorage.getItem('token')}
     })
   }
 
   // Ingreso parcial de producto
-  egresoParcial(producto: string): Observable<any> {
-    return this.http.put(`${base_url}/egreso_productos/parcial/${producto}`,{} ,{
+  egresoParcial(producto: string, data: any): Observable<any> {
+    return this.http.put(`${base_url}/egreso_productos/parcial/${producto}`, data, {
       headers: {'x-token': localStorage.getItem('token')}
     });   
   }

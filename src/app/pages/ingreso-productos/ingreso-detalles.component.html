@@ -24,7 +24,7 @@
             </div>
         </div>
         
-        <div *ngIf="!loading && productos.length !== 0">
+        <div *ngIf="!loading && tieneProductos">
             <div (click)="completarIngreso()" *ngIf="ingreso.estado === 'Pendiente'">
                 <button title="Completar ingreso" 
                         class="py-2 px-3 rounded border bg-green-500 text-white mr-2 cursor-pointer shadow"
@@ -101,15 +101,49 @@
                title="Agregar productos"
                class="fas fa-plus-circle text-gray-600 mr-2 cursor-pointer text-xl hover:text-yellow-500"></i>
         </div>
-        <button *ngIf="productos.length === 0 && !loadingCargando"
+        <button *ngIf="!tieneProductos && !loadingCargando"
                 [routerLink]="['/dashboard/ingreso_productos/nuevo-producto', ingreso._id]" 
                 class="border rounded p-2 mt-3 bg-yellow-500 text-white">
             <i class="fas fa-plus text-xs"></i>
             Agregar productos
-        </button>  
+        </button> 
+        <div *ngIf="tieneProductos">
+            <div *ngIf="ingreso.estado != 'Completado'" class="mt-2 text-center">
+                <select class="border p-2 rounded shadow text-sm"
+                        [disabled]="loadingCargando"
+                        #txtActivo
+                        (change)="filtrarActivo(txtActivo.value)">
+                            <option value=""> Todos </option>
+                            <option value=true> Productos pendientes </option>
+                            <option value=false> Productos ingresados </option>
+                </select>
+            </div>
+            <div class="flex items-center justify-center mt-3">
+                <button class="mr-4 px-4 py-2 border rounded shadow text-gray-700 cursor-pointer bg-white text-sm"
+                        (click)="actualizarDesdeHasta('anterior')"
+                        [ngClass]="{'bg-gray-100':loadingCargando}"
+                        [disabled]="loadingCargando"> 
+                            <i class="fas fa-arrow-left"></i> 
+                </button>
+                <div class="text-gray-500 text-sm font-semibold"> Mostrando {{ total > 0 ? paginacion.desde + 1 : 0 }} - {{ paginacion.hasta < total ? paginacion.hasta : total }} de {{ total }} elementos </div>
+                <button class="ml-4 px-4 py-2 border rounded shadow text-gray-700 cursor-pointer bg-white text-sm" 
+                        (click)="actualizarDesdeHasta('siguiente')"
+                        [ngClass]="{'bg-gray-100':loadingCargando}"
+                        [disabled]="loadingCargando"
+                        > <i class="fas fa-arrow-right"></i> 
+                </button>
+            </div>
+        </div>
+            
+        <div *ngIf="total === 0 && tieneProductos" class="bg-gray-100 px-2 py-3 border shadow text-center mt-2 text-gray-700 font-semibold text-sm">
+            No se encontraron productos
+        </div>
+
+        <!-- Lista de productos -->
+
         <div *ngFor="let producto of productos" 
-             class="border shadow rounded p-2 m-2 font-semibold flex items-center justify-between"
-             [ngClass]="{'bg-green-100': !producto.activo}"
+             class="animate__animated animate__fadeIn border shadow rounded p-2 m-2 font-semibold flex items-center justify-between mt-3"
+             [ngClass]="{'bg-green-100 border-green-300': !producto.activo, 'bg-white border-gray-200': producto.activo}"
              >
             <div>
                 <span class="block"> {{ producto.producto.codigo }} </span>
@@ -136,7 +170,7 @@
                     <i class="fas fa-times"></i> 
                 </button>
             </div>
-
+            
             <div *ngIf="!producto.activo" class="py-1 px-2 rounded bg-green-500 text-white text-sm"> 
                 <span> {{ producto.fecha_ingreso | fecha }} </span>
             </div>

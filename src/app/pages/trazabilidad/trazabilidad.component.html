@@ -1,0 +1,107 @@
+<app-tarjeta-tabla>
+    <div class="px-6 pt-4 animate__animated animate__zoomIn">
+        <div class="text-center">
+            <h2 class="text-2xl font-semibold leading-tight text-gray-600">
+                Trazabilidad ({{ total }})
+            </h2>
+        </div>
+    
+        <!-- Filtros: Varios -->
+
+        <div class="md:flex md:items-center md:justify-center mt-4">
+            <select
+                #txtTipo
+                class="border rounded shadow p-2 text-sm w-full md:w-auto"
+                (change)="filtrarTipos(txtTipo.value)"
+            >
+                <option value=""> Ingreso y Egresos </option>
+                <option value="Ingreso"> Ingresos </option>
+                <option value="Egreso"> Egresos </option>
+            </select>           
+            <select
+                #txtProducto
+                class="border rounded shadow p-2 md:ml-3 mt-2 md:mt-0 text-sm w-full md:w-auto"
+                (change)="filtrarProducto(txtProducto.value)"
+                >
+                    <option value=""> Todos los productos </option>
+                    <option *ngFor="let producto of productos" [value]="producto._id"> {{ producto.descripcion }} - {{ producto.codigo }} </option>
+            </select>  
+        </div>
+
+        <!-- Filtros: Por fecha -->
+
+        <div class="md:flex md:items-center md:justify-center mt-4">
+            <input type="date"
+                   class="border rounded shadow p-2 text-sm w-full md:w-auto">
+            <span class="text-xl font-semibold ml-2 mr-2"> - </span>
+            <input type="date"
+            class="border rounded shadow p-2 text-sm w-full md:w-auto">
+            <button class="border rounded bg-gray-100 py-2 px-4 ml-3 text-gray-700"
+                    (click)="buscar()"> 
+                <i class="fas fa-search"></i>
+                Buscar 
+            </button>
+        </div>
+
+    </div>
+
+    <div *ngIf="total !== 0" class="flex items-center justify-center animate__animated animate__zoomIn mt-4">
+        <div class="mr-4 px-4 py-2 border rounded shadow text-gray-700 cursor-pointer text-sm"
+             (click)="actualizarDesdeHasta('anterior')"
+        > <i class="fas fa-arrow-left"></i> </div>
+        <div class="text-gray-500 text-sm font-semibold"> Mostrando {{ total > 0 ? paginacion.desde + 1 : 0 }} - {{ paginacion.hasta < total ? paginacion.hasta : total }} de {{ total }} elementos </div>
+        <div class="ml-4 px-4 py-2 border rounded shadow text-gray-700 cursor-pointer text-sm"
+             (click)="actualizarDesdeHasta('siguiente')"> <i class="fas fa-arrow-right"></i> </div>
+    </div>
+
+    <!-- Listado de trazabilidad -->
+
+    <div *ngIf="total !== 0" class="px-6 py-2 overflow-auto h-full mt-4">
+        <div *ngFor="let traza of trazabilidad"
+            [routerLink]="traza.tipo === 'Ingreso' ? ['/dashboard/ingreso_productos/detalles/', traza.documento] : ['/dashboard/egreso_productos/detalles/', traza.documento]"
+            class="animate__animated animate__zoomIn shadow border rounded mb-2 cursor-pointer"
+            [ngClass]="{'border-green-200 hover:bg-green-100': traza.tipo === 'Ingreso', 'border-red-200 hover:bg-red-100': traza.tipo === 'Egreso'}">
+            <div class="text-white px-2 py-1 flex items-center justify-between rounded-t"
+                 [ngClass]="{'bg-green-600': traza.tipo === 'Ingreso', 'bg-red-600': traza.tipo === 'Egreso'}"
+            >
+                <div class="font-semibold text-sm">
+                    <h1> {{ traza.tipo === 'Ingreso' ? 'Remito' : 'Documento de venta' }}</h1>
+                    <h1> Nro. {{ traza.documento_codigo }} </h1>
+                </div>
+                <span class="font-semibold text-sm"> {{ traza.createdAt | fecha }} </span>
+            </div>
+             <div class="flex items-center justify-between p-3">
+                 <div class="text-gray-800">
+                    <div>
+                        <p class="text-sm font-semibold"> {{ traza.persona_empresa }} </p>
+                        <p class="text-sm"> 
+                            <span class="font-semibold"> {{ traza.producto.codigo}} </span>
+                            <span> - {{ traza.producto.descripcion }} </span>
+                        </p>
+                        <p class="text-sm font-semibold"
+                           [ngClass]="{'text-green-700' : traza.tipo === 'Ingreso', 'text-red-700' : traza.tipo === 'Egreso'}"
+                        > Cantidad: {{ traza.cantidad }} </p>
+                    </div>
+                 </div>
+                 <div class="border p-2 bg-white shadow rounded text-sm bg-white"
+                      [ngClass]="{'border-green-500 text-green-700':traza.tipo === 'Ingreso', 'border-red-500 text-red-700':traza.tipo === 'Egreso'}"
+                    >
+                     <span class="font-semibold"> {{ traza.stock_anterior }} </span>
+                     <i class="fas fa-arrow-right"></i>
+                     <span class="font-semibold"> {{ traza.stock_nuevo }} </span>
+                 </div>
+             </div>
+        </div>
+    </div>
+
+    <div *ngIf="total === 0" class="px-6 py-4 mx-4 mt-2 mb-3 border bg-gray-100 mr-auto ml-auto font-semibold text-gray-600 text-sm text-center">
+        Debes realizar una busqueda
+    </div>
+
+    <div *ngIf="total === 0 && !inicio" class="px-6 py-4 mx-4 mt-2 mb-3 border bg-gray-100 font-semibold text-gray-600 text-sm text-center">
+        No se encontraron elementos
+    </div>
+
+</app-tarjeta-tabla>
+
+<br>

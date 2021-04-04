@@ -16,7 +16,22 @@ export class IngresoDetallesComponent implements OnInit {
   public total;
   public loading = true;
   public loadingCargando = true;
-  public ingreso = {};
+  public ingreso = {
+    numero_remito: '',
+    proveedor: '',
+  };
+
+  public filtro = {
+    activo: ''
+  }
+  
+  public paginacion = {
+    limit: 5,
+    desde: 0,
+    hasta: 5
+  }
+
+  public tieneProductos: boolean;
   public productos = [];
 
   constructor(private ingresoService: IngresosService,
@@ -29,7 +44,7 @@ export class IngresoDetallesComponent implements OnInit {
       this.id = id;
       this.ingresoService.getIngreso(id).subscribe( ({ ingreso }) => {
        this.ingreso = ingreso;
-       this.listarProductosPorIngreso();
+       this.primerIngreso();
       });  
     },({error}) => {
       Swal.fire({
@@ -40,6 +55,31 @@ export class IngresoDetallesComponent implements OnInit {
       });
       this.loading = false;
     });
+  }
+
+  primerIngreso(): void {
+    this.loadingCargando = true;
+    this.ingresoProductosService.listarProductosPorIngreso(
+      this.id,
+      this.paginacion.hasta,
+      this.paginacion.desde,
+      this.filtro.activo
+      ).subscribe( ({ productos, total }) => {
+      this.productos = productos;
+      this.total = total;
+      total != 0 ? this.tieneProductos = true : this.tieneProductos = false;  // Indica que el ingreso tiene productos
+      this.loadingCargando = false;
+      this.loading = false;
+    },({error})=>{
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: error.msg,
+        confirmButtonText: 'Entendido'
+      });
+      this.loading = false;
+      this.loadingCargando = false;
+    });  
   }
 
   // Completar ingreso
@@ -56,7 +96,11 @@ export class IngresoDetallesComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.loadingCargando = true;
-        this.ingresoProductosService.completarIngreso(this.id).subscribe(() => {
+        const data = {
+          persona_empresa: this.ingreso.proveedor['razon_social'],
+          documento_codigo: this.ingreso.numero_remito
+        }
+        this.ingresoProductosService.completarIngreso(this.id, data).subscribe(() => {
           Swal.fire({
             icon: 'success',
             title: 'Completado',
@@ -73,6 +117,7 @@ export class IngresoDetallesComponent implements OnInit {
             text: error.msg,
             confirmButtonText: 'Entendido'
           })
+          this.loading = false;
           this.loadingCargando = false;
         });
       }
@@ -82,7 +127,12 @@ export class IngresoDetallesComponent implements OnInit {
   // Listar productos por ingreso
   listarProductosPorIngreso(): void {
     this.loadingCargando = true;
-    this.ingresoProductosService.listarProductosPorIngreso(this.id).subscribe( ({ productos, total }) => {
+    this.ingresoProductosService.listarProductosPorIngreso(
+      this.id,
+      this.paginacion.hasta,
+      this.paginacion.desde,
+      this.filtro.activo
+      ).subscribe( ({ productos, total }) => {
       this.productos = productos;
       this.total = total;
       this.loadingCargando = false;
@@ -95,6 +145,7 @@ export class IngresoDetallesComponent implements OnInit {
         confirmButtonText: 'Entendido'
       });
       this.loadingCargando = false;
+      this.loading = false;
     });
   }
 
@@ -147,7 +198,11 @@ export class IngresoDetallesComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.loadingCargando = true;
-        this.ingresoProductosService.ingresoParcial(producto).subscribe(() => {
+        const data = {
+          persona_empresa: this.ingreso.proveedor['razon_social'],
+          documento_codigo: this.ingreso.numero_remito
+        }
+        this.ingresoProductosService.ingresoParcial(producto, data).subscribe(() => {
           Swal.fire({
             icon: 'success',
             title: 'Completado',
@@ -168,5 +223,39 @@ export class IngresoDetallesComponent implements OnInit {
       }
     })
   }
+
+  // Filtro por activo
+  filtrarActivo(activo: any): void{
+    this.loadingCargando = true;
+    this.filtro.activo = activo;
+    this.reiniciarPaginacion();
+    this.listarProductosPorIngreso();
+  }
+
+  // Funcion de paginación
+  actualizarDesdeHasta(selector): void {
+    this.loadingCargando = true;
+    if (selector === 'siguiente'){ // Incrementar
+      if (this.paginacion.hasta < this.total){
+        this.paginacion.desde += this.paginacion.limit;
+        this.paginacion.hasta += this.paginacion.limit;
+      }
+    }else{                         // Decrementar
+      this.paginacion.desde -= this.paginacion.limit;
+      if (this.paginacion.desde < 0){
+        this.paginacion.desde = 0;
+      }else{
+        this.paginacion.hasta -= this.paginacion.limit;
+      }
+    }
+    this.listarProductosPorIngreso();
+  }
+  
+  // Se reestablecen los valores de paginacion
+  reiniciarPaginacion(): void {
+    this.paginacion.limit = 5;
+    this.paginacion.desde = 0;
+    this.paginacion.hasta = 5;  
+  } 
 
 }
