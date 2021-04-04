@@ -20,7 +20,9 @@ export class TrazabilidadService {
     producto: string = '',
     parametro: string = '',
     direccion: number = -1,
-    columna: string = 'createdAt'
+    columna: string = 'createdAt',
+    fechaAntes: string,
+    fechaDespues: string
   ): Observable<any>{
     return this.http.get(`${base_url}/trazabilidad`, {
       params: {
@@ -30,7 +32,9 @@ export class TrazabilidadService {
         producto,
         parametro,
         direccion: String(direccion),
-        columna
+        columna,
+        fechaAntes: String(fechaAntes),
+        fechaDespues: String(fechaDespues)
       },
       headers: {'x-token': localStorage.getItem('token')}
     })

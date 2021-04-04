@@ -36,6 +36,12 @@ export class TrazabilidadComponent implements OnInit {
     columna: 'createdAt'
   }
 
+  // Fechas
+  public fecha = {
+    antes: '',
+    despues: ''
+  }
+
   public trazabilidad = [];
 
   constructor(private trazabilidadService: TrazabilidadService,
@@ -54,7 +60,9 @@ export class TrazabilidadComponent implements OnInit {
       this.filtro.producto,
       this.filtro.parametro,
       this.ordenar.direccion,
-      this.ordenar.columna
+      this.ordenar.columna,
+      this.fecha.antes,
+      this.fecha.despues
     ).subscribe( ({ trazabilidad, total }) => {
       this.trazabilidad = trazabilidad;
       this.total = total;
@@ -131,6 +139,16 @@ export class TrazabilidadComponent implements OnInit {
     this.loading = true;
     this.reiniciarPaginacion(); 
     this.listarTrazabilidad();
+  }
+
+  // Fecha antes
+  fechaAntes(fecha: string): void{
+    this.fecha.antes = fecha;
+  }
+
+  // Fecha despues
+  fechaDespues(fecha: string): void{
+    this.fecha.despues = fecha;
   }
 
 }
