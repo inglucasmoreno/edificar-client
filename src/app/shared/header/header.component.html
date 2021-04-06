@@ -60,7 +60,7 @@
         <div class="relative">
           <button (click)="showIngresoEgreso = !showIngresoEgreso" class="flex flex-row items-center w-full px-4 py-2 mt-2 text-sm font-semibold text-left bg-transparent rounded-lg lg:block focus:outline-none focus:shadow-outline">
             <span> 
-              <i class="fas fa-exchange-alt"></i>
+              <i class="fas fa-exchange-alt mr-1"></i>
               Ingreso/Egreso
             </span>
             <svg fill="currentColor" [ngClass]="{'rotate-180': !showIngresoEgreso, 'rotate-0': showIngresoEgreso}" viewBox="0 0 20 20"  class="inline w-4 h-4 mt-1 ml-1 transition-transform duration-200 transform lg:-mt-1"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
@@ -78,11 +78,19 @@
           </div>        
         </div>
 
+        <!-- Trazabilidad -->
         <a routerLinkActive="text-yellow-500" routerLink="trazabilidad" class="block px-4 py-2 mt-2 text-sm font-semibold text-gray-900 rounded-lg hover:text-gray-900 focus:outline-none focus:shadow-outline cursor-pointer hover:text-yellow-500"> 
           <i class="fas fa-chart-line mr-1"></i>
           Trazabilidad
         </a>
 
+        <!-- Presupuesto -->
+        <a routerLinkActive="text-yellow-500" routerLink="presupuesto" class="block px-4 py-2 mt-2 text-sm font-semibold text-gray-900 rounded-lg hover:text-gray-900 focus:outline-none focus:shadow-outline cursor-pointer hover:text-yellow-500"> 
+          <i class="far fa-file-alt mr-1"></i>
+          Presupuesto
+        </a>
+
+        <!-- Cerrar sesion -->
         <a (click)="logout()" class="block px-4 py-2 mt-2 text-sm font-semibold hover:text-red-500 focus:bg-gray-200 focus:outline-none focus:shadow-outline cursor-pointer">
           <i class="fas fa-door-open mr-1"></i>
           Cerrar Sesion

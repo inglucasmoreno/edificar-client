@@ -74,6 +74,7 @@ export class TrazabilidadComponent implements OnInit {
         text: error.msg,
         confirmButtonText: 'Entendido'
       });
+      this.inicio = false;
       this.loading = false;
     });  
   }
@@ -90,6 +91,13 @@ export class TrazabilidadComponent implements OnInit {
       });
       this.loading = false;
     });
+  }
+
+  // Ordenar por fecha
+  ordenarFecha(): void {
+    this.loading = true;
+    this.ordenar.direccion === 1 ? this.ordenar.direccion = -1 : this.ordenar.direccion = 1;
+    this.listarTrazabilidad();
   }
 
   // Filtrar por tipo

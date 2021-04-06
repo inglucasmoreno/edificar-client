@@ -1,0 +1,45 @@
+<div class="flex mt-1">
+    <div class="bg-white w-1/2 ml-1 h-screen animate__animated animate__zoomIn">
+        <div class="p-4">
+            <h1 class="font-semibold text-gray-700 text-xl bg-gray-100 p-2 border rounded"> Generador de presupuesto </h1>           
+            <input type="text" 
+                   #txtDescripcion
+                   class="p-2 rounded border shadow text-sm mt-4"
+                   (keyup)="filtroDescripcion(txtDescripcion.value)"
+                   placeholder="Buscar producto">   
+            <div class="p-2 bg-gray-100 text-gray-500 mt-4 border shadow animate__animated animate__fadeInUp"
+                 *ngIf="productos.length === 0">
+                <p class="text-sm rounded"> 
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span class="ml-1"> Busca un producto para tu presupuesto </span>
+                </p>    
+            </div>
+        </div>
+    
+        <div class="p-4">
+            <div *ngFor="let producto of productos" 
+                  class="p-2 border rounded shadow mb-2 cursor-pointer hover:bg-yellow-100 animate__animated animate__fadeInUp"
+                  (click)="agregarProducto(producto, txtDescripcion)">
+                <span class="font-semibold"> {{ producto.codigo }} </span>
+                <span class="text-gray-600 block text-sm"> {{ producto.descripcion }} </span>  
+                <span class="text-gray-700 block text-sm font-semibold"> Precio: ${{ producto.precio }} </span>    
+            </div>
+        </div>
+    
+    </div>
+
+    <div class="bg-white w-1/2 ml-1 mr-1 h-full animate__animated animate__zoomIn">
+        <div class="p-4">
+            <h1 class="font-semibold text-gray-700 text-xl bg-gray-100 p-2 border border-gray-200 rounded"> Presupuesto generado </h1>
+            
+            <div class="mt-4">
+                <div class="flex items-center justify-between border p-2 rounded mb-2 text-sm" *ngFor="let seleccionado of seleccionados">
+                    <span class="block"> {{ seleccionado.descripcion }} </span>
+                    <span class="block font-semibold"> Precio: ${{ seleccionado.precio }} </span>   
+                </div>
+            </div>
+
+        
+    </div>
+
+</div>

@@ -33,6 +33,7 @@ import { EditarIngresoComponent } from './ingreso-productos/editar/editar-ingres
 import { NuevoProductoIngresoComponent } from './ingreso-productos/nuevo-producto-ingreso.component';
 import { NuevoProductoEgresoComponent } from './egreso-productos/nuevo-producto-egreso.component';
 import { TrazabilidadComponent } from './trazabilidad/trazabilidad.component';
+import { PresupuestoComponent } from './presupuesto/presupuesto.component';
 
 @NgModule({
   declarations: [
@@ -62,6 +63,7 @@ import { TrazabilidadComponent } from './trazabilidad/trazabilidad.component';
     NuevoProductoIngresoComponent,
     NuevoProductoEgresoComponent,
     TrazabilidadComponent,
+    PresupuestoComponent,
   ],
   imports: [
     CommonModule,

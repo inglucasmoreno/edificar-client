@@ -141,40 +141,43 @@
 
         <!-- Lista de productos -->
 
-        <div *ngFor="let producto of productos" 
-             class="animate__animated animate__fadeIn border shadow rounded p-2 m-2 font-semibold flex items-center justify-between mt-3"
-             [ngClass]="{'bg-green-100 border-green-300': !producto.activo, 'bg-white border-gray-200': producto.activo}"
-             >
-            <div>
-                <span class="block"> {{ producto.producto.codigo }} </span>
-                <span class="block text-xs text-gray-600"> {{ producto.producto.descripcion }}  </span>
-                <span class="block text-sm font-semibold"> cantidad: {{ producto.cantidad }} ({{ producto.producto.unidad_medida.descripcion }}) </span>
-            </div>
-
-            <div *ngIf="producto.activo">
-                <button title="Ingreso parcial" 
-                        [disabled]="loadingCargando"
-                        class="py-1 px-2 rounded border text-white mr-2 cursor-pointer"
-                        [ngClass]="{'bg-green-400':loadingCargando, 'bg-green-500':!loadingCargando}"
-                        (click)="ingresoParcial(producto._id)"
-                      > 
-                      <i class="fas fa-check"></i> 
-                </button>
+        <div class="mt-4">
+            <div *ngFor="let producto of productos" 
+                 class="animate__animated animate__fadeIn border shadow rounded p-2 m-2 font-semibold flex items-center justify-between mt-3"
+                 [ngClass]="{'bg-green-100 border-green-300': !producto.activo, 'bg-white border-gray-200': producto.activo}"
+                 >
+                <div>
+                    <span class="block"> {{ producto.producto.codigo }} </span>
+                    <span class="block text-xs text-gray-600"> {{ producto.producto.descripcion }}  </span>
+                    <span class="block text-sm font-semibold"> cantidad: {{ producto.cantidad }} ({{ producto.producto.unidad_medida.descripcion }}) </span>
+                </div>
+    
+                <div *ngIf="producto.activo">
+                    <button title="Ingreso parcial" 
+                            [disabled]="loadingCargando"
+                            class="py-1 px-2 rounded border text-white mr-2 cursor-pointer"
+                            [ngClass]="{'bg-green-400':loadingCargando, 'bg-green-500':!loadingCargando}"
+                            (click)="ingresoParcial(producto._id)"
+                          > 
+                          <i class="fas fa-check"></i> 
+                    </button>
+                    
+                    <button title="Eliminar producto"
+                            [disabled]="loadingCargando" 
+                            class="py-1 px-3 rounded border text-white cursor-pointer"
+                            [ngClass]="{'bg-red-400':loadingCargando, 'bg-red-500':!loadingCargando}"
+                            (click)="eliminarProducto(producto._id)"
+                          > 
+                        <i class="fas fa-times"></i> 
+                    </button>
+                </div>
                 
-                <button title="Eliminar producto"
-                        [disabled]="loadingCargando" 
-                        class="py-1 px-3 rounded border text-white cursor-pointer"
-                        [ngClass]="{'bg-red-400':loadingCargando, 'bg-red-500':!loadingCargando}"
-                        (click)="eliminarProducto(producto._id)"
-                      > 
-                    <i class="fas fa-times"></i> 
-                </button>
-            </div>
-            
-            <div *ngIf="!producto.activo" class="py-1 px-2 rounded bg-green-500 text-white text-sm"> 
-                <span> {{ producto.fecha_ingreso | fecha }} </span>
+                <div *ngIf="!producto.activo" class="py-1 px-2 rounded bg-green-500 text-white text-sm"> 
+                    <span> {{ producto.fecha_ingreso | fecha }} </span>
+                </div>
             </div>
         </div>
+
     </div>
 
 </app-tarjeta-formulario>
