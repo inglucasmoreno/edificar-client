@@ -1,45 +1,108 @@
 <div class="flex mt-1">
+
+    <!-- Generador de presupuesto -->
     <div class="bg-white w-1/2 ml-1 h-screen animate__animated animate__zoomIn">
+        
         <div class="p-4">
+            <!-- Titulo -->
             <h1 class="font-semibold text-gray-700 text-xl bg-gray-100 p-2 border rounded"> Generador de presupuesto </h1>           
+            
+            <!-- Buscador de productos -->          
             <input type="text" 
                    #txtDescripcion
+                   *ngIf="!flagSeleccionado"
                    class="p-2 rounded border shadow text-sm mt-4"
                    (keyup)="filtroDescripcion(txtDescripcion.value)"
                    placeholder="Buscar producto">   
             <div class="p-2 bg-gray-100 text-gray-500 mt-4 border shadow animate__animated animate__fadeInUp"
-                 *ngIf="productos.length === 0">
+                 *ngIf="productos.length === 0 && !flagSeleccionado">
                 <p class="text-sm rounded"> 
                     <i class="fas fa-exclamation-circle"></i>
                     <span class="ml-1"> Busca un producto para tu presupuesto </span>
                 </p>    
             </div>
         </div>
-    
-        <div class="p-4">
+        
+        <!-- Listado de productos -->
+        <div class="p-4" *ngIf="!flagSeleccionado">
             <div *ngFor="let producto of productos" 
                   class="p-2 border rounded shadow mb-2 cursor-pointer hover:bg-yellow-100 animate__animated animate__fadeInUp"
-                  (click)="agregarProducto(producto, txtDescripcion)">
+                  (click)="seleccionarProducto(producto, txtDescripcion)">
                 <span class="font-semibold"> {{ producto.codigo }} </span>
                 <span class="text-gray-600 block text-sm"> {{ producto.descripcion }} </span>  
-                <span class="text-gray-700 block text-sm font-semibold"> Precio: ${{ producto.precio }} </span>    
+                <span class="text-gray-700 block text-sm font-semibold"> Precio: ${{ producto.precio | moneda }} </span>    
             </div>
         </div>
-    
-    </div>
 
-    <div class="bg-white w-1/2 ml-1 mr-1 h-full animate__animated animate__zoomIn">
+        <!-- Producto seleccionado -->
+
         <div class="p-4">
-            <h1 class="font-semibold text-gray-700 text-xl bg-gray-100 p-2 border border-gray-200 rounded"> Presupuesto generado </h1>
-            
-            <div class="mt-4">
-                <div class="flex items-center justify-between border p-2 rounded mb-2 text-sm" *ngFor="let seleccionado of seleccionados">
-                    <span class="block"> {{ seleccionado.descripcion }} </span>
-                    <span class="block font-semibold"> Precio: ${{ seleccionado.precio }} </span>   
+            <div *ngIf="flagSeleccionado" class="mt-2 animate__animated animate__fadeInUp border shadow rounded p-2 flex items-center justify-between">
+                <div>
+                    <span class="text-sm font-semibold"> Producto seleccionado </span>
+                    <span class="text-gray-700 block text-sm"> {{ seleccionado.codigo }} - {{ seleccionado.descripcion }} </span>
+                    
+                    <span class="text-sm font-semibold mt-2 block"> Cantidad </span>
+                    <input type="number"
+                           #txtCantidad 
+                           [placeholder]="seleccionado.unidad_medida.descripcion"
+                           class="border mt-1 rounded p-1 text-sm"
+                           min="0"
+                           >
+                    <div class="mt-3">
+                        <span class="text-sm font-semibold"> Precio: </span>
+                        <span class="text-gray-700 text-sm"> ${{ seleccionado.precio | moneda }} </span>
+                    </div>
+
+                </div>
+                <div>
+                    <button class="text-white py-1 px-2 ml-2 rounded cursor-pointer"
+                            [ngClass]="{'bg-green-400': loadingCreacion, 'bg-green-500': !loadingCreacion}"
+                            (click)="agregarProducto(txtCantidad)"
+                            title="Agregar producto"
+                            [disabled]="loadingCreacion"
+                          >
+                            <i class="fas fa-check"></i>
+                    </button>
+                    <button class="text-white py-1 px-2 ml-2 rounded cursor-pointer"
+                            [ngClass]="{'bg-red-400': loadingCreacion, 'bg-red-500': !loadingCreacion}"
+                            (click)="borrarProductoSeleccionado()"
+                            title="Cancelar producto"
+                            [disabled]="loadingCreacion"
+                            >
+                            <i class="far fa-trash-alt"></i>
+                    </button>
                 </div>
             </div>
-
+        </div>
         
+    </div>
+
+    <!-- Presupuesto generado -->
+    <div class="bg-white w-1/2 ml-1 mr-1 h-full animate__animated animate__zoomIn" *ngIf="seleccionados.length !== 0">
+        <div class="p-4">
+            <!-- Titulo -->
+            <h1 class="font-semibold text-gray-700 text-xl bg-gray-100 p-2 border border-gray-200 rounded"> Presupuesto generado </h1>             
+            
+            <!-- Titulo de listado -->
+            <div class="mt-4">
+                <div class="flex items-center justify-between border-b-2 border-gray-300 pb-2">
+                    <span class="font-semibold text-gray-600"> Listado de productos </span>
+                    <span class="font-semibold text-gray-600 mr-3"> Precio </span>
+                </div>
+            </div>
+            
+            <!-- Listado de productos + precio -->
+            <div class="mt-4">
+                <div class="flex items-center justify-between p-2 mb-2 text-sm" *ngFor="let seleccionado of seleccionados">
+                    <div>
+                        <span class="block text-sm font-semibold"> {{ seleccionado.descripcion }} </span>
+                        <span class="block text-sm text-gray-400 ml-2"> Cantidad: {{ seleccionado.cantidad }} ({{ seleccionado.unidad_medida }}) </span>
+                        <span class="block text-sm text-gray-400 ml-2"> Precio (c/u): ${{ seleccionado.precio | moneda }} </span>
+                    </div>
+                    <span class="block font-semibold text-sm"> ${{ seleccionado.total }} </span>   
+                </div>
+            </div>     
     </div>
 
 </div>

@@ -13,6 +13,8 @@ export class PresupuestoComponent implements OnInit {
   public loading = false;
   public total = 0;
   public productos: any = [];
+  public seleccionado: any = {};
+  public flagSeleccionado: boolean;
   public seleccionados = [];
   public limit = 5;
   public descripcion = '';
@@ -21,14 +23,49 @@ export class PresupuestoComponent implements OnInit {
 
   ngOnInit(): void {}
   
-  // Agregar producto
-  agregarProducto(producto: any, txtDescripcion: any): void{
-    this.seleccionados.push({
-      descripcion: producto.descripcion,
-      precio: producto.precio
-    })
+  // Agregar producto al presupuesto
+  agregarProducto(txtCantidad: any): void{
+
+    if(txtCantidad.value.trim() === ''){
+      Swal.fire({
+        icon: 'info',
+        title: 'Información',
+        text: 'Debe colocar una cantidad valida',
+        confirmButtonText: 'Entendido'
+      })
+      return;
+    }else{
+
+      const total = new Intl.NumberFormat('es-AR',{
+        minimumFractionDigits: 2  
+      }).format( this.seleccionado.precio * txtCantidad.value );
+
+      this.seleccionados.push({
+        descripcion: this.seleccionado.descripcion,
+        precio: this.seleccionado.precio,
+        unidad_medida: this.seleccionado.unidad_medida.descripcion,
+        cantidad: txtCantidad.value,
+        total
+      })
+      this.borrarProductoSeleccionado();
+      this.productos = [];
+      txtCantidad.value = '';
+    }
+
+  }
+
+  // Seleccionar producto
+  seleccionarProducto(producto: any, txtDescripcion: any): void {
+    this.flagSeleccionado = true;
+    this.seleccionado = producto;
     this.productos = [];
     txtDescripcion.value = '';
+  }
+
+  // Eliminar producto seleccionado
+  borrarProductoSeleccionado(): void {
+    this.seleccionado = {};
+    this.flagSeleccionado = false;  
   }
 
   // Listar productos

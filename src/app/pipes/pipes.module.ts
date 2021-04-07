@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FechaPipe } from './fecha.pipe';
 import { RolPipe } from './rol.pipe';
 import { AlertaStockPipe } from './alerta-stock.pipe';
+import { MonedaPipe } from './moneda.pipe';
 
 
 
@@ -10,7 +11,8 @@ import { AlertaStockPipe } from './alerta-stock.pipe';
   declarations: [
     FechaPipe,
     RolPipe,
-    AlertaStockPipe
+    AlertaStockPipe,
+    MonedaPipe
   ],
   imports: [
     CommonModule
@@ -18,7 +20,8 @@ import { AlertaStockPipe } from './alerta-stock.pipe';
   exports: [
     FechaPipe,
     RolPipe,
-    AlertaStockPipe
+    AlertaStockPipe,
+    MonedaPipe
   ]
 })
 export class PipesModule { }
