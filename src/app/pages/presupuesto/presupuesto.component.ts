@@ -12,6 +12,7 @@ export class PresupuestoComponent implements OnInit {
 
   public loading = false;
   public total = 0;
+  public precioTotal = 0;
   public productos: any = [];
   public seleccionado: any = {};
   public flagSeleccionado: boolean;
@@ -26,7 +27,7 @@ export class PresupuestoComponent implements OnInit {
   // Agregar producto al presupuesto
   agregarProducto(txtCantidad: any): void{
 
-    if(txtCantidad.value.trim() === ''){
+    if(txtCantidad.value.trim() === '' || txtCantidad.value === '0'){
       Swal.fire({
         icon: 'info',
         title: 'Información',
@@ -36,30 +37,47 @@ export class PresupuestoComponent implements OnInit {
       return;
     }else{
 
-      const total = new Intl.NumberFormat('es-AR',{
-        minimumFractionDigits: 2  
-      }).format( this.seleccionado.precio * txtCantidad.value );
-
+      const total = this.seleccionado.precio * txtCantidad.value;
+      
       this.seleccionados.push({
+        id: this.seleccionado._id,
         descripcion: this.seleccionado.descripcion,
         precio: this.seleccionado.precio,
         unidad_medida: this.seleccionado.unidad_medida.descripcion,
         cantidad: txtCantidad.value,
         total
-      })
+      });
+      this.precioTotalFnc();
       this.borrarProductoSeleccionado();
       this.productos = [];
       txtCantidad.value = '';
+    
     }
 
   }
 
+  // Se extra un elemento del arreglo
+  extraerProducto(productoId: string): void {
+    const productos = this.seleccionados.filter(elemento => elemento.id !== productoId);
+    this.seleccionados = productos;
+    this.precioTotalFnc();
+  }
+
+  // Se calcula el precio total del presupuesto
+  precioTotalFnc(): void {
+    let tmpTotal = 0;
+    this.seleccionados.forEach(producto => {
+      tmpTotal += Number.parseFloat(producto.total); 
+    });
+    this.precioTotal = tmpTotal;
+  }
+
   // Seleccionar producto
-  seleccionarProducto(producto: any, txtDescripcion: any): void {
+  seleccionarProducto(producto: any): void {
     this.flagSeleccionado = true;
     this.seleccionado = producto;
     this.productos = [];
-    txtDescripcion.value = '';
+    console.log(producto);
   }
 
   // Eliminar producto seleccionado
@@ -99,6 +117,12 @@ export class PresupuestoComponent implements OnInit {
       this.descripcion = descripcion;
       this.buscarProducto();  
     }
+  }
+
+  // Eliminar presupuesto
+  eliminarPresupuesto(): void {
+    this.seleccionados = [];
+    this.precioTotal = 0;
   }
 
 }
