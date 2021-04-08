@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
+import { DeviceDetectorService } from 'ngx-device-detector';
 import { Cell, Img, PdfMakeWrapper, Table, Txt } from 'pdfmake-wrapper';
 import Swal from 'sweetalert2';
 import { ProductosService } from '../../services/productos.service';
@@ -23,7 +24,8 @@ export class PresupuestoComponent implements OnInit {
   public limit = 5;
   public descripcion = '';
 
-  constructor(private productosService: ProductosService) { }
+  constructor(private productosService: ProductosService,
+              private deviceService: DeviceDetectorService) { }
 
   ngOnInit(): void {}
   
@@ -38,9 +40,8 @@ export class PresupuestoComponent implements OnInit {
       subject: 'Presupuesto'      
     });
     
-    const header = new Txt('Listado de productos').alignment('left')
-                                                  .bold()
-                                                  .fontSize(12).end;                                               
+    const titulo = new Txt(`Presupuesto - Fecha: ${hoy}`).fontSize(10).bold().end;
+
     // Tabla - Presupuesto
     const productosPresupuesto = this.extractData();
     const tabla = new Table([
@@ -60,11 +61,23 @@ export class PresupuestoComponent implements OnInit {
     .layout('lightHorizontalLines')
     .widths(['*', 100, 50, 80])
     .end;
+
+    const isMobile = this.deviceService.isMobile();
+    // const isDesktop = this.deviceService.isDesktop();
+    const isTablet = this.deviceService.isTablet();
     
-    pdf.add(await new Img('assets/Logo-Pdf.png').width(180).build());
-    pdf.add('');
+    pdf.add(await new Img('assets/Logo-Pdf-2.png').width(520).build());
+    pdf.add(new Txt('').margin([0,10]).end);
+    pdf.add(titulo);
+    pdf.add(new Txt('').margin([0,4]).end);
     pdf.add(tabla);
-    pdf.create().open();  
+
+    if(isMobile || isTablet){
+      pdf.create().download(); // Se genera PDF y se descarga    
+    }else{
+      pdf.create().open(); // Se genera PDF y se abre en otra pestaña  
+    }
+  
   }
 
   extractData(): any{
@@ -151,6 +164,7 @@ export class PresupuestoComponent implements OnInit {
 
   // Listar productos
   buscarProducto(): void{
+    this.loading = true;
     this.productosService.listarProductos(
       this.limit,
       0,
@@ -166,7 +180,8 @@ export class PresupuestoComponent implements OnInit {
         title: 'Error',
         text: error.msg,
         confirmButtonText: 'Entendido'
-      })
+      });
+      this.loading = false;
     });
   }
 
