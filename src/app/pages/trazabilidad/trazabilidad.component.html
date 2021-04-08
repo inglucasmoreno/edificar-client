@@ -1,17 +1,30 @@
-<div>
-    <br>
-    <div class="animate__animated animate__zoomIn border w-full md:w-max mr-auto ml-auto shadow mt-2 mb-4 rounded bg-white shadow">
+<div class="md:flex mt-1">
+    
+    <!-- Trazabilidad - Filtrado -->
+    <div class="bg-white w-1/2 ml-1 mr-2 md:h-screen animate__animated animate__zoomIn border rounded-t"> 
         <div class="text-center">
-            <h2 class="text-xl font-semibold leading-tight bg-gray-100 text-gray-600 border-b p-2">
-                Trazabilidad
-            </h2>
+
+            <h2 class="font-semibold leading-tight bg-gray-100 text-gray-600 border-b p-2 mb-2"> Busqueda y Filtrado </h2>
+            <button class="border rounded bg-gray-100 py-2 md:mt-0 text-gray-700 w-full"
+                    [disabled]="loading"
+                    [ngClass]="{'bg-gray-200': loading}"
+                    (click)="buscar()">
+                <span *ngIf="loading">
+                    <i class="fas fa-spinner animate-spin"></i>
+                    Cargando
+                </span> 
+                <span *ngIf="!loading">
+                    <i class="fas fa-search"></i>
+                    Buscar
+                </span>
+            </button>
 
             <!-- Filtros: Varios -->
-            <div class="p-2 rounded">
-                <div class="md:flex md:items-center md:justify-center mt-4">
+            <div class="p-2 rounded mt-2 mb-2">
+                <div>
                     <select
                         #txtTipo
-                        class="border rounded shadow p-2 text-sm w-full md:w-auto"
+                        class="border rounded shadow p-2 text-xs w-full"
                         (change)="filtrarTipos(txtTipo.value)"
                     >
                         <option value=""> Ingreso y Egresos </option>
@@ -20,47 +33,34 @@
                     </select>           
                     <select
                         #txtProducto
-                        class="border rounded shadow p-2 md:ml-3 mt-2 md:mt-0 text-sm w-full md:w-auto"
+                        class="border rounded shadow p-2 text-xs mt-2 w-full"
                         (change)="filtrarProducto(txtProducto.value)"
                         >
-                            <option value=""> Todos los productos </option>
-                            <option *ngFor="let producto of productos" [value]="producto._id"> {{ producto.descripcion }} - {{ producto.codigo }} </option>
+                            <option value="" class="text-xs"> Todos los productos </option>
+                            <option *ngFor="let producto of productos" class="text-xs" [value]="producto._id"> {{ producto.descripcion }} - {{ producto.codigo }} </option>
                     </select>  
                 </div>
         
                 <!-- Filtros: Por fecha -->
-                <div class="md:flex md:items-center md:justify-center mt-2 md:mt-4 mb-6">
+                <div class="md:flex md:items-center md:justify-center mt-2">
                     <input type="date"
                            #txtDespues
                            (change)="fechaDespues(txtDespues.value)"
-                           class="border rounded shadow p-2 text-sm w-full md:w-auto"
+                           class="border rounded mr-1 shadow p-2 text-xs w-full"
                     >
-                    <span class="text-xl font-semibold ml-2 mr-2 hidden md:inline-block"> - </span>
+                    <span class="text-xl font-semibold ml-2 mr-2 hidden"> - </span>
                     <input type="date"
                            #txtAntes
-                           class="border rounded shadow p-2 mt-3 md:mt-0 text-sm w-full md:w-auto"
+                           class="border rounded shadow p-2 mt-3 md:mt-0 text-xs w-full"
                            (change)="fechaAntes(txtAntes.value)"
                     >
-                    <button class="border rounded bg-gray-100 py-2 px-4 md:ml-3 mt-4 md:mt-0 text-gray-700 w-full md:w-auto"
-                            [disabled]="loading"
-                            [ngClass]="{'bg-gray-200': loading}"
-                            (click)="buscar()">
-                        <span *ngIf="loading">
-                            <i class="fas fa-spinner animate-spin"></i>
-                            Cargando
-                        </span> 
-                        <span *ngIf="!loading">
-                            <i class="fas fa-search"></i>
-                            Buscar
-                        </span>
-                    </button>
-                </div>
+                </div>            
             </div>
         </div>
 
     </div>
 
-    <div class="border shadow rounded-t m-4 w-11/12 mr-auto ml-auto bg-white animate__animated animate__zoomIn" *ngIf="total !== 0">
+    <div class="border shadow rounded-t w-full bg-white animate__animated animate__zoomIn" *ngIf="total !== 0">
         
         <!-- Titulo y ordenamiento -->
         
@@ -124,14 +124,14 @@
                             </p>
                         </div>
                     </div>
-                    <div class="border p-2 bg-white shadow text-sm bg-white w-max"
+                    <div class="border p-2 bg-white shadow text-xs bg-white w-max"
                         [ngClass]="{'border-green-500 text-green-700':traza.tipo === 'Ingreso', 'border-red-500 text-red-700':traza.tipo === 'Egreso'}"
                         >
-                        <span class="font-semibold"> {{ traza.stock_anterior }} </span>
-                        <i class="fas fa-arrow-right"></i>
-                        <span class="font-semibold"> ({{ traza.tipo === 'Ingreso' ? '+' : '-'}}{{traza.cantidad}}) </span>
-                        <i class="fas fa-arrow-right"></i>
-                        <span class="font-semibold"> {{ traza.stock_nuevo }} </span>
+                            <span class="font-semibold"> {{ traza.stock_anterior }} </span>
+                            <i class="fas fa-arrow-right"></i>
+                            <span class="font-semibold"> ({{ traza.tipo === 'Ingreso' ? '+' : '-'}}{{traza.cantidad}}) </span>
+                            <i class="fas fa-arrow-right"></i>
+                            <span class="font-semibold"> {{ traza.stock_nuevo }} </span>
                     </div>
                 </div>
             </div>

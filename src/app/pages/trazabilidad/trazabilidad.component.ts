@@ -15,6 +15,9 @@ export class TrazabilidadComponent implements OnInit {
   public inicio = true;
   public loading = false;
   public productos = [];
+  public limit = 5;
+  public descripcion = ''
+  public flagSeleccionado = false;
 
   // Paginación
   public paginacion = {
