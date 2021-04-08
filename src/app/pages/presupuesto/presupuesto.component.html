@@ -1,7 +1,7 @@
-<div class="flex mt-1">
+<div class="md:flex mt-1">
 
     <!-- Generador de presupuesto -->
-    <div class="bg-white w-1/2 ml-1 h-screen animate__animated animate__zoomIn">
+    <div class="bg-white w-full md:w-1/2 ml-1 md:h-screen animate__animated animate__zoomIn">
         
         <div class="p-4">
             <!-- Titulo -->
@@ -25,7 +25,7 @@
             </div>
         </div>
         
-        <!-- Listado de productos -->
+        <!-- Listado de productos - Para seleccionar -->
         <div class="p-4" *ngIf="!flagSeleccionado">
             <div *ngFor="let producto of productos" 
                   class="p-2 border rounded shadow mb-2 cursor-pointer hover:bg-yellow-100 animate__animated animate__fadeInUp"
@@ -81,20 +81,37 @@
     </div>
 
     <!-- Presupuesto generado -->
-    <div class="bg-white w-1/2 ml-1 mr-1 h-full animate__animated animate__zoomIn" *ngIf="seleccionados.length !== 0">
+    <div class="bg-white w-fill mt-2 md:mt-0 md:w-1/2 ml-1 mr-1 h-full animate__animated animate__zoomIn" *ngIf="seleccionados.length !== 0">
         <div class="p-4">
+
             <!-- Titulo -->
-            <div class="flex items-center justify-between bg-gray-100 p-4 cursor pointer rounded">
+            <div class="flex items-center justify-between bg-gray-100 p-4 border rounded">
                 <h1 class="font-semibold text-gray-700 text-xl"> Presupuesto generado </h1>
                 <div>
                     <span class="px-3 py-2 bg-white text-gray-600 bg-red-500 border rounded cursor-pointer shadow"
                           (click)="eliminarPresupuesto()"> 
                         <i class="far fa-trash-alt text-white"></i> 
                     </span>
-                    <span class="px-3 py-2 bg-white text-gray-600 bg-white border ml-3 rounded cursor-pointer shadow">
+                    <span class="px-3 py-2 bg-white text-gray-600 bg-white border ml-3 rounded cursor-pointer shadow"
+                          (click)="presupuestoPDF()">
                         <i class="fas fa-print"></i>
                     </span>
                 </div>             
+            </div>
+
+            <div class="flex items-center justify-between">
+                <div class="flex items-center p-1 mt-3">
+                    <img src="assets/Edificar-Logo.png" class="w-20" alt="Logo Edificar">
+                    <div>
+                        <span class="block font-semibold text-sm"> Edificar SRL </span>
+                        <span class="block text-xs text-gray-600"> Dirección: Pringles 772  </span>
+                        <span class="block text-xs text-gray-600"> Teléfono: 2664869642 </span>
+                    </div>
+                </div> 
+                <div class="text-xs text-gray-600">
+                    <span class="block"> Fecha </span>
+                    <span class="block"> {{ fechaHoy | fecha }} </span>        
+                </div>
             </div>
             
             <!-- Titulo de listado -->
@@ -106,15 +123,15 @@
             </div>
             
             <!-- Listado de productos + precio -->
-            <div class="mt-4">
+            <div class="mt-2">
                 <div class="flex items-center justify-between p-2 mb-2 text-sm hover:bg-red-100 hover:border hover:rounded cursor-pointer" 
                      *ngFor="let seleccionado of seleccionados"
                      (click)="extraerProducto(seleccionado.id)"
                      >
                     <div>
-                        <span class="block text-sm font-semibold"> {{ seleccionado.descripcion }} </span>
-                        <span class="block text-sm text-gray-400 ml-2"> Cantidad: {{ seleccionado.cantidad }} ({{ seleccionado.unidad_medida }}) </span>
-                        <span class="block text-sm text-gray-400 ml-2"> Precio (c/u): ${{ seleccionado.precio | moneda }} </span>
+                        <span class="block text-xs font-semibold"> {{ seleccionado.descripcion }} </span>
+                        <span class="block text-xs text-gray-400 ml-2"> Cantidad: {{ seleccionado.cantidad }} ({{ seleccionado.unidad_medida }}) </span>
+                        <span class="block text-xs text-gray-400 ml-2"> Precio (c/u): ${{ seleccionado.precio | moneda }} </span>
                     </div>
                     <span class="block font-semibold text-sm"> ${{ seleccionado.total | moneda }} </span>   
                 </div>

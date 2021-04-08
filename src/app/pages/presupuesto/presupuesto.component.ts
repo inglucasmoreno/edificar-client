@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import * as moment from 'moment';
+import { Cell, Img, PdfMakeWrapper, Table, Txt } from 'pdfmake-wrapper';
 import Swal from 'sweetalert2';
 import { ProductosService } from '../../services/productos.service';
 
@@ -10,6 +12,7 @@ import { ProductosService } from '../../services/productos.service';
 })
 export class PresupuestoComponent implements OnInit {
 
+  public fechaHoy = Date.now();
   public loading = false;
   public total = 0;
   public precioTotal = 0;
@@ -24,6 +27,56 @@ export class PresupuestoComponent implements OnInit {
 
   ngOnInit(): void {}
   
+  // Presupuesto en PDF
+  async presupuestoPDF() {
+    const hoy = moment().format('DD/MM/YYYY');
+    const pdf = new PdfMakeWrapper();
+  
+    pdf.info({
+      title: `Presupuesto | ${hoy}`,
+      author: 'Equinoccio Technology',
+      subject: 'Presupuesto'      
+    });
+    
+    const header = new Txt('Listado de productos').alignment('left')
+                                                  .bold()
+                                                  .fontSize(12).end;                                               
+    // Tabla - Presupuesto
+    const productosPresupuesto = this.extractData();
+    const tabla = new Table([
+   
+      [ // Cabecera
+        new Txt('Productos').bold().fontSize(10).margin([0, 5]).end, 
+        new Txt('Precio (c/u)').bold().fontSize(10).alignment('center').margin([0, 5]).end, 
+        new Txt('Cantidad').bold().fontSize(10).alignment('center').margin([0, 5]).end, 
+        new Txt('Precio total').bold().fontSize(10).alignment('center').margin([0, 5]).end], 
+        ...productosPresupuesto,
+        [ // Productos
+          new Txt('PRECIO TOTAL').fontSize(10).bold().margin([0, 5]).end, 
+          '', 
+          '', 
+          new Txt('$' + new Intl.NumberFormat('es-AR', { minimumFractionDigits: 2 }).format(this.precioTotal)).fontSize(10).alignment('center').bold().margin([0, 5]).end,]
+    ])
+    .layout('lightHorizontalLines')
+    .widths(['*', 100, 50, 80])
+    .end;
+    
+    pdf.add(await new Img('assets/Logo-Pdf.png').width(180).build());
+    pdf.add('');
+    pdf.add(tabla);
+    pdf.create().open();  
+  }
+
+  extractData(): any{
+    return this.seleccionados.map( seleccionado => [
+        new Txt(seleccionado.descripcion).fontSize(8).margin([0, 10]).end, 
+        new Txt('$' + new Intl.NumberFormat('es-AR', { minimumFractionDigits: 2 }).format(seleccionado.precio)).fontSize(8).alignment('center').margin([0, 10]).end,
+        new Txt(seleccionado.cantidad).alignment('center').fontSize(8).margin([0, 10]).end,
+        new Txt('$' + new Intl.NumberFormat('es-AR', { minimumFractionDigits: 2 }).format(seleccionado.total)).fontSize(8).alignment('center').margin([0, 10]).end,
+      ],
+    );
+  }
+
   // Agregar producto al presupuesto
   agregarProducto(txtCantidad: any): void{
 
@@ -51,9 +104,7 @@ export class PresupuestoComponent implements OnInit {
       this.borrarProductoSeleccionado();
       this.productos = [];
       txtCantidad.value = '';
-    
     }
-
   }
 
   // Se extra un elemento del arreglo
@@ -74,10 +125,22 @@ export class PresupuestoComponent implements OnInit {
 
   // Seleccionar producto
   seleccionarProducto(producto: any): void {
-    this.flagSeleccionado = true;
-    this.seleccionado = producto;
-    this.productos = [];
-    console.log(producto);
+
+    // Se controla si el producto ya esa en el presupuesto
+    const existe = this.seleccionados.find(elemento => elemento.id == producto._id);
+    if(existe){
+      Swal.fire({
+        icon: 'info',
+        title: 'Información',
+        text: 'Este producto ya esta agregado',
+        confirmButtonText: 'Entendido'
+      });
+      this.productos = [];
+    }else{
+      this.flagSeleccionado = true;
+      this.seleccionado = producto;
+      this.productos = [];
+    }
   }
 
   // Eliminar producto seleccionado
@@ -94,7 +157,6 @@ export class PresupuestoComponent implements OnInit {
       true,
       this.descripcion
     ).subscribe(({productos, total}) => {
-      console.log(productos);
       this.total = total;
       this.productos = productos;
       this.loading = false;
@@ -121,8 +183,21 @@ export class PresupuestoComponent implements OnInit {
 
   // Eliminar presupuesto
   eliminarPresupuesto(): void {
-    this.seleccionados = [];
-    this.precioTotal = 0;
+    Swal.fire({
+      title: '¿Estas seguro?',
+      text: "Estas por eliminar el presupuesto",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.seleccionados = [];
+        this.precioTotal = 0;
+      }
+    })
   }
 
 }
