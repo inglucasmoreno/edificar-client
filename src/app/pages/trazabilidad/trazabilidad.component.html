@@ -1,7 +1,7 @@
-<div class="md:flex mt-1">
+<div class="mt-1">
     
     <!-- Trazabilidad - Filtrado -->
-    <div class="bg-white w-1/2 ml-1 mr-2 md:h-screen animate__animated animate__zoomIn border rounded-t"> 
+    <div *ngIf="!buscando || total === 0" class="bg-white w-11/12 md:w-1/2 ml-1 mt-2 mr-2 ml-auto mr-auto animate__animated animate__zoomIn border rounded"> 
         <div class="text-center">
 
             <h2 class="font-semibold leading-tight bg-gray-100 text-gray-600 border-b p-2 mb-2"> Busqueda y Filtrado </h2>
@@ -60,32 +60,46 @@
 
     </div>
 
-    <div class="border shadow rounded-t w-full bg-white animate__animated animate__zoomIn" *ngIf="total !== 0">
+    <!-- Alerta - Busqueda sin resultados -->
+    <div *ngIf="total === 0 && buscando" class="animate__animated animate__zoomIn px-6 w-11/12 md:w-1/2 py-4 mx-4 mt-2 mb-3 border mr-auto ml-auto bg-gray-100 font-semibold text-gray-600 text-sm text-center">
+        <i class="fas fa-exclamation-circle"></i>
+        <span> No se encontraron elementos </span>
+    </div>
+
+    <div class="border shadow rounded-t w-11/12 mr-auto ml-auto bg-white animate__animated animate__zoomIn" *ngIf="total !== 0 && buscando">
         
         <!-- Titulo y ordenamiento -->
         
         <div class="flex items-center justify-between bg-gray-100 p-2 border-b">
-            <h1 class="text-xl font-semibold text-gray-600"> Listado de trazabilidad ({{ total }}) </h1>
-            <button class="px-3 py-2 border border-gray-300 shadow rounded cursor-pointer bg-white"
-                    [ngClass]="{'bg-gray-100': loading}" 
-                    [disabled]="loading"
-                    (click)="ordenarFecha()">
-                <i *ngIf="ordenar.direccion === -1" class="fas fa-sort-amount-down text-gray-700"></i> 
-                <i *ngIf="ordenar.direccion === 1" class="fas fa-sort-amount-up-alt text-gray-700"></i> 
-            </button>
+            <h1 class=" font-semibold text-xl text-gray-600 ml-4"> Resultados ({{ total }}) </h1>
+            <div>
+                <button class="bg-red-500 text-white px-3 py-2 rounded shadow mr-2"
+                        title="Finalizar busqueda"
+                        (click)="finalizarBusqueda()">  
+                    <i class="far fa-trash-alt"></i>
+                </button>
+                <button class="px-3 py-2 border border-gray-300 shadow rounded cursor-pointer bg-white"
+                        title="Ordenar por fecha"
+                        [ngClass]="{'bg-gray-100': loading}" 
+                        [disabled]="loading"
+                        (click)="ordenarFecha()">
+                    <i *ngIf="ordenar.direccion === -1" class="fas fa-sort-amount-down text-gray-700"></i> 
+                    <i *ngIf="ordenar.direccion === 1" class="fas fa-sort-amount-up-alt text-gray-700"></i> 
+                </button>
+            </div>
         </div>
 
         <!-- Paginación -->
 
         <div class="flex items-center justify-center animate__animated animate__zoomIn mt-6">
-            <button class="mr-4 px-4 py-2 border rounded shadow text-gray-700 cursor-pointer text-sm"
+            <button class="mr-4 px-4 py-2 border rounded shadow text-gray-700 cursor-pointer text-xs md:text-sm"
                     [ngClass]="{'bg-gray-100': loading}"
                     [disabled]="loading"
                     (click)="actualizarDesdeHasta('anterior')"> 
                     <i class="fas fa-arrow-left"></i> 
             </button>
-            <div class="text-gray-500 text-sm font-semibold"> Mostrando {{ total > 0 ? paginacion.desde + 1 : 0 }} - {{ paginacion.hasta < total ? paginacion.hasta : total }} de {{ total }} elementos </div>
-            <button class="ml-4 px-4 py-2 border rounded shadow text-gray-700 cursor-pointer text-sm"
+            <div class="text-gray-500 text-xs md:text-sm font-semibold"> Mostrando {{ total > 0 ? paginacion.desde + 1 : 0 }} - {{ paginacion.hasta < total ? paginacion.hasta : total }} de {{ total }} elementos </div>
+            <button class="ml-4 px-4 py-2 border rounded shadow text-gray-700 cursor-pointer text-xs md:text-sm"
                     [ngClass]="{'bg-gray-100': loading}"
                     [disabled]="loading"
                     (click)="actualizarDesdeHasta('siguiente')"> <i class="fas fa-arrow-right"></i> 
@@ -103,7 +117,7 @@
                 <div class="text-white px-2 py-1 flex items-center justify-between rounded-t"
                     [ngClass]="{'bg-green-600': traza.tipo === 'Ingreso', 'bg-red-600': traza.tipo === 'Egreso'}"
                 >
-                    <div class="font-semibold text-sm">
+                    <div class="font-semibold text-xs md:text-sm">
                         <h1> {{ traza.tipo === 'Ingreso' ? 'Remito' : 'Documento de venta' }}</h1>
                         <h1> Nro. {{ traza.documento_codigo }} </h1>
                     </div>
@@ -111,12 +125,12 @@
                 <div class="flex items-center justify-between p-3">
                     <div class="text-gray-800">
                         <div>
-                            <p class="text-sm font-semibold"> {{ traza.persona_empresa }} </p>
-                            <p class="text-sm"> 
+                            <p class="text-xs md:text-sm font-semibold"> {{ traza.persona_empresa }} </p>
+                            <p class="text-xs md:text-sm"> 
                                 <span class="font-semibold"> {{ traza.producto.codigo}} </span>
                                 <span> - {{ traza.producto.descripcion }} </span>
                             </p>
-                            <p class="text-sm font-semibold"
+                            <p class="text-xs md:text-sm font-semibold"
                             [ngClass]="{'text-green-700' : traza.tipo === 'Ingreso', 'text-red-700' : traza.tipo === 'Egreso'}"
                             > Cantidad: {{ traza.cantidad }} </p>
                             <p>
@@ -124,7 +138,7 @@
                             </p>
                         </div>
                     </div>
-                    <div class="border p-2 bg-white shadow text-xs bg-white w-max"
+                    <div class="border p-2 bg-white hidden md:inline-block shadow text-xs bg-white w-max"
                         [ngClass]="{'border-green-500 text-green-700':traza.tipo === 'Ingreso', 'border-red-500 text-red-700':traza.tipo === 'Egreso'}"
                         >
                             <span class="font-semibold"> {{ traza.stock_anterior }} </span>
@@ -137,10 +151,6 @@
             </div>
         </div>
 
-    </div>
-
-    <div *ngIf="total === 0 && !inicio" class="animate__animated animate__zoomIn px-6 w-11/12 md:w-1/2 py-4 mx-4 mt-2 mb-3 border mr-auto ml-auto bg-gray-100 font-semibold text-gray-600 text-sm text-center">
-        No se encontraron elementos
     </div>
 
     <br>

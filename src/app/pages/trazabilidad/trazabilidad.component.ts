@@ -10,7 +10,7 @@ import { ProductosService } from '../../services/productos.service';
   ]
 })
 export class TrazabilidadComponent implements OnInit {
-
+  
   public total = 0;
   public inicio = true;
   public loading = false;
@@ -18,6 +18,8 @@ export class TrazabilidadComponent implements OnInit {
   public limit = 5;
   public descripcion = ''
   public flagSeleccionado = false;
+  public buscando = false;
+  public trazabilidad = [];
 
   // Paginación
   public paginacion = {
@@ -45,8 +47,6 @@ export class TrazabilidadComponent implements OnInit {
     despues: ''
   }
 
-  public trazabilidad = [];
-
   constructor(private trazabilidadService: TrazabilidadService,
               private productosService: ProductosService) { }
 
@@ -70,6 +70,7 @@ export class TrazabilidadComponent implements OnInit {
       this.trazabilidad = trazabilidad;
       this.total = total;
       this.loading = false;
+      this.buscando = true;
     },({error})=>{
       Swal.fire({
         icon: 'error',
@@ -84,7 +85,7 @@ export class TrazabilidadComponent implements OnInit {
 
   listarProductos(): void {
     this.productosService.listarProductos().subscribe(({productos}) => {
-      this.productos = productos      
+      this.productos = productos    
     },({error})=>{
       Swal.fire({
         icon: 'error',
@@ -150,6 +151,13 @@ export class TrazabilidadComponent implements OnInit {
     this.loading = true;
     this.reiniciarPaginacion(); 
     this.listarTrazabilidad();
+  }
+
+  // Finalizar busqueda
+  finalizarBusqueda(): void {
+    this.total = 0;
+    this.trazabilidad = [];
+    this.buscando = false; 
   }
 
   // Fecha antes
