@@ -15,8 +15,6 @@ export class TrazabilidadComponent implements OnInit {
   public inicio = true;
   public loading = false;
   public productos = [];
-  public limit = 5;
-  public descripcion = ''
   public flagSeleccionado = false;
 
   // Paginación
@@ -55,6 +53,7 @@ export class TrazabilidadComponent implements OnInit {
   }
 
   listarTrazabilidad(): void {
+    console.log(this.paginacion);
     this.inicio = false;
     this.trazabilidadService.listarTrazabilidad(
       this.paginacion.hasta,
@@ -145,19 +144,31 @@ export class TrazabilidadComponent implements OnInit {
     this.paginacion.hasta = 5;  
   } 
 
+  // Cantidad de registros
+  cantidadRegistros(cantidad: any): void {
+    this.paginacion.limit = cantidad;
+    this.paginacion.hasta = cantidad;
+  }
+
   // Buscar
-  buscar(): void {
+  buscar(parametro: string): void {
     this.loading = true;
+    this.filtroParametro(parametro);
     this.reiniciarPaginacion(); 
     this.listarTrazabilidad();
   }
 
-  // Fecha antes
+  // Filtro por descripcion
+  filtroParametro(parametro: string): void {
+    this.filtro.parametro = parametro;
+  }
+
+  // Filtro por Fecha - Antes
   fechaAntes(fecha: string): void{
     this.fecha.antes = fecha;
   }
 
-  // Fecha despues
+  // Fecha por Fecha - Despues
   fechaDespues(fecha: string): void{
     this.fecha.despues = fecha;
   }

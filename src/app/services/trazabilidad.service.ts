@@ -24,6 +24,7 @@ export class TrazabilidadService {
     fechaAntes: string,
     fechaDespues: string
   ): Observable<any>{
+    console.log(limit);
     return this.http.get(`${base_url}/trazabilidad`, {
       params: {
         limit: String(limit),
