@@ -27,10 +27,17 @@ export class NuevoProveedorComponent implements OnInit {
               private router: Router) { }
 
   ngOnInit(): void {}
-
+  
+  // Se crea el proveedor
   crearProveedor(): void {
-    if(this.proveedorForm.valid){
-      const {razon_social, cuit, domicilio, condicion_iva, activo} = this.proveedorForm.value;
+    
+    const {razon_social, cuit, domicilio, condicion_iva, activo} = this.proveedorForm.value;
+    
+    const formularioValido = razon_social.trim() !== '' &&
+                             cuit.trim() !== '' &&
+                             this.proveedorForm.valid
+                            
+    if(formularioValido){
       let data = {
         razon_social,
         cuit,

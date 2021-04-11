@@ -14,8 +14,16 @@ export class IngresoDetallesComponent implements OnInit {
 
   public id;
   public total;
-  public loading = true;
+
+  // Loadings
+  public loadingRemito = true;
+  public loadingProductos = true;
+
   public loadingCargando = true;
+  public loadingTabla = true;
+  public loadingCompletar = false;
+  
+  public loading = true;
   public ingreso = {
     numero_remito: '',
     proveedor: '',
@@ -32,7 +40,7 @@ export class IngresoDetallesComponent implements OnInit {
   }
 
   public tieneProductos: boolean;
-  public productos = [];
+  public productos = [];                  // Productos del ingreso
 
   constructor(private ingresoService: IngresosService,
               private activatedRoute: ActivatedRoute,
@@ -44,6 +52,7 @@ export class IngresoDetallesComponent implements OnInit {
       this.id = id;
       this.ingresoService.getIngreso(id).subscribe( ({ ingreso }) => {
        this.ingreso = ingreso;
+       this.loadingRemito = false;
        this.primerIngreso();
       });  
     },({error}) => {
@@ -53,12 +62,12 @@ export class IngresoDetallesComponent implements OnInit {
         text: error.msg,
         confirmButtonText: 'Entendido'
       });
-      this.loading = false;
+      this.loadingRemito = false;
     });
   }
-
+  
+  // Primer ingreso a la pagina
   primerIngreso(): void {
-    this.loadingCargando = true;
     this.ingresoProductosService.listarProductosPorIngreso(
       this.id,
       this.paginacion.hasta,
@@ -68,8 +77,7 @@ export class IngresoDetallesComponent implements OnInit {
       this.productos = productos;
       this.total = total;
       total != 0 ? this.tieneProductos = true : this.tieneProductos = false;  // Indica que el ingreso tiene productos
-      this.loadingCargando = false;
-      this.loading = false;
+      this.loadingProductos = false;
     },({error})=>{
       Swal.fire({
         icon: 'error',
@@ -77,13 +85,24 @@ export class IngresoDetallesComponent implements OnInit {
         text: error.msg,
         confirmButtonText: 'Entendido'
       });
-      this.loading = false;
-      this.loadingCargando = false;
+      this.loadingProductos = false;
     });  
   }
 
   // Completar ingreso
   completarIngreso(): void {
+    
+    // Se verifica si el remito tiene productos
+    if(this.productos.length <= 0){
+      Swal.fire({
+        icon: 'info',
+        title: 'Información',
+        text: 'El ingreso no tiene productos',
+        confirmButtonText: 'Entendido'
+      });
+      return;
+    }
+
     Swal.fire({
       title: '¿Estas seguro?',
       text: "Estas por completar el ingreso",

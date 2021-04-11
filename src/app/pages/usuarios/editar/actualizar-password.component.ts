@@ -42,11 +42,7 @@ export class ActualizarPasswordComponent implements OnInit {
       });
     });
   }
-
-  regresar(): void{
-    this.router.navigateByUrl('/dashboard/usuarios');
-  }
-  
+    
   // Actualizar constraseña
   actualizarPassword(): void | boolean{
     const {password, repetir} = this.passwordForm.value;

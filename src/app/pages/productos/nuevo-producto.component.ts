@@ -12,7 +12,8 @@ import { ProductosService } from '../../services/productos.service';
 })
 export class NuevoProductoComponent implements OnInit {
 
-  public loading = true;
+  public loadingCarga = false;
+  public loadingInicio = true;
   public stockMinimo = false;
   public unidades = [];
 
@@ -31,14 +32,36 @@ export class NuevoProductoComponent implements OnInit {
               private unidadMedidaService: UnidadMedidaService,
               private productosService: ProductosService
     ) { }
-
+   
   ngOnInit(): void {
     this.obtenerUnidades();
   }
   
+  // Se crea el nuevo producto
   crearProducto(): void {
-    if(this.productoForm.valid){
-      this.loading = true;
+  
+    const {codigo, descripcion, cantidad, stock_minimo, cantidad_minima, precio} = this.productoForm.value;   
+    
+    const cantidadMinimaValida = stock_minimo && Number(cantidad_minima) < 0;
+
+    if(cantidadMinimaValida){
+      Swal.fire({
+        icon: 'info',
+        title: 'Información',
+        text: 'Formulario inválido',
+        confirmButtonText: 'Entendido'
+      }); 
+      return;         
+    }
+
+    const formularioValido = this.productoForm.valid && 
+                             codigo.trim() !== '' && 
+                             descripcion.trim() !== '' && 
+                             Number(cantidad) >= 0 && 
+                             Number(precio) >= 0 
+
+    if(formularioValido){
+      this.loadingCarga = true;
       const data = this.productoForm.value;
       if(!this.stockMinimo) data['cantidad_minima'] = 0;
       this.productosService.nuevoProducto(data).subscribe( () => {
@@ -50,7 +73,7 @@ export class NuevoProductoComponent implements OnInit {
           showConfirmButton: false
         });
         this.reiniciarFormulario();  
-        this.loading = false;
+        this.loadingCarga = false;
       },({error}) => {
         Swal.fire({
           icon: 'error',
@@ -58,7 +81,7 @@ export class NuevoProductoComponent implements OnInit {
           text: error.msg,
           confirmButtonText: 'Entendido'
         });
-        this.loading = false;
+        this.loadingCarga = false;
       }); 
     }else{
       Swal.fire({
@@ -74,7 +97,7 @@ export class NuevoProductoComponent implements OnInit {
     this.unidadMedidaService.listarUnidades(0, 0, true).subscribe( ({ unidades }) => {
       this.unidades= unidades; 
       this.reiniciarFormulario();
-      this.loading = false;  
+      this.loadingInicio = false;
     },({error}) => {
       Swal.fire({
         icon: 'error',
@@ -82,10 +105,11 @@ export class NuevoProductoComponent implements OnInit {
         text: error.msg,
         confirmButtonText: 'Entendido'
       })
-      this.loading = false;  
+      this.loadingInicio = false;
     }); 
   }
-
+  
+  // Se reinician los valores del formulario
   reiniciarFormulario() {
     this.stockMinimo = false;
     this.productoForm.setValue({

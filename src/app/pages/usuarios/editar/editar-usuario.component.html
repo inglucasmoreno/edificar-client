@@ -1,102 +1,111 @@
 <app-tarjeta-formulario>
-    <div class="p-4 flex items-center">
-        <h1 class="flex items-center text-gray-700">
-            <i routerLink="/dashboard/usuarios" class="fas fa-arrow-left border bg-gray-500 text-white border-gray-300 rounded p-2 px-3 shadow cursor-pointer"></i>
-            <div class="flex flex-col ml-2">
-                <span class="ml-2 text-xl text-gray-600"> Usuarios </span>
-                <span class="text-xs mt-1 ml-1 font-semibold border py-1 px-2 rounded text-white bg-yellow-500"> 
-                    <i class="fas fa-pencil-alt"></i>
-                    Editando usuario
-                </span>
-            </div>
-        </h1>
-        <span class="md:block" *ngIf="loading">
-            <i class="fas fa-spinner animate-spin text-2xl text-gray-400 ml-3"></i>
-        </span>
+    <div class="p-3 text-gray-500" *ngIf="loading">
+        <i class="fas fa-spinner animate-spin mr-2"></i>
+        Cargando datos
     </div>
-    <form 
-        [formGroup]="usuarioForm"
-        (submit)="editarUsuario()"    
-        class="px-5 pb-5">
-        <div class="flex flex-col lg:flex-row">
-            <div class="w-full mx-2 flex-1 svelte-1l8159u">
-                <div class="font-bold mt-3 text-gray-600 text-sm"> Nombre de usuario </div>
-                <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
-                    <input placeholder="Ej. 34060398" 
-                           [disabled]="loading"
-                           class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"
-                           formControlName="dni"
-                           ></div>
-            </div>
-            <div class="w-full mx-2 flex-1 svelte-1l8159u">
-                <div class="font-bold mt-3 text-gray-600 text-sm"> Email </div>
-                <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
-                    <input type="email"
-                           formControlName="email" 
-                           placeholder="Ej. lucasmoreno@gmail.com" 
-                           class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"></div>
-            </div>
+    <div *ngIf="!loading">   
+        <div class="p-4 flex items-center">
+            <h1 class="flex items-center text-gray-700">
+                <i routerLink="/dashboard/usuarios" title="Regresar" class="fas fa-arrow-left border hover:text-yellow-500 bg-gray-100 text-gray-600 border-gray-300 rounded p-2 px-3 shadow cursor-pointer"></i>
+                <div class="flex flex-col ml-2">
+                    <span class="ml-2 text-xl text-gray-600"> Usuarios </span>
+                    <span class="text-xs mt-1 ml-1 font-semibold border border-gray-200 py-1 px-2 rounded text-gray-600 bg-yellow-100"> 
+                        <i class="fas fa-pencil-alt"></i>
+                        Editando usuario
+                    </span>
+                </div>
+            </h1>
+            <span class="md:block" *ngIf="loading">
+                <i class="fas fa-spinner animate-spin text-2xl text-gray-400 ml-3"></i>
+            </span>
         </div>
-        <div class="flex flex-col lg:flex-row">
-            <div class="w-full mx-2 flex-1 svelte-1l8159u">
-                <div class="font-bold mt-3 text-gray-600 text-sm"> Apellido </div>
-                <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
-                    <input placeholder="Ej. Moreno" 
-                           formControlName="apellido"
-                           class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"> 
+        <form 
+            [formGroup]="usuarioForm"
+            (submit)="editarUsuario()"    
+            class="px-5 pb-5">
+            <div class="flex flex-col lg:flex-row">
+                <div class="w-full mx-2 flex-1 svelte-1l8159u">
+                    <div class="font-bold mt-3 text-gray-600 text-sm"> Nombre de usuario </div>
+                    <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
+                        <input placeholder="Ej. 34060398" 
+                               [disabled]="loading"
+                               class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"
+                               formControlName="dni"
+                               ></div>
+                </div>
+                <div class="w-full mx-2 flex-1 svelte-1l8159u">
+                    <div class="font-bold mt-3 text-gray-600 text-sm"> Email </div>
+                    <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
+                        <input type="email"
+                               formControlName="email" 
+                               placeholder="Ej. lucasmoreno@gmail.com" 
+                               class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"></div>
                 </div>
             </div>
-            <div class="w-full mx-2 flex-1 svelte-1l8159u">
-                <div class="font-bold mt-3 text-gray-600 text-sm"> Nombre </div>
-                <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
-                    <input placeholder="Ej. Lucas" 
-                           formControlName="nombre"
-                           class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"> </div>
-            </div>
-        </div>
-        <div class="flex flex-col lg:flex-row">
-            <div class="w-full mx-2 flex-1">
-                <div class="font-bold mt-3 text-gray-600 text-sm"> Rol </div>
-                <div class="bg-white my-2 flex">
-                    <select class="border rounded p-1 py-2 w-full shadow text-sm"
-                            formControlName="role">
-                        <option value="USER_ROLE"> Consulta </option>
-                        <option value="ADMIN_ROLE"> Administrador </option>
-                    </select>
+            <div class="flex flex-col lg:flex-row">
+                <div class="w-full mx-2 flex-1 svelte-1l8159u">
+                    <div class="font-bold mt-3 text-gray-600 text-sm"> Apellido </div>
+                    <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
+                        <input placeholder="Ej. Moreno" 
+                               formControlName="apellido"
+                               class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"> 
+                    </div>
+                </div>
+                <div class="w-full mx-2 flex-1 svelte-1l8159u">
+                    <div class="font-bold mt-3 text-gray-600 text-sm"> Nombre </div>
+                    <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
+                        <input placeholder="Ej. Lucas" 
+                               formControlName="nombre"
+                               class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"> </div>
                 </div>
             </div>
-            <div class="w-full mx-2 flex-1">
-                <div class="font-bold mt-3 text-gray-600 text-sm"> Estado </div>
-                <div class="bg-white my-2 flex">
-                    <select class="border rounded p-1 py-2 w-full shadow text-sm"
-                            formControlName="activo">
-                        <option value=true> Activo </option>
-                        <option value=false> Inactivo </option>
-                    </select>
+            <div class="flex flex-col lg:flex-row">
+                <div class="w-full mx-2 flex-1">
+                    <div class="font-bold mt-3 text-gray-600 text-sm"> Rol </div>
+                    <div class="bg-white my-2 flex">
+                        <select class="border rounded p-1 py-2 w-full shadow text-sm"
+                                formControlName="role">
+                            <option value="USER_ROLE"> Consulta </option>
+                            <option value="ADMIN_ROLE"> Administrador </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="w-full mx-2 flex-1">
+                    <div class="font-bold mt-3 text-gray-600 text-sm"> Estado </div>
+                    <div class="bg-white my-2 flex">
+                        <select class="border rounded p-1 py-2 w-full shadow text-sm"
+                                formControlName="activo">
+                            <option value=true> Activo </option>
+                            <option value=false> Inactivo </option>
+                        </select>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="flex flex-col lg:flex-row mt-2">
-            <div class="w-full mx-2 flex-1">
-                <button [disabled]="loading || loadingEnd"
-                        [ngClass]="{'bg-yellow-300' : loading || loadingEnd, 'bg-yellow-500' : !loading && !loadingEnd}"
-                        class="p-2 text-white w-full mt-3 rounded shadow"> 
-                            <span *ngIf="!loadingEnd"> Actualizar usuario </span>
-                            <span *ngIf="loadingEnd">
-                                <i class="fas fa-spinner animate-spin mr-2"></i>
-                                Actualizando usuario
-                            </span>
-                        </button>
-            </div>
-            <div class="w-full mx-2 flex-1">
-                <button 
-                        [disabled]="loadingEnd"
-                        routerLink="/dashboard/usuarios" 
-                        [ngClass]="{'bg-gray-400' : loadingEnd, 'bg-gray-500' : !loadingEnd}"
-                        class="p-2 text-white w-full mt-3 rounded shadow"> Regresar </button>
-            </div>
-        </div> 
-    </form>
+            <div class="flex flex-col lg:flex-row mt-2">
+                <div class="w-full mx-2 flex-1">
+                    <button [disabled]="loading || loadingEnd"
+                            [ngClass]="{'bg-yellow-100' : loading || loadingEnd, 'bg-gray-100 hover:bg-yellow-100' : !loading && !loadingEnd}"
+                            class="p-2 text-gray-600 border border-gray-300 w-full mt-3 rounded shadow"> 
+                                <span *ngIf="!loadingEnd" class="font-semibold"> 
+                                    <i class="fas fa-check text-green-500"></i>
+                                    Actualizar usuario 
+                                </span>
+                                <span *ngIf="loadingEnd">
+                                    <i class="fas fa-spinner animate-spin mr-2"></i>
+                                    Actualizando usuario
+                                </span>
+                            </button>
+                </div>
+                <div class="w-full mx-2 flex-1">
+                    <button 
+                            [disabled]="loadingEnd"
+                            routerLink="/dashboard/usuarios" 
+                            [ngClass]="{'bg-gray-200' : loadingEnd, 'bg-gray-100 hover:bg-yellow-100' : !loadingEnd}"
+                            class="p-2 text-gray-600 border font-semibold border-gray-300 w-full mt-3 rounded shadow"> Regresar </button>
+                </div>
+            </div> 
+        </form>
+    </div>
 </app-tarjeta-formulario>
 <br>
 <br>

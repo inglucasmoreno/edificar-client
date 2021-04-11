@@ -53,12 +53,24 @@ export class EditarUsuarioComponent implements OnInit {
 
   // Editar usuario
   editarUsuario(): void | boolean{
+
+
+    const {dni, apellido, nombre, email, password, repetir} = this.usuarioForm.value;
+
+    // Se verifica que los campos no tengan un espacio vacio
+    const campoVacio = dni.trim() === '' || 
+    apellido.trim() === '' || 
+    email.trim() === '' || 
+    nombre.trim() === '' ||
+    password.trim() === '' ||
+    repetir.trim() === '';
+
     // Se verifica que todos los campos esten rellenos
-    if (this.usuarioForm.status === 'INVALID'){
+    if (this.usuarioForm.status === 'INVALID' || campoVacio){
     Swal.fire({
       icon: 'info',
       title: 'Información',
-      text: 'Debes completar todos los campos',
+      text: 'Formulario inválido',
       confirmButtonText: 'Entendido'
     });
     return false;

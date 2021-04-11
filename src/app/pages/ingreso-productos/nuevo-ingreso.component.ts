@@ -37,7 +37,7 @@ export class NuevoIngresoComponent implements OnInit {
       Swal.fire({
         icon: 'info',
         title: 'Información',
-        text: 'Debe completar todos los campos',
+        text: 'Formulario inválido',
         confirmButtonText: 'Entendido'
       });  
       return;

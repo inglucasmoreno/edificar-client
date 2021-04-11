@@ -1,10 +1,10 @@
 <app-tarjeta-formulario>
     <div class="p-4">
         <h1 class="flex items-center text-gray-700">
-            <i routerLink="/dashboard/usuarios" class="fas fa-arrow-left border bg-gray-500 text-white border-gray-300 rounded p-2 px-3 shadow cursor-pointer"></i>
+            <i routerLink="/dashboard/usuarios" title="Regresar" class="fas fa-arrow-left hover:text-yellow-500 border bg-gray-100 text-gray-600 border-gray-300 rounded p-2 px-3 shadow cursor-pointer"></i>
             <div class="flex flex-col ml-2">
                 <span class="ml-2 text-xl text-gray-600"> Usuarios </span>
-                <span class="text-xs mt-1 ml-1 font-semibold border py-1 px-2 rounded text-white bg-yellow-500"> 
+                <span class="text-xs mt-1 ml-1 font-semibold border border-gray-200 py-1 px-2 rounded text-gray-600 bg-yellow-100"> 
                     <i class="fas fa-user-plus"></i>
                     Nuevo usuario 
                 </span>
@@ -95,21 +95,24 @@
             <div class="w-full mx-2 flex-1">
                 <button 
                         [disabled]="loading"
-                        [ngClass]="{'bg-yellow-400' : loading, 'bg-yellow-500' : !loading}"
-                        class="p-2 bg-yellow-500 text-white w-full mt-3 rounded shadow"> 
+                        [ngClass]="{'bg-yellow-100' : loading, 'bg-gray-100 hover:bg-yellow-100' : !loading}"
+                        class="p-2 text-gray-600 border shadow border-gray-300 w-full mt-3 rounded shadow"> 
                             <span *ngIf="loading">
                                 <i class="fas fa-spinner animate-spin mr-2"></i>
                                 Creando usuario
                             </span>
-                            <span *ngIf="!loading"> Crear usuario  </span>    
+                            <span class="font-semibold" *ngIf="!loading"> 
+                                <i class="fas fa-check text-green-500"></i>
+                                Crear usuario  
+                            </span>    
                         </button>
             </div>
             <div class="w-full mx-2 flex-1">
                 <button 
                         [disabled]="loading"
-                        [ngClass]="{'bg-gray-400' : loading, 'bg-gray-500' : !loading }"
+                        [ngClass]="{'bg-gray-200' : loading, 'bg-gray-100 hover:bg-yellow-100' : !loading }"
                         routerLink="/dashboard/usuarios" 
-                        class="p-2 text-white w-full mt-3 rounded shadow"> Regresar </button>
+                        class="p-2 text-gray-600 w-full mt-3 border font-semibold border-gray-300 rounded shadow"> Regresar </button>
             </div>
         </div> 
     </form>

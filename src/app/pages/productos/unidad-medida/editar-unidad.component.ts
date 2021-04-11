@@ -13,7 +13,8 @@ import { FormBuilder, Validators } from '@angular/forms';
 export class EditarUnidadComponent implements OnInit {
 
   public id = '';
-  public loading = true;
+  public loadingInicio = true;
+  public loadingActualizacion = false;
 
   public formUnidad = this.fb.group({
     descripcion: ['', Validators.required],
@@ -39,7 +40,7 @@ export class EditarUnidadComponent implements OnInit {
         descripcion: unidad.descripcion,
         activo: unidad.activo
       });
-      this.loading = false;
+      this.loadingInicio = false;
     },(({error}) => {
       Swal.fire({
         icon: 'error',
@@ -47,7 +48,7 @@ export class EditarUnidadComponent implements OnInit {
         text: error.msg,
         confirmButtonText: 'Entendido'
       });
-      this.loading = false;
+      this.loadingInicio = false;
     }))    
   }
   
@@ -55,14 +56,14 @@ export class EditarUnidadComponent implements OnInit {
     const { descripcion } = this.formUnidad.value;
     if(this.formUnidad.status === 'INVALID' || descripcion.trim() === ''){
       Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Debe completar todos los campos',
+        icon: 'info',
+        title: 'Información',
+        text: 'Formulario inválido',
         confirmButtonText: 'Entendido'
       });
       return;
     }
-    this.loading = true;
+    this.loadingActualizacion = true;
     this.unidadMedidaService.actualizarUnidad(this.id, this.formUnidad.value).subscribe( () => {
       Swal.fire({
         icon: 'success',
@@ -71,7 +72,7 @@ export class EditarUnidadComponent implements OnInit {
         timer: 1000,
         showConfirmButton: false
       });  
-      this.loading = false;
+      this.loadingActualizacion = false;
       this.router.navigateByUrl('dashboard/unidad-medida');
     },(({error}) => {
       Swal.fire({
@@ -80,7 +81,7 @@ export class EditarUnidadComponent implements OnInit {
         text: error.msg,
         confirmButtonText: 'Entendido'
       })
-      this.loading = false;  
+      this.loadingActualizacion = false;  
     }));
   }
 

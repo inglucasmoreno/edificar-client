@@ -100,6 +100,7 @@ export class ProductosComponent implements OnInit {
 
   }
 
+  // Reiniciar paginación
   reiniciarPaginacion(): void {
     this.paginacion.desde = 0;
     this.paginacion.hasta = 10;

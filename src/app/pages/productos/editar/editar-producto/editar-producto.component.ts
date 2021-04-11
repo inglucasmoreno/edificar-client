@@ -15,10 +15,11 @@ import { Producto } from 'src/app/models/producto.model';
 })
 export class EditarProductoComponent implements OnInit {
 s
+  public loadingActualizando = false;
+  public loadingInicio = true;
   public unidades = [];
   public productoId = '';
   public stockMinimo = true;
-  public loading = true;
   public producto: Producto = {
     _id: '',
     codigo: '',
@@ -56,8 +57,28 @@ s
   }
 
   editarProducto(): void {
-    if(this.productoForm.valid){ 
-        this.loading = true;       
+
+    const {codigo, descripcion, stock_minimo, cantidad_minima, precio} = this.productoForm.value;   
+    
+    const cantidadMinimaValida = stock_minimo && Number(cantidad_minima) < 0;
+
+    if(cantidadMinimaValida){
+      Swal.fire({
+        icon: 'info',
+        title: 'Información',
+        text: 'Formulario inválido',
+        confirmButtonText: 'Entendido'
+      }); 
+      return;         
+    }
+
+    const formularioValido = this.productoForm.valid && 
+                             codigo.trim() !== '' && 
+                             descripcion.trim() !== '' && 
+                             Number(precio) >= 0 
+
+    if(formularioValido){ 
+        this.loadingActualizando = true;       
         const data = this.productoForm.value;
         if(!this.stockMinimo) data.cantidad_minima = 0;
         this.productosService.actualizarProducto(this.producto._id, data).subscribe(()=>{
@@ -68,7 +89,7 @@ s
             timer: 1000,
             showConfirmButton: false
           });
-          this.loading = false;
+          this.loadingActualizando = false;
           this.router.navigateByUrl(`/dashboard/productos`);
         },({error}) =>{
           Swal.fire({
@@ -77,7 +98,7 @@ s
             text: error.msg,
             confirmButtonText: 'Entendido'
           });
-          this.loading = false;
+          this.loadingActualizando = false;
         });
     }else{
       Swal.fire({
@@ -86,7 +107,7 @@ s
         text: 'Formulario invalido',
         confirmButtonText: 'Entendido'
       })  
-      this.loading = false;
+      this.loadingActualizando = false;
     }
   }
 
@@ -94,7 +115,7 @@ s
     this.productosService.getProducto(id).subscribe(({producto})=>{
       this.producto = producto;
       this.stockMinimo = producto.stock_minimo;
-      this.loading = false;  
+      this.loadingInicio = false;
       this.productoForm.setValue({
         codigo: producto.codigo,
         descripcion: producto.descripcion,

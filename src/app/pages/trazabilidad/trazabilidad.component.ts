@@ -18,12 +18,13 @@ export class TrazabilidadComponent implements OnInit {
   public flagSeleccionado = false;
   public buscando = false;
   public trazabilidad = [];
+  public registros: number = 5;
 
   // Paginación
   public paginacion = {
-    limit: 5,
+    limit: this.registros,
     desde: 0,
-    hasta: 5
+    hasta: this.registros
   };
 
   // Filtrado
@@ -122,6 +123,9 @@ export class TrazabilidadComponent implements OnInit {
   actualizarDesdeHasta(selector): void {
     this.loading = true;
   
+    console.log(this.paginacion.desde);
+    console.log(this.paginacion.hasta);
+
     if (selector === 'siguiente'){ // Incrementar
       if (this.paginacion.hasta < this.total){
         this.paginacion.desde += this.paginacion.limit;
@@ -140,21 +144,16 @@ export class TrazabilidadComponent implements OnInit {
   
   // Se reestablecen los valores de paginacion
   reiniciarPaginacion(): void {
-    this.paginacion.limit = 5;
+    this.paginacion.limit = this.registros;
     this.paginacion.desde = 0;
-    this.paginacion.hasta = 5;  
+    this.paginacion.hasta = this.registros;  
   } 
 
-  // Cantidad de registros
-  cantidadRegistros(cantidad: any): void {
-    this.paginacion.limit = cantidad;
-    this.paginacion.hasta = cantidad;
-  }
-
   // Buscar
-  buscar(parametro: string): void {
+  buscar(parametro: string, registros: number): void {
     this.loading = true;
     this.filtroParametro(parametro);
+    this.registros = Number(registros);
     this.reiniciarPaginacion(); 
     this.listarTrazabilidad();
   }

@@ -1,14 +1,8 @@
-<div class="mt-1">
+<div class="mt-1 lg:flex">
     
     <!-- Trazabilidad - Filtrado -->
-<<<<<<< HEAD
-    <div class="bg-white w-full md:w-2/5 ml-auto mr-auto md:ml-1 md:mr-2 md:h-screen animate__animated animate__zoomIn border rounded"> 
+    <div class="bg-white w-full lg:w-2/5 ml-auto mr-auto h-full lg:ml-1 lg:mr-2 animate__animated animate__zoomIn border rounded"> 
         <div>
-=======
-    <div *ngIf="!buscando || total === 0" class="bg-white w-11/12 md:w-1/2 ml-1 mt-2 mr-2 ml-auto mr-auto animate__animated animate__zoomIn border rounded"> 
-        <div class="text-center">
-
->>>>>>> 6d8a321d66214369b55dd7a23be5c5d97f536769
             <h2 class="font-semibold leading-tight bg-gray-100 text-gray-600 border-b p-2 mb-2"> Busqueda y Filtrado </h2>
             <!-- Filtros: Varios -->
             <div class="p-3 rounded mt-2 mb-2">
@@ -52,7 +46,7 @@
                 </div>
 
                 <!-- Filtros: Por fecha -->
-                <div class="md:flex md:items-center mt-3">
+                <div class="lg:flex lg:items-center mt-3">
                     <input type="date"
                            #txtDespues
                            (change)="fechaDespues(txtDespues.value)"
@@ -61,7 +55,7 @@
                     <span class="text-xl font-semibold ml-2 mr-2 hidden"> - </span>
                     <input type="date"
                            #txtAntes
-                           class="border rounded shadow p-2 mt-3 md:mt-0 text-xs w-full"
+                           class="border rounded shadow p-2 mt-3 lg:mt-0 text-xs w-full"
                            (change)="fechaAntes(txtAntes.value)"
                     >
                 </div>            
@@ -86,27 +80,28 @@
         <div class="p-2">
             <div class="bg-gray-100 p-2 mt-2 border">
                 <label class="text-sm font-semibold text-gray-600"> 
-                    <i class="fas fa-filter"></i>
+                    <i class="fas fa-copy"></i>
                     <span class="ml-2">
-                        Otros filtros 
+                        Paginación
                     </span>
                 </label>
             </div>
 
-            <select #txtCantidad
-                    (change)="cantidadRegistros(txtCantidad.value)" 
+            <select #txtRegistros
                     class="p-2 text-sm border rounded w-full mt-3 shadow">
                 <option value=5> 5 Registros </option>
                 <option value=10> 10 Registros </option>
                 <option value=20> 20 Registros </option>
+                <option value=20> 50 Registros </option>
+                <option value=20> 100 Registros </option>
             </select>
 
         </div>
 
-        <button class="border shadow rounded bg-gray-100 p-2 mt-4 text-gray-700 w-full"
+        <button class="border border-gray-200 shadow bg-gray-100 p-2 hover:bg-yellow-100 mt-4 text-gray-700 w-full"
             [disabled]="loading"
             [ngClass]="{'bg-gray-200': loading}"
-            (click)="buscar(txtParametro.value)">
+            (click)="buscar(txtParametro.value, txtRegistros.value)">
                 <span *ngIf="loading">
                     <i class="fas fa-spinner animate-spin"></i>
                     Cargando
@@ -119,28 +114,13 @@
 
     </div>
 
-<<<<<<< HEAD
-    <div class="border shadow rounded-t w-full md:w-3/5 mr-auto ml-auto mt-2 md:mt-0 bg-white animate__animated animate__zoomIn" *ngIf="total !== 0">
-=======
-    <!-- Alerta - Busqueda sin resultados -->
-    <div *ngIf="total === 0 && buscando" class="animate__animated animate__zoomIn px-6 w-11/12 md:w-1/2 py-4 mx-4 mt-2 mb-3 border mr-auto ml-auto bg-gray-100 font-semibold text-gray-600 text-sm text-center">
-        <i class="fas fa-exclamation-circle"></i>
-        <span> No se encontraron elementos </span>
-    </div>
-
-    <div class="border shadow rounded-t w-11/12 mr-auto ml-auto bg-white animate__animated animate__zoomIn" *ngIf="total !== 0 && buscando">
->>>>>>> 6d8a321d66214369b55dd7a23be5c5d97f536769
+    <div class="border shadow rounded-t w-full lg:w-3/5 mr-auto ml-auto mt-2 lg:mt-0 bg-white animate__animated animate__zoomIn" *ngIf="total !== 0">
         
         <!-- Titulo y ordenamiento -->
         
         <div class="flex items-center justify-between bg-gray-100 p-2 border-b">
-            <h1 class=" font-semibold text-xl text-gray-600 ml-4"> Resultados ({{ total }}) </h1>
+            <h1 class=" font-semibold text-xl text-gray-600 ml-4"> Trazabilidad ({{ total }}) </h1>
             <div>
-                <button class="bg-red-500 text-white px-3 py-2 rounded shadow mr-2"
-                        title="Finalizar busqueda"
-                        (click)="finalizarBusqueda()">  
-                    <i class="far fa-trash-alt"></i>
-                </button>
                 <button class="px-3 py-2 border border-gray-300 shadow rounded cursor-pointer bg-white"
                         title="Ordenar por fecha"
                         [ngClass]="{'bg-gray-100': loading}" 
@@ -155,14 +135,14 @@
         <!-- Paginación -->
 
         <div class="flex items-center justify-center animate__animated animate__zoomIn mt-6">
-            <button class="mr-4 px-4 py-2 border rounded shadow text-gray-700 cursor-pointer text-xs md:text-sm"
+            <button class="mr-4 px-4 py-2 border rounded shadow text-gray-700 cursor-pointer text-xs"
                     [ngClass]="{'bg-gray-100': loading}"
                     [disabled]="loading"
                     (click)="actualizarDesdeHasta('anterior')"> 
                     <i class="fas fa-arrow-left"></i> 
             </button>
-            <div class="text-gray-500 text-xs md:text-sm font-semibold"> Mostrando {{ total > 0 ? paginacion.desde + 1 : 0 }} - {{ paginacion.hasta < total ? paginacion.hasta : total }} de {{ total }} elementos </div>
-            <button class="ml-4 px-4 py-2 border rounded shadow text-gray-700 cursor-pointer text-xs md:text-sm"
+            <div class="text-gray-500 text-xs font-semibold"> Mostrando {{ total > 0 ? paginacion.desde + 1 : 0 }} - {{ paginacion.hasta < total ? paginacion.hasta : total }} de {{ total }} elementos </div>
+            <button class="ml-4 px-4 py-2 border rounded shadow text-gray-700 cursor-pointer text-xs"
                     [ngClass]="{'bg-gray-100': loading}"
                     [disabled]="loading"
                     (click)="actualizarDesdeHasta('siguiente')"> <i class="fas fa-arrow-right"></i> 
@@ -180,11 +160,11 @@
                 <div class="text-white px-2 py-1 flex items-center justify-between rounded-t"
                     [ngClass]="{'bg-green-600': traza.tipo === 'Ingreso', 'bg-red-600': traza.tipo === 'Egreso'}"
                 >
-                    <div class="font-semibold text-xs md:text-sm">
+                    <div class="font-semibold text-xs">
                         <h1> {{ traza.tipo === 'Ingreso' ? 'Remito' : 'Documento de venta' }}</h1>
                         <h1> Nro. {{ traza.documento_codigo }} </h1>
                     </div>
-                    <div class="p-1 border border-gray-300 bg-white shadow md:hidden md:inline-block text-xs bg-white rounded"
+                    <div class="p-1 border border-gray-300 bg-white shadow lg:inline-block text-xs bg-white rounded"
                     [ngClass]="{'text-green-700':traza.tipo === 'Ingreso', 'text-red-700':traza.tipo === 'Egreso'}"
                     >
                     <div class="w-max">
@@ -199,12 +179,12 @@
                 <div class="flex items-center justify-between p-3">
                     <div class="text-gray-800">
                         <div>
-                            <p class="text-xs md:text-sm font-semibold"> {{ traza.persona_empresa }} </p>
-                            <p class="text-xs md:text-sm"> 
+                            <p class="text-xs font-semibold"> {{ traza.persona_empresa }} </p>
+                            <p class="text-xs"> 
                                 <span class="font-semibold"> {{ traza.producto.codigo}} </span>
                                 <span> - {{ traza.producto.descripcion }} </span>
                             </p>
-                            <p class="text-xs md:text-sm font-semibold"
+                            <p class="text-xs font-semibold"
                             [ngClass]="{'text-green-700' : traza.tipo === 'Ingreso', 'text-red-700' : traza.tipo === 'Egreso'}"
                             > Cantidad: {{ traza.cantidad }} </p>
                             <p>
@@ -212,13 +192,8 @@
                             </p>
                         </div>
                     </div>
-<<<<<<< HEAD
-                    <div class="p-2 border border-gray-300 bg-white shadow hidden md:inline-block text-xs bg-white"
+                    <!-- <div class="p-2 border border-gray-300 bg-white shadow hidden lg:inline-block text-xs bg-white"
                         [ngClass]="{'text-green-700':traza.tipo === 'Ingreso', 'text-red-700':traza.tipo === 'Egreso'}"
-=======
-                    <div class="border p-2 bg-white hidden md:inline-block shadow text-xs bg-white w-max"
-                        [ngClass]="{'border-green-500 text-green-700':traza.tipo === 'Ingreso', 'border-red-500 text-red-700':traza.tipo === 'Egreso'}"
->>>>>>> 6d8a321d66214369b55dd7a23be5c5d97f536769
                         >
                         <div class="w-max">
                             <span class="font-semibold"> {{ traza.stock_anterior }} </span>
@@ -227,7 +202,7 @@
                             <i class="fas fa-arrow-right"></i>
                             <span class="font-semibold"> {{ traza.stock_nuevo }} </span>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>

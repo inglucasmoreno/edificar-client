@@ -13,6 +13,9 @@ export class UnidadMedidaComponent implements OnInit {
 
   public total = 0;
   public unidades: UnidadMedida[] = [];
+  public loadingNuevaUnidad = false;
+  public loadingTabla = true;
+
   public loading = true;
 
   // Paginación
@@ -47,12 +50,12 @@ export class UnidadMedidaComponent implements OnInit {
       Swal.fire({
         icon: 'info',
         title: 'Información',
-        text: 'Debe colocar una unidad',
+        text: 'Formulario inválido',
         confirmButtonText: 'Entendido'  
       });
       return;
     }
-    this.loading = true;
+    this.loadingNuevaUnidad = true;
     descripcionCtrl.value = '';
     this.unidadMedidaService.nuevaUnidad({ descripcion }).subscribe( resp => {
       Swal.fire({
@@ -62,6 +65,7 @@ export class UnidadMedidaComponent implements OnInit {
         timer: 1000,
         showConfirmButton: false
       })
+      this.loadingNuevaUnidad = false;
       this.listarUnidades();
     },(({error}) => {
       Swal.fire({
@@ -70,12 +74,13 @@ export class UnidadMedidaComponent implements OnInit {
         text: error.msg,
         confirmButtonText: 'Entendido'
       });
-      this.loading = false;
+      this.loadingNuevaUnidad = false;
     }));
   }
 
   // Listar unidades
   listarUnidades(): void {
+    this.loadingTabla = true;
     this.unidadMedidaService.listarUnidades(
       this.paginacion.limit,
       this.paginacion.desde,
@@ -86,7 +91,7 @@ export class UnidadMedidaComponent implements OnInit {
     ).subscribe( ({ total, unidades }) => {
       this.total = total;
       this.unidades = unidades; 
-      this.loading = false;
+      this.loadingTabla = false;
     },(({error}) => {
       Swal.fire({
         icon: 'error',
@@ -94,7 +99,7 @@ export class UnidadMedidaComponent implements OnInit {
         text: error.msg,
         confirmButtonText: 'Entendido'
       });
-      this.loading = false;
+      this.loadingTabla = false;
     }));
   }
 
@@ -111,7 +116,7 @@ export class UnidadMedidaComponent implements OnInit {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.loading = true;
+        this.loadingTabla = true;
         this.unidadMedidaService.actualizarUnidad(unidad._id, { activo: !unidad.activo }).subscribe( () => {
           Swal.fire({
             icon: 'success',
@@ -128,12 +133,13 @@ export class UnidadMedidaComponent implements OnInit {
             text: error.msg,
             confirmButtonText: 'Entendido'
           });
-          this.loading = false;
+          this.loadingTabla = false;
         }));
       }
     })  
   }
   
+  // Reiniciar paginacion
   reiniciarPaginacion(): void {
     this.paginacion.desde = 0;
     this.paginacion.hasta = 10;
@@ -142,7 +148,7 @@ export class UnidadMedidaComponent implements OnInit {
 
   // Filtrar Activo/Inactivo
   filtrarActivos(activo: any): void{
-    this.loading = true;
+    this.loadingTabla = true;
     this.filtro.activo = activo;
     this.reiniciarPaginacion();
     this.listarUnidades();
@@ -150,7 +156,7 @@ export class UnidadMedidaComponent implements OnInit {
 
   // Filtrar por parametro
   filtrarDescripcion(descripcion: string): void{
-    this.loading = true;
+    this.loadingTabla = true;
     this.filtro.descripcion= descripcion;
     this.reiniciarPaginacion();
     this.listarUnidades();
@@ -158,7 +164,7 @@ export class UnidadMedidaComponent implements OnInit {
 
   // Funcion de paginación
   actualizarDesdeHasta(selector): void {
-    this.loading = true;
+    this.loadingTabla = true;
   
     if (selector === 'siguiente'){ // Incrementar
       if (this.paginacion.hasta < this.total){
@@ -180,7 +186,7 @@ export class UnidadMedidaComponent implements OnInit {
 
   // Ordenar por columna
   ordenarPorColumna(columna: string){
-    this.loading = true;
+    this.loadingTabla = true;
     this.ordenar.columna = columna;
     this.ordenar.direccion = this.ordenar.direccion == 1 ? -1 : 1; 
     this.listarUnidades();

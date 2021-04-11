@@ -13,7 +13,8 @@ import Swal from 'sweetalert2';
 export class NuevoUsuarioComponent implements OnInit {
 
   public loading = false;
-
+  
+  // Modelo reactivo
   public usuarioForm = this.fb.group({
     dni: ['', Validators.required],
     apellido: ['', Validators.required],
@@ -30,18 +31,27 @@ export class NuevoUsuarioComponent implements OnInit {
               private usuariosService: UsuariosService) { }
 
   ngOnInit(): void {}
-
+  
+  // Crear nuevo usuario
   nuevoUsuario(): void {
 
     const { status } = this.usuarioForm;
-    const { password, repetir } = this.usuarioForm.value;
+    const {dni, apellido, nombre, email, password, repetir} = this.usuarioForm.value;
+    
+    // Se verifica que los campos no tengan un espacio vacio
+    const campoVacio = dni.trim() === '' || 
+                       apellido.trim() === '' || 
+                       email.trim() === '' || 
+                       nombre.trim() === '' ||
+                       password.trim() === '' ||
+                       repetir.trim() === '';
 
     // Se verifica si los campos son invalidos
-    if(status === 'INVALID'){
+    if(status === 'INVALID' || campoVacio){
       Swal.fire({
         icon: 'info',
         title: 'Información',
-        text: 'Debe completar todos los campos',
+        text: 'Formulario inválido',
         confirmButtonText: 'Entendido'  
       });
       return;
@@ -58,8 +68,9 @@ export class NuevoUsuarioComponent implements OnInit {
       return;   
     }
 
-    this.loading = true;  // Comienza la creacion del usuario
-    // Crear nuevo usuario
+    this.loading = true; 
+
+    // Se crear el nuevo usuario
     this.usuariosService.nuevoUsuario(this.usuarioForm.value).subscribe(() => {
       Swal.fire({
         icon: 'success',
@@ -80,6 +91,7 @@ export class NuevoUsuarioComponent implements OnInit {
       this.loading = false;  // Finaliza la creacion de usuario
       return;  
     }));
+
   }
 
 }

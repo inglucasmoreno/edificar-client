@@ -13,7 +13,8 @@ import { ProveedoresService } from '../../../services/proveedores.service';
 })
 export class EditarProveedorComponent implements OnInit {
 
-  public loading = true;
+  public loadingInicio = true;
+  public loadingActualizando = false;
   public proveedor: Proveedor;
 
   public proveedorForm = this.fb.group({
@@ -34,7 +35,8 @@ export class EditarProveedorComponent implements OnInit {
       this.getProveedor(id);
     })
   }
-
+  
+  // Se traen los datos del proveedor
   getProveedor(id: string): void {
     this.proveedoresService.getProveedor(id).subscribe(({proveedor})=>{
       this.proveedor = proveedor;
@@ -45,7 +47,7 @@ export class EditarProveedorComponent implements OnInit {
         condicion_iva: proveedor.condicion_iva,
         activo: proveedor.activo
       });
-      this.loading = false;
+      this.loadingInicio = false;
     },({error})=>{
       Swal.fire({
         icon: 'error',
@@ -53,13 +55,21 @@ export class EditarProveedorComponent implements OnInit {
         text: error.msg,
         confirmButtonText: 'Entendido'
       });
-      this.loading = false;  
+      this.loadingInicio = false;  
     });
   }
 
+  // Actualizando proveedor
   actualizarProveedor(): void {
-    if(this.proveedorForm.valid){
-      this.loading = true;
+
+    const {razon_social, cuit} = this.proveedorForm.value;
+    
+    const formularioValido = razon_social.trim() !== '' &&
+                             cuit.trim() !== '' &&
+                             this.proveedorForm.valid
+
+    if(formularioValido){
+      this.loadingActualizando = true;
       this.proveedoresService.actualizarProveedor(this.proveedor._id, this.proveedorForm.value).subscribe(()=>{
         Swal.fire({
           icon: 'success',
@@ -69,7 +79,14 @@ export class EditarProveedorComponent implements OnInit {
           showConfirmButton: false
         });
         this.router.navigateByUrl('/dashboard/proveedores');
-        this.loading = false;  
+        this.loadingActualizando = false;  
+      },({error})=>{
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: error.msg,
+          confirmButtonText: 'Entendido'  
+        });
       });  
     }else{
       Swal.fire({

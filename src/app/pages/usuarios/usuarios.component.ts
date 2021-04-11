@@ -81,8 +81,8 @@ export class UsuariosComponent implements OnInit {
       text: `¿Quieres actualizar el estado?`,
       icon: 'info',
       showCancelButton: true,
-      confirmButtonText: 'Si, estoy seguro',
-      cancelButtonText: 'No'
+      confirmButtonText: 'Actualizar',
+      cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
         this.loading = true;  
@@ -130,7 +130,8 @@ export class UsuariosComponent implements OnInit {
     this.listarUsuarios();
 
   }
-
+  
+  // Reiniciar paginacion
   reiniciarPaginacion(): void {
     this.paginacion.desde = 0;
     this.paginacion.hasta = 10;
