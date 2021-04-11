@@ -52,8 +52,14 @@ export class EditarEgresoComponent implements OnInit {
     })  
   }
 
+  // Actualizando egreso
   actualizarEgreso(): void {
-    if(this.egresoForm.valid){
+
+    const { descripcion_cliente, tipo_identificacion_cliente, identificacion_cliente } = this.egresoForm.value;
+
+    const formularioValido = this.egresoForm.valid && descripcion_cliente.trim() !== '' && tipo_identificacion_cliente.trim() !== '' && identificacion_cliente.trim() !== '';
+
+    if(formularioValido){
       this.loadingFinal = true;
       this.egresoService.actualizarEgreso(this.id, this.egresoForm.value).subscribe(()=>{
         Swal.fire({

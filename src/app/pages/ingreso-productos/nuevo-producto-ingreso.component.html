@@ -44,7 +44,7 @@
                            >
                 </div>
                 <div class="flex">
-                    <button class="text-green-500 border border-green-200 hover:bg-green-400 hover:text-white py-1 px-2 ml-2 rounded cursor-pointer"
+                    <button class="text-green-500 border border-green-200 hover:bg-green-400 hover:text-white py-1 px-3 ml-2 rounded cursor-pointer"
                             [ngClass]="{'bg-green-100': loadingCreacion, 'bg-green-100': !loadingCreacion}"
                             (click)="ingresarProducto(txtCantidad.value)"
                             title="Agregar producto"
@@ -52,7 +52,7 @@
                           >
                             <i class="fas fa-check"></i>
                     </button>
-                    <button class="text-red-500 border border-red-200 hover:bg-red-400 hover:text-white py-1 px-2 ml-2 rounded cursor-pointer"
+                    <button class="text-red-500 border border-red-200 hover:bg-red-400 hover:text-white py-1 px-3 ml-2 rounded cursor-pointer"
                             [ngClass]="{'bg-red-100': loadingCreacion, 'bg-red-100': !loadingCreacion}"
                             (click)="borrarProductoSeleccionado()"
                             title="Cancelar producto"

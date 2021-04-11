@@ -129,7 +129,11 @@ export class EditarIngresoComponent implements OnInit {
 
   // Actualizar ingreso
   actualizarIngreso(): void {
-    if(this.ingresoForm.valid && this.proveedorSeleccionado){
+
+    const { punto_venta, numero_comprobante } = this.ingresoForm.value;
+    const formularioValido = punto_venta.trim() !== '' && numero_comprobante.trim() !== '' && this.ingresoForm.valid && this.proveedorSeleccionado;
+
+    if(formularioValido){
       this.loadingFinal = true;
       const data = {
         numero_remito: `${this.ingresoForm.value.punto_venta}-${this.ingresoForm.value.numero_comprobante}`,

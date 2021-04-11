@@ -18,9 +18,9 @@ export class IngresoDetallesComponent implements OnInit {
   // Loadings
   public loadingRemito = true;
   public loadingProductos = true;
+  public loadingTabla = false;
 
   public loadingCargando = true;
-  public loadingTabla = true;
   public loadingCompletar = false;
   
   public loading = true;
@@ -78,6 +78,7 @@ export class IngresoDetallesComponent implements OnInit {
       this.total = total;
       total != 0 ? this.tieneProductos = true : this.tieneProductos = false;  // Indica que el ingreso tiene productos
       this.loadingProductos = false;
+      this.loadingTabla = false;
     },({error})=>{
       Swal.fire({
         icon: 'error',
@@ -86,6 +87,7 @@ export class IngresoDetallesComponent implements OnInit {
         confirmButtonText: 'Entendido'
       });
       this.loadingProductos = false;
+      this.loadingTabla = false;
     });  
   }
 
@@ -145,7 +147,7 @@ export class IngresoDetallesComponent implements OnInit {
 
   // Listar productos por ingreso
   listarProductosPorIngreso(): void {
-    this.loadingCargando = true;
+    this.loadingTabla = true;
     this.ingresoProductosService.listarProductosPorIngreso(
       this.id,
       this.paginacion.hasta,
@@ -154,8 +156,7 @@ export class IngresoDetallesComponent implements OnInit {
       ).subscribe( ({ productos, total }) => {
       this.productos = productos;
       this.total = total;
-      this.loadingCargando = false;
-      this.loading = false;
+      this.loadingTabla = false;
     },({error})=>{
       Swal.fire({
         icon: 'error',
@@ -163,8 +164,7 @@ export class IngresoDetallesComponent implements OnInit {
         text: error.msg,
         confirmButtonText: 'Entendido'
       });
-      this.loadingCargando = false;
-      this.loading = false;
+      this.loadingTabla = false;
     });
   }
 

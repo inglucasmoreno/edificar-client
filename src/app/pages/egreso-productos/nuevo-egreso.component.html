@@ -3,35 +3,37 @@
     <div class="px-4 pt-2 flex items-center justify-between mr-2">
         <div class="flex items-center">
             <h1 class="flex items-center text-gray-700">
-                <i routerLink="/dashboard/egreso_productos" class="fas fa-arrow-left border bg-gray-500 text-white border-gray-300 rounded p-2 px-3 shadow cursor-pointer"></i>
+                <i routerLink="/dashboard/egreso_productos" 
+                   class="fas fa-arrow-left border bg-gray-100 text-gray-600 border-gray-300 hover:text-yellow-500 rounded p-2 px-3 shadow cursor-pointer"
+                   ></i>
                 <div class="flex flex-col ml-2">
                     <span class="ml-2 text-xl text-gray-600"> Nota de venta </span>
-                    <span class="text-xs w-max mt-1 ml-1 font-semibold border py-1 px-2 rounded text-white bg-yellow-500"> 
+                    <span class="text-xs w-max mt-1 ml-1 font-semibold border border-gray-200 py-1 px-2 rounded text-gray-600 bg-yellow-100"> 
                         <i class="fas fa-plus-circle"></i>
-                        Nuevo egreso
+                        Nueva nota
                     </span>
                 </div>
             </h1>
-            <div *ngIf="loading" class="ml-2">
-                <i class="fas fa-spinner animate-spin text-gray-400 ml-1 text-2xl"></i> 
-            </div>
         </div>
         <div>
-          <button   class="py-2 px-4 text-white rounded shadow"
-                    [ngClass]="{'bg-gray-400':loading, 'bg-gray-500': !loading}"
+          <button   class="py-2 px-4 text-gray-600 hover:bg-yellow-100 border border-gray-300 rounded shadow"
+                    [ngClass]="{'bg-yellow-100':loading, 'bg-gray-100': !loading}"
                     [disabled]="loading"
                     (click)="crearEgreso()" 
-          > <i class="fas fa-check"></i> </button>
+          > 
+            <i *ngIf="!loading" class="fas fa-check"></i> 
+            <i *ngIf="loading" class="fas fa-spinner animate-spin text-gray-500 ml-1 text-2xl"></i>
+            </button>
         </div>
     </div>
     <form 
         [formGroup]="egresoForm"
         autocomplete="off"
         class="px-4 py-2">
-        <h1 class="text-xl ml-2 text-gray-700"> Datos de cliente </h1>
+        <h1 class="text-xl ml-2 text-gray-700 bg-gray-100 p-2 mt-2 mb-1 rounded border border-gray-200"> Datos de cliente </h1>
         <div class="flex flex-col lg:flex-row">
             <div class="w-full mx-2 flex-1 svelte-1l8159u">
-                <div class="font-bold mt-3 text-gray-600 text-sm"> Descripción </div>
+                <div class="font-semibold mt-3 text-gray-600 text-sm"> Descripción </div>
                 <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
                     <input placeholder="Ej. Moreno Lucas" 
                            formControlName="descripcion_cliente"
@@ -40,9 +42,9 @@
             </div>
             <div class="w-full mx-2 flex-1 svelte-1l8159u"></div>
         </div>
-        <div class="flex flex-col lg:flex-row">
+        <div class="flex flex-col lg:flex-row pb-3">
             <div class="w-full mx-2 flex-1 svelte-1l8159u">
-                <div class="font-bold mt-3 text-gray-600 text-sm"> Tipo de identificación </div>
+                <div class="font-semibold mt-3 text-gray-600 text-sm"> Tipo de identificación </div>
                 <select class="border shadow rounded p-2 w-full mt-2 text-sm"
                         formControlName="tipo_identificacion_cliente">
                     <option value="DNI"> DNI </option>
@@ -51,7 +53,7 @@
                 </select>
             </div>
             <div class="w-full mx-2 flex-1 svelte-1l8159u">
-                <div class="font-bold mt-3 text-gray-600 text-sm"> Identificación </div>
+                <div class="font-semibold mt-3 text-gray-600 text-sm"> Identificación </div>
                 <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
                     <input placeholder="Ej. 34060398"
                            formControlName="identificacion_cliente" 

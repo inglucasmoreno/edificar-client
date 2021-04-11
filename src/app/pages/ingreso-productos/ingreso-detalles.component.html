@@ -74,14 +74,14 @@
                    title="Agregar productos"
                    class="fas fas fa-box-open text-gray-600 px-3 py-2 bg-white mr-2 cursor-pointer border border-gray-300 hover:bg-yellow-100 rounded"></i>
             </div>
-            <div class="bg-gray-100 p-2 mt-2 border border-gray-200 rounded text-gray-600 text-sm" *ngIf="!tieneProductos && !loadingCargando">
-                <i class="fas fa-exclamation-circle"></i>
+            <div class="bg-gray-100 p-2 mt-3 border border-gray-200 rounded text-gray-600 text-sm" *ngIf="total <= 0">
+                <i class="fas fa-exclamation-circle mr-1"></i>
                 Debes agregar al menos un producto    
             </div> 
             <div *ngIf="tieneProductos">
                 <div *ngIf="ingreso.estado != 'Completado'" class="mt-2 text-center">
                     <select class="border p-2 rounded shadow text-xs"
-                            [disabled]="loadingCargando"
+                            [disabled]="loadingTabla"
                             #txtActivo
                             (change)="filtrarActivo(txtActivo.value)">
                                 <option value=""> Todos </option>
@@ -92,15 +92,15 @@
                 <div class="flex items-center justify-center mt-3">
                     <button class="mr-4 px-4 py-2 border rounded shadow hover:bg-yellow-100 text-gray-700 cursor-pointer bg-white text-xs"
                             (click)="actualizarDesdeHasta('anterior')"
-                            [ngClass]="{'bg-gray-100':loadingCargando}"
-                            [disabled]="loadingCargando"> 
+                            [ngClass]="{'bg-gray-100':loadingTabla}"
+                            [disabled]="loadingTabla"> 
                                 <i class="fas fa-arrow-left"></i> 
                     </button>
                     <div class="text-gray-500 text-xs font-semibold"> Mostrando {{ total > 0 ? paginacion.desde + 1 : 0 }} - {{ paginacion.hasta < total ? paginacion.hasta : total }} de {{ total }} elementos </div>
                     <button class="ml-4 px-4 py-2 border rounded shadow hover:bg-yellow-100 text-gray-700 cursor-pointer bg-white text-xs" 
                             (click)="actualizarDesdeHasta('siguiente')"
-                            [ngClass]="{'bg-gray-100':loadingCargando}"
-                            [disabled]="loadingCargando"
+                            [ngClass]="{'bg-gray-100':loadingTabla}"
+                            [disabled]="loadingTabla"
                             > <i class="fas fa-arrow-right"></i> 
                     </button>
                 </div>
@@ -125,18 +125,18 @@
         
                     <div *ngIf="producto.activo" class="flex w-max">
                         <button title="Ingreso parcial" 
-                                [disabled]="loadingCargando"
+                                [disabled]="loadingTabla"
                                 class="py-1 px-2 rounded border border-green-200 text-green-500 mr-2 shadow hover:bg-green-400 hover:text-white cursor-pointer"
-                                [ngClass]="{'bg-green-100':loadingCargando, 'bg-green-100':!loadingCargando}"
+                                [ngClass]="{'bg-green-100':loadingTabla, 'bg-green-100':!loadingTabla}"
                                 (click)="ingresoParcial(producto._id)"
                               > 
                               <i class="fas fa-check"></i> 
                         </button>
                         
                         <button title="Eliminar producto"
-                                [disabled]="loadingCargando" 
+                                [disabled]="loadingTabla" 
                                 class="py-1 px-3 rounded border border-red-200 text-red-500 hover:bg-red-400 shadow hover:text-white cursor-pointer"
-                                [ngClass]="{'bg-red-100':loadingCargando, 'bg-red-100':!loadingCargando}"
+                                [ngClass]="{'bg-red-100':loadingTabla, 'bg-red-100':!loadingTabla}"
                                 (click)="eliminarProducto(producto._id)"
                               > 
                             <i class="fas fa-times"></i> 
