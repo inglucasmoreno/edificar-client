@@ -47,10 +47,20 @@
                     <i class="fas fa-check text-green-500"></i>
                     Completado el {{ ingreso.fecha_ingreso | fecha }}        
                 </div>
-                <button *ngIf="ingreso.estado === 'Pendiente'" class="p-2 text-center text-sm border border-gray-300 text-gray-600 w-full font-semibold bg-gray-100 hover:bg-green-200 mt-4 rounded"
-                        (click)="completarIngreso()"> 
-                    <i class="fas fa-check text-green-500"></i>
-                    Completar ingreso 
+                <button *ngIf="ingreso.estado === 'Pendiente'" class="p-2 font-semibold text-center text-sm border border-gray-300 text-gray-600 w-full mt-4 rounded"
+                        [ngClass]="{'bg-green-200' : loadingCompletar, 'bg-gray-100 hover:bg-green-200' : !loadingCompletar}"
+                        [disabled]="loadingCompletar"
+                        (click)="completarIngreso()">
+                        
+                    <div *ngIf="loadingCompletar">
+                        <i class="fas fa-spinner animate-spin mr-2"></i>
+                        Completando ingreso    
+                    </div>
+
+                    <div *ngIf="!loadingCompletar">
+                        <i class="fas fa-check text-green-500"></i>
+                        Completar ingreso 
+                    </div>    
                 </button>    
             </div>
         </div>
@@ -59,35 +69,40 @@
 
     <div class="bg-white w-11/12 lg:w-1/2 ml-auto lg:ml-2 mt-2 lg:mt-0 mr-auto lg:mr-2 p-4 lg:h-full rounded animate__animated animate__zoomIn">
         
-        <!-- Detalle de productos -->
-
         <div class="p-3 text-gray-500" *ngIf="loadingProductos">
             <i class="fas fa-spinner animate-spin mr-2"></i>
             Cargando productos
         </div>
+                  
+        <!-- Detalle de productos -->
 
         <div *ngIf="!loadingProductos">
             <div class="flex items-center justify-between bg-gray-100 p-2 rounded border">
                 <h1 class="font-semibold text-gray-600"> Productos ({{ total }}) </h1>
                 <i [routerLink]="['/dashboard/ingreso_productos/nuevo-producto', ingreso._id]" 
-                   *ngIf="ingreso.estado == 'Pendiente'" 
-                   title="Agregar productos"
-                   class="fas fas fa-box-open text-gray-600 px-3 py-2 bg-white mr-2 cursor-pointer border border-gray-300 hover:bg-yellow-100 rounded"></i>
+                    *ngIf="ingreso.estado == 'Pendiente'" 
+                    title="Agregar productos"
+                    class="fas fas fa-box-open text-gray-600 px-3 py-2 bg-white mr-2 cursor-pointer border border-gray-300 hover:bg-yellow-100 rounded"></i>
             </div>
-            <div class="bg-gray-100 p-2 mt-3 border border-gray-200 rounded text-gray-600 text-sm" *ngIf="total <= 0">
+            <div class="bg-gray-100 p-2 mt-3 border border-gray-200 rounded text-gray-600 text-sm" *ngIf="totalGeneral <= 0">
                 <i class="fas fa-exclamation-circle mr-1"></i>
                 Debes agregar al menos un producto    
             </div> 
-            <div *ngIf="tieneProductos">
+            <div *ngIf="totalGeneral > 0">
                 <div *ngIf="ingreso.estado != 'Completado'" class="mt-2 text-center">
-                    <select class="border p-2 rounded shadow text-xs"
-                            [disabled]="loadingTabla"
-                            #txtActivo
-                            (change)="filtrarActivo(txtActivo.value)">
-                                <option value=""> Todos </option>
-                                <option value=true> Productos pendientes </option>
-                                <option value=false> Productos ingresados </option>
-                    </select>
+                    <div class="flex items-center justify-center">
+                        <select class="border p-2 rounded shadow text-xs"
+                                [disabled]="loadingTabla"
+                                #txtActivo
+                                (change)="filtrarActivo(txtActivo.value)">
+                                    <option value=""> Todos </option>
+                                    <option value=true> Productos pendientes </option>
+                                    <option value=false> Productos ingresados </option>
+                        </select>
+                        <span class="block-inline" *ngIf="loadingTabla">
+                            <i class="fas fa-spinner animate-spin text-2xl text-gray-500 ml-2"></i>
+                        </span>
+                    </div>
                 </div>
                 <div class="flex items-center justify-center mt-3">
                     <button class="mr-4 px-4 py-2 border rounded shadow hover:bg-yellow-100 text-gray-700 cursor-pointer bg-white text-xs"
@@ -106,7 +121,7 @@
                 </div>
             </div>
                 
-            <div *ngIf="total === 0 && tieneProductos" class="bg-gray-100 px-2 py-3 border shadow text-center mt-2 text-gray-700 font-semibold text-sm">
+            <div *ngIf="total === 0 && totalGeneral > 0" class="bg-gray-100 px-2 py-3 border shadow text-center mt-2 text-gray-700 font-semibold text-sm">
                 No se encontraron productos
             </div>
     
@@ -114,9 +129,9 @@
     
             <div class="mt-4">
                 <div *ngFor="let producto of productos" 
-                     class="animate__animated animate__fadeIn border shadow rounded p-2 m-2 font-semibold flex items-center justify-between mt-3"
-                     [ngClass]="{'bg-green-100 border-green-300': !producto.activo, 'bg-white border-gray-200': producto.activo}"
-                     >
+                        class="animate__animated animate__fadeIn border shadow rounded p-2 m-2 font-semibold flex items-center justify-between mt-3"
+                        [ngClass]="{'bg-green-100 border-green-300': !producto.activo, 'bg-white border-gray-200': producto.activo}"
+                        >
                     <div>
                         <span class="block"> {{ producto.producto.codigo }} </span>
                         <span class="block text-xs text-gray-600"> {{ producto.producto.descripcion }}  </span>
@@ -126,19 +141,19 @@
                     <div *ngIf="producto.activo" class="flex w-max">
                         <button title="Ingreso parcial" 
                                 [disabled]="loadingTabla"
-                                class="py-1 px-2 rounded border border-green-200 text-green-500 mr-2 shadow hover:bg-green-400 hover:text-white cursor-pointer"
-                                [ngClass]="{'bg-green-100':loadingTabla, 'bg-green-100':!loadingTabla}"
+                                class="py-1 px-3 rounded border border-green-200 bg-green-100 text-green-500 mr-2 shadow cursor-pointer"
+                                [ngClass]="{'hover:bg-green-400 hover:text-white':!loadingTabla}"
                                 (click)="ingresoParcial(producto._id)"
-                              > 
-                              <i class="fas fa-check"></i> 
+                                > 
+                                <i class="fas fa-check"></i> 
                         </button>
                         
                         <button title="Eliminar producto"
                                 [disabled]="loadingTabla" 
-                                class="py-1 px-3 rounded border border-red-200 text-red-500 hover:bg-red-400 shadow hover:text-white cursor-pointer"
-                                [ngClass]="{'bg-red-100':loadingTabla, 'bg-red-100':!loadingTabla}"
+                                class="py-1 px-3 rounded border border-red-200 bg-red-100 text-red-500 cursor-pointer"
+                                [ngClass]="{'hover:bg-red-400 shadow hover:text-white':!loadingTabla}"
                                 (click)="eliminarProducto(producto._id)"
-                              > 
+                                > 
                             <i class="fas fa-times"></i> 
                         </button>
                     </div>
@@ -149,7 +164,5 @@
                 </div>
             </div>
         </div>
-            
-        </div>
-
+    </div>
 </div>

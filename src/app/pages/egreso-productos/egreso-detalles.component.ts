@@ -14,24 +14,33 @@ export class EgresoDetallesComponent implements OnInit {
 
   public id;
   public total = 0;
-  public loading = true;
-  public loadingCargando = true;
+
+  public totalGeneral;
+
+  // Loadings
+  public loadingNota = true;
+  public loadingProductos = true;
+  public loadingTabla = false;
+  public loadingCompletar = false;
+
+  // Egreso
   public egreso = {
     codigo_cadena: '',
     descripcion_cliente: ''
   };
 
+  // Filtrado
   public filtro = {
     activo: ''
   }
   
+  // Paginaciion
   public paginacion = {
     limit: 5,
     desde: 0,
     hasta: 5
   }
   
-  public tieneProductos: boolean;
   public productos = [];
 
   constructor(private activatedRoute: ActivatedRoute,
@@ -43,9 +52,18 @@ export class EgresoDetallesComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.params.subscribe( ({id}) => {
       this.id = id;
-      this.egresosService.getEgreso(id).subscribe(({egreso}) => {
+      this.egresosService.getEgreso(id).subscribe(({ egreso }) => {
         this.egreso = egreso;
+        this.loadingNota = false;
         this.primerIngreso();
+      },({error}) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: error.msg,
+          confirmButtonText: 'Entendido'
+        });
+        this.loadingNota = false;        
       })         
     },({error}) => {
       Swal.fire({
@@ -54,6 +72,7 @@ export class EgresoDetallesComponent implements OnInit {
         text: error.msg,
         confirmButtonText: 'Entendido'
       });
+      this.loadingNota = false;
     });
   };
 
@@ -63,12 +82,11 @@ export class EgresoDetallesComponent implements OnInit {
       this.paginacion.hasta,
       this.paginacion.desde,
       this.filtro.activo
-    ).subscribe(({productos, total})=>{
+    ).subscribe(({productos, total, totalGeneral})=>{
+      this.totalGeneral = totalGeneral;
       this.productos = productos;
       this.total = total;
-      total !== 0 ? this.tieneProductos = true : this.tieneProductos = false;
-      this.loadingCargando = false;
-      this.loading = false;
+      this.loadingProductos = false;
     },({error})=>{
       Swal.fire({
         icon: 'error',
@@ -76,23 +94,23 @@ export class EgresoDetallesComponent implements OnInit {
         text: error.msg,
         confirmButtonText: 'Entendido'
       });
-      this.loadingCargando = false;
-      this.loading = false;
+      this.loadingProductos = false;
     })  
   }
 
   // Listar productos de egreso
   listarProductos(): void {
+    this.loadingTabla = true;
     this.egresoProductosService.listarProductosPorEgreso(
       this.id,
       this.paginacion.hasta,
       this.paginacion.desde,
       this.filtro.activo
-    ).subscribe(({productos, total})=>{
+    ).subscribe(({productos, total, totalGeneral})=>{
+      this.totalGeneral = totalGeneral;
       this.productos = productos;
       this.total = total;
-      this.loadingCargando = false;
-      this.loading = false;
+      this.loadingTabla = false;
     },({error})=>{
       Swal.fire({
         icon: 'error',
@@ -100,13 +118,24 @@ export class EgresoDetallesComponent implements OnInit {
         text: error.msg,
         confirmButtonText: 'Entendido'
       });
-      this.loadingCargando = false;
-      this.loading = false;
+      this.loadingTabla = false;
     })
   }
 
   // Completar Egreso
   completarEgreso(): void {
+
+    // Se verifica si la nota de venta tiene productos
+    if(this.totalGeneral <= 0){
+      Swal.fire({
+        icon: 'info',
+        title: 'Información',
+        text: 'El egreso no tiene productos',
+        confirmButtonText: 'Entendido'
+      });
+      return;
+    }
+
     Swal.fire({
       title: '¿Estas seguro?',
       text: "Estas por completar el egreso",
@@ -118,7 +147,7 @@ export class EgresoDetallesComponent implements OnInit {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.loadingCargando = true;
+        this.loadingCompletar= true;
         const data = {
           persona_empresa: this.egreso.descripcion_cliente,
           documento_codigo: this.egreso.codigo_cadena  
@@ -131,7 +160,7 @@ export class EgresoDetallesComponent implements OnInit {
             timer: 1000,
             showConfirmButton: false
           });
-          this.loadingCargando = false;
+          this.loadingCompletar = false;
           this.router.navigateByUrl('/dashboard/egreso_productos'); 
         },({error})=>{
           Swal.fire({
@@ -140,7 +169,7 @@ export class EgresoDetallesComponent implements OnInit {
             text: error.msg,
             confirmButtonText: 'Entendido'
           });
-          this.loadingCargando = false;
+          this.loadingCompletar = false;
         });
       }
     })
@@ -159,7 +188,7 @@ export class EgresoDetallesComponent implements OnInit {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.loadingCargando = true;
+        this.loadingTabla = true;
         const data = {
           persona_empresa: this.egreso.descripcion_cliente,
           documento_codigo: this.egreso.codigo_cadena  
@@ -180,7 +209,7 @@ export class EgresoDetallesComponent implements OnInit {
             text: error.msg,
             confirmButtonText: 'Entendido'
           });
-          this.loadingCargando = false;
+          this.loadingTabla = false;
         });    
       }
     })
@@ -199,7 +228,7 @@ export class EgresoDetallesComponent implements OnInit {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.loadingCargando = true;
+        this.loadingTabla = true;
         this.egresoProductosService.eliminarProducto(producto).subscribe(()=>{
           Swal.fire({
             icon: 'success',
@@ -216,7 +245,7 @@ export class EgresoDetallesComponent implements OnInit {
             text: error.msg,
             confirmButtonText: 'Entendido'
           });
-          this.loadingCargando = false;
+          this.loadingTabla = false;
         });    
       }
     })
@@ -224,7 +253,7 @@ export class EgresoDetallesComponent implements OnInit {
 
   // Filtro por activo
   filtrarActivo(activo: any): void{
-    this.loadingCargando = true;
+    this.loadingTabla = true;
     this.filtro.activo = activo;
     this.reiniciarPaginacion();
     this.listarProductos();
@@ -232,7 +261,7 @@ export class EgresoDetallesComponent implements OnInit {
 
   // Funcion de paginación
   actualizarDesdeHasta(selector): void {
-    this.loadingCargando = true;
+    this.loadingTabla = true;
     if (selector === 'siguiente'){ // Incrementar
       if (this.paginacion.hasta < this.total){
         this.paginacion.desde += this.paginacion.limit;

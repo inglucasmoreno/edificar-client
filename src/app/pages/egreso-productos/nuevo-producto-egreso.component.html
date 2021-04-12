@@ -42,13 +42,13 @@
                            min="0"
                            >
                     <span class="text-sm font-semibold mt-2 block"> Disponible </span>
-                    <div class="border mt-1 rounded p-1 text-sm bg-gray-100 font-semibold"
+                    <div class="border mt-1 rounded p-1 text-sm bg-white shadow border-gray-300 font-semibold py-2 px-5 w-max"
                         [ngClass]="{'text-red-500': producto.cantidad < 0, 'text-black': producto.cantidad >= 0}"
                     >
                     {{ producto.cantidad }}
                     </div>
                 </div>
-                <div>
+                <div class="flex">
                     <button class="text-green-500 border border-green-200 py-1 px-3 ml-2 hover:bg-green-400 hover:text-white rounded cursor-pointer"
                             [ngClass]="{'bg-green-100': loadingCreacion, 'bg-green-100': !loadingCreacion}"
                             (click)="nuevoProducto(txtCantidad.value)"

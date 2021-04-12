@@ -1,165 +1,151 @@
-<app-tarjeta-formulario >
-    <div class="flex items-center justify-between">
-        <div class="flex items-center">
-            <h1 *ngIf="!loading" class="flex items-center text-gray-700 px-4 py-1 pt-2">
-                <button routerLink="/dashboard/egreso_productos"
-                        [disabled]="loadingCargando">
-                    <i class="fas fa-arrow-left border text-white border-gray-300 rounded p-2 px-3 shadow cursor-pointer"
-                       [ngClass]="{'bg-gray-400': loadingCargando, 'bg-gray-500': !loadingCargando}"
-                    ></i>
-                </button>
-                <div *ngIf="!loading" class="flex flex-col ml-2">
-                    <span class="ml-2 text-xl text-gray-600"> Nota de venta </span>
-                    <span [ngClass]="{'bg-yellow-500':egreso.estado == 'Pendiente', 'bg-green-500':egreso.estado == 'Completado'}"
-                          class="text-xs mt-1 w-max ml-1 font-semibold border py-1 px-2 rounded text-white">
-                        {{ egreso.estado }} 
+<div class="mt-1 ml-2 lg:flex">
+    <div class="bg-white px-4 py-5 lg:h-full w-11/12 animate__animated animate__zoomIn mr-auto ml-auto lg:mr-0 lg:ml-0 lg:w-1/2 rounded shadow">     
+        <div class="p-3 text-gray-500" *ngIf="loadingNota">
+            <i class="fas fa-spinner animate-spin mr-2"></i>
+            Cargando nota de venta
+        </div>
+        <div *ngIf="!loadingNota">
+            <div class="flex items-center justify-between bg-gray-100 p-2 rounded border">
+                <h1 class="font-semibold text-gray-700"> Nota de venta (Nro.{{ egreso.codigo_cadena }}) </h1>
+                <i [routerLink]="['/dashboard/egreso_productos/editar', egreso._id]" 
+                   *ngIf="egreso.estado == 'Pendiente'" 
+                   title="Editar egreso"
+                   class="fas fa-pencil-alt text-gray-600 mr-2 py-2 px-3 border rounded border-gray-300 bg-white hover:bg-yellow-100 cursor-pointer"></i>
+            </div>
+            <div class="flex flex-col lg:flex-row">
+                <div class="w-full mx-2 flex-1 svelte-1l8159u">
+                    <div class="font-semibold mt-3 text-gray-600 text-sm"> Cliente </div>
+                    <div class="block p-2 rounded border border-gray-200 shadow mt-2 bg-white text-sm">
+                        {{ egreso.descripcion_cliente }}
+                    </div>
+                </div>
+                <div class="w-full mx-2 flex-1 svelte-1l8159u">
+                    <div class="font-semibold mt-3 text-gray-600 text-sm"> {{ egreso.tipo_identificacion_cliente }} </div>
+                    <div class="block p-2 rounded border border-gray-200 border shadow mt-2 text-sm">
+                        {{ egreso.identificacion_cliente }}    
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div *ngIf="egreso.estado !== 'Pendiente'" class="p-2 text-center text-sm border border-green-200 text-gray-600 w-full font-semibold bg-green-100 mt-4 rounded">
+                    <i class="fas fa-check text-green-500"></i>
+                    Completado el {{ egreso.fecha_egreso | fecha }}        
+                </div>
+                <button *ngIf="egreso.estado === 'Pendiente'" class="p-2 font-semibold text-center text-sm border border-gray-300 text-gray-600 w-full mt-4 rounded"
+                        [ngClass]="{'bg-green-200' : loadingCompletar, 'bg-gray-100 hover:bg-green-200' : !loadingCompletar}"
+                        [disabled]="loadingCompletar"
+                        (click)="completarEgreso()">
+                        
+                    <div *ngIf="loadingCompletar">
+                        <i class="fas fa-spinner animate-spin mr-2"></i>
+                        Completando egreso    
+                    </div>
+    
+                    <div *ngIf="!loadingCompletar">
+                        <i class="fas fa-check text-green-500"></i>
+                        Completar egreso
+                    </div>    
+                </button>    
+            </div>
+        </div> 
+    </div>
+
+    <div class="bg-white px-4 py-5 w-11/12 lg:w-1/2 ml-auto lg:ml-2 mt-2 lg:mt-0 mr-auto lg:mr-2 p-4 lg:h-full rounded animate__animated animate__zoomIn">
+        <div class="p-3 text-gray-500" *ngIf="loadingProductos">
+            <i class="fas fa-spinner animate-spin mr-2"></i>
+            Cargando productos
+        </div>
+        <div *ngIf="!loadingProductos">
+            <div class="flex items-center justify-between bg-gray-100 p-2 rounded border">
+                <h1 class="font-semibold text-gray-600"> Productos ({{ total }}) </h1>
+                <i *ngIf="egreso.estado == 'Pendiente'"
+                    title="Agregar productos"
+                    [routerLink]="['/dashboard/egreso_productos/nuevo-producto', egreso._id]" 
+                    class="fas fas fa-box-open text-gray-600 px-3 py-2 bg-white mr-2 cursor-pointer border border-gray-300 hover:bg-yellow-100 rounded"></i>
+            </div>
+    
+            <div *ngIf="totalGeneral <= 0 && !loadingTabla" class="mt-3 p-2 bg-gray-100 border border-gray-200 text-gray-600 text-sm rounded">
+                <i class="fas fa-exclamation-circle mr-1"></i>
+                Debes agregar al menos un producto    
+            </div>
+    
+            <!-- Lista de productos -->
+    
+            <div *ngIf="totalGeneral > 0">
+                <div *ngIf="egreso.estado != 'Completado'" class="flex items-center justify-center mt-2 text-center">
+                    <select class="border p-2 rounded shadow text-xs"
+                            [disabled]="loadingTabla"
+                            #txtActivo
+                            (change)="filtrarActivo(txtActivo.value)">
+                                <option value=""> Todos </option>
+                                <option value=true> Productos pendientes </option>
+                                <option value=false> Productos egresados </option>
+                    </select>
+                    <span class="block-inline" *ngIf="loadingTabla">
+                        <i class="fas fa-spinner animate-spin text-2xl text-gray-500 ml-2"></i>
                     </span>
                 </div>
-            </h1>
-            <span *ngIf="loadingCargando && !loading">
-                <i class="fas fa-spinner animate-spin text-2xl text-gray-400 ml-2"></i>
-            </span>    
-        </div>
-        <div *ngIf="!loading && tieneProductos">
-            <div (click)="completarEgreso()" *ngIf="egreso.estado === 'Pendiente'" class="mr-5">
-                <button title="Completar egreso" 
-                        class="py-2 px-3 rounded border text-white cursor-pointer shadow"
-                        [ngClass]="{'bg-green-400': loadingCargando, 'bg-green-500': !loadingCargando}"
-                        [disabled]="loadingCargando"
-                        > <i class="fas fa-check"></i> </button>
-            </div>
-            <div *ngIf="egreso.estado === 'Completado'" class="mr-4 px-2 py-1 border bg-green-500 text-white rounded">
-                <i class="far fa-calendar-check mr-1 font-semibold"></i>
-                {{ egreso.fecha_egreso | fecha }}
-            </div>
-        </div>
-    </div>
-    
-    <div *ngIf="loading" class="p-3 text-gray-500">
-        <i class="fas fa-spinner animate-spin ml-2 text-gray-500"></i> 
-        Cargando nota de venta
-    </div>
-
-    <div *ngIf="!loading" class="p-4">
-        <div class="flex items-center justify-between bg-yellow-100 p-2 rounded border">
-            <h1 class="font-semibold text-gray-600"> Datos del egreso </h1>
-            <i [routerLink]="['/dashboard/egreso_productos/editar', egreso._id]" 
-               *ngIf="egreso.estado == 'Pendiente'" 
-               title="Editar egreso"
-               class="fas text-xl fa-pencil-alt text-gray-600 mr-2 cursor-pointer hover:text-yellow-500"></i>
-        </div>
-        <div class="flex flex-col lg:flex-row">
-            <div class="w-full mx-2 flex-1 svelte-1l8159u">
-                <div class="font-bold mt-3 text-gray-600 text-sm"> Codigo de egreso </div>
-                <div class="block p-2 rounded border shadow mt-2 bg-gray-100 text-sm">
-                    {{ egreso.codigo_cadena }}
-                </div>
-            </div>
-            <div class="w-full mx-2 flex-1 svelte-1l8159u"></div>
-        </div> 
-        <div class="flex flex-col lg:flex-row">
-            <div class="w-full mx-2 flex-1 svelte-1l8159u">
-                <div class="font-bold mt-3 text-gray-600 text-sm"> Cliente </div>
-                <div class="block p-2 rounded border shadow mt-2 bg-gray-100 text-sm">
-                    {{ egreso.descripcion_cliente }}
-                </div>
-            </div>
-            <div class="w-full mx-2 flex-1 svelte-1l8159u">
-                <div class="font-bold mt-3 text-gray-600 text-sm"> {{ egreso.tipo_identificacion_cliente }} </div>
-                <div class="block p-2 rounded border shadow mt-2 bg-gray-100 text-sm">
-                    {{ egreso.identificacion_cliente }}    
-                </div>
-            </div>
-        </div> 
-        <div class="flex items-center justify-between bg-yellow-100 p-2 rounded border mt-4">
-            <h1 class="font-semibold text-gray-600"> Detalles de productos ({{ total }}) </h1>
-            <i *ngIf="egreso.estado == 'Pendiente'"
-                title="Agregar productos"
-                [routerLink]="['/dashboard/egreso_productos/nuevo-producto', egreso._id]" 
-                class="fas fa-plus-circle text-xl text-gray-600 mr-2 cursor-pointer hover:text-yellow-500"></i>
-        </div>
-        <button *ngIf="!tieneProductos && !loadingCargando"
-                [routerLink]="['/dashboard/egreso_productos/nuevo-producto', egreso._id]" 
-                class="border rounded p-2 mt-3 bg-yellow-500 text-white">
-            <i class="fas fa-plus text-xs"></i>
-            Agregar productos
-        </button> 
-
-        <!-- Lista de productos -->
-
-        <div *ngIf="tieneProductos">
-            <div *ngIf="egreso.estado != 'Completado'" class="mt-2 text-center">
-                <select class="border p-2 rounded shadow text-sm"
-                        [disabled]="loadingCargando"
-                        #txtActivo
-                        (change)="filtrarActivo(txtActivo.value)">
-                            <option value=""> Todos </option>
-                            <option value=true> Productos pendientes </option>
-                            <option value=false> Productos egresados </option>
-                </select>
-            </div>
-            <div class="flex items-center justify-center mt-3">
-                <button class="mr-4 px-4 py-2 border rounded shadow text-gray-700 cursor-pointer bg-white text-sm"
-                        (click)="actualizarDesdeHasta('anterior')"
-                        [ngClass]="{'bg-gray-100':loadingCargando}"
-                        [disabled]="loadingCargando"> 
-                            <i class="fas fa-arrow-left"></i> 
-                </button>
-                <div class="text-gray-500 text-sm font-semibold"> Mostrando {{ total > 0 ? paginacion.desde + 1 : 0 }} - {{ paginacion.hasta < total ? paginacion.hasta : total }} de {{ total }} elementos </div>
-                <button class="ml-4 px-4 py-2 border rounded shadow text-gray-700 cursor-pointer bg-white text-sm" 
-                        (click)="actualizarDesdeHasta('siguiente')"
-                        [ngClass]="{'bg-gray-100':loadingCargando}"
-                        [disabled]="loadingCargando"
-                        > <i class="fas fa-arrow-right"></i> 
-                </button>
-            </div>
-        </div>
-
-        <div *ngIf="total === 0 && tieneProductos" class="bg-gray-100 px-2 py-3 border shadow text-center mt-2 text-gray-700 font-semibold text-sm">
-            No se encontraron productos
-        </div>
-
-        <!-- Lista de productos -->
-
-        <div class="mt-4">
-            <div *ngFor="let producto of productos" 
-                class="border shadow rounded p-2 m-2 font-semibold flex items-center justify-between"
-                [ngClass]="{'bg-red-100 border-red-300': !producto.activo, 'bg-white border-gray-200': producto.activo}">
-                
-                <div>
-                    <span class="block"> {{ producto.producto.codigo }} </span>
-                    <span class="block text-xs text-gray-600"> {{ producto.producto.descripcion }}  </span>
-                    <span class="block text-sm font-semibold"> cantidad: {{ producto.cantidad }} ({{ producto.producto.unidad_medida.descripcion }}) </span>
-                </div>
-    
-                <div *ngIf="producto.activo">
-                    <button title="Ingreso parcial" 
-                            [disabled]="loadingCargando"
-                            class="py-1 px-2 rounded border text-white mr-2 cursor-pointer"
-                            [ngClass]="{'bg-green-400': loadingCargando, 'bg-green-500': !loadingCargando}"
-                            (click)="egresoParcial(producto._id)"
-                            > 
-                            <i class="fas fa-check"></i> 
+                <div class="flex items-center justify-center mt-3">
+                    <button class="mr-4 px-4 py-2 border rounded shadow hover:bg-yellow-100 text-gray-700 cursor-pointer bg-white text-xs"
+                            (click)="actualizarDesdeHasta('anterior')"
+                            [ngClass]="{'bg-gray-100':loadingTabla}"
+                            [disabled]="loadingTabla"> 
+                                <i class="fas fa-arrow-left"></i> 
                     </button>
+                    <div class="text-gray-500 text-xs font-semibold"> Mostrando {{ total > 0 ? paginacion.desde + 1 : 0 }} - {{ paginacion.hasta < total ? paginacion.hasta : total }} de {{ total }} elementos </div>
+                    <button class="ml-4 px-4 py-2 border rounded shadow text-gray-700 hover:bg-yellow-100 cursor-pointer bg-white text-xs" 
+                            (click)="actualizarDesdeHasta('siguiente')"
+                            [ngClass]="{'bg-gray-100':loadingTabla}"
+                            [disabled]="loadingTabla"
+                            > <i class="fas fa-arrow-right"></i> 
+                    </button>
+                </div>
+            </div>
+    
+            <div *ngIf="total === 0 && totalGeneral > 0" class="bg-gray-100 px-2 py-3 border shadow text-center mt-2 text-gray-700 font-semibold text-sm">
+                No se encontraron productos
+            </div>
+    
+            <!-- Lista de productos -->
+    
+            <div class="mt-4">
+                <div *ngFor="let producto of productos" 
+                    class="border shadow rounded p-2 m-2 font-semibold flex items-center justify-between"
+                    [ngClass]="{'bg-red-100 border-red-300': !producto.activo, 'bg-white border-gray-200': producto.activo}">
                     
-                    <button title="Eliminar producto"
-                            [disabled]="loadingCargando" 
-                            class="py-1 px-3 rounded border bg-red-500 text-white cursor-pointer"
-                            [ngClass]="{'bg-red-400': loadingCargando, 'bg-red-500': !loadingCargando}"
-                            (click)="eliminarProducto(producto._id)"
-                            > 
-                        <i class="fas fa-times"></i> 
-                    </button>
-                </div>
-    
-                <div *ngIf="!producto.activo" class="py-1 px-2 rounded bg-red-500 text-white text-sm"> 
-                    <span> {{ producto.fecha_egreso | fecha }} </span>         
-                </div>
-            </div> 
+                    <div>
+                        <span class="block"> {{ producto.producto.codigo }} </span>
+                        <span class="block text-xs text-gray-600"> {{ producto.producto.descripcion }}  </span>
+                        <span class="block text-sm font-semibold"> cantidad: {{ producto.cantidad }} ({{ producto.producto.unidad_medida.descripcion }}) </span>
+                    </div>
+        
+                    <div *ngIf="producto.activo">
+                        <button title="Egreso parcial" 
+                                [disabled]="loadingTabla"
+                                class="py-1 px-3 rounded border text-green-500 bg-green-100 mr-2 border border-green-200 cursor-pointer"
+                                [ngClass]="{'hover:bg-green-400 hover:text-white': !loadingTabla}"
+                                (click)="egresoParcial(producto._id)"
+                                > 
+                                <i class="fas fa-check"></i> 
+                        </button>
+                        
+                        <button title="Eliminar producto"
+                                [disabled]="loadingTabla" 
+                                class="py-1 px-3 rounded border text-red-500 bg-red-100 border border-red-200 cursor-pointer"
+                                [ngClass]="{'hover:bg-red-400 hover:text-white': !loadingTabla}"
+                                (click)="eliminarProducto(producto._id)"
+                                > 
+                            <i class="fas fa-times"></i> 
+                        </button>
+                    </div>
+        
+                    <div *ngIf="!producto.activo" class="py-1 px-2 rounded bg-white text-red-500 text-sm border border-red-300"> 
+                        <span> {{ producto.fecha_egreso | fecha }} </span>         
+                    </div>
+                </div> 
+            </div>    
         </div>
-
     </div>
-       
-</app-tarjeta-formulario>
+</div>
 
 
