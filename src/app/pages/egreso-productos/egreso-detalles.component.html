@@ -57,7 +57,10 @@
         </div>
         <div *ngIf="!loadingProductos">
             <div class="flex items-center justify-between bg-gray-100 p-2 rounded border">
-                <h1 class="font-semibold text-gray-600"> Productos ({{ total }}) </h1>
+                <div class="flex">
+                    <h1 class="font-semibold text-gray-600"> Productos ({{ total }}) </h1>
+                    <i *ngIf="loadingTabla" class="fas fa-spinner animate-spin text-xl text-gray-500 ml-2"></i>
+                </div>
                 <i *ngIf="egreso.estado == 'Pendiente'"
                     title="Agregar productos"
                     [routerLink]="['/dashboard/egreso_productos/nuevo-producto', egreso._id]" 

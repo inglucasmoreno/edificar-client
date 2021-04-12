@@ -13,7 +13,10 @@ export class TrazabilidadComponent implements OnInit {
   
   public total = 0;
   public inicio = true;
+
   public loading = false;
+  public loadingBuscar = false;
+  
   public productos = [];
   public flagSeleccionado = false;
   public buscando = false;
@@ -53,6 +56,7 @@ export class TrazabilidadComponent implements OnInit {
     this.listarProductos();
   }
 
+  // Listado de resulados
   listarTrazabilidad(): void {
     console.log(this.paginacion);
     this.inicio = false;
@@ -71,6 +75,7 @@ export class TrazabilidadComponent implements OnInit {
       this.total = total;
       this.loading = false;
       this.buscando = true;
+      this.loadingBuscar = false;
     },({error})=>{
       Swal.fire({
         icon: 'error',
@@ -80,6 +85,7 @@ export class TrazabilidadComponent implements OnInit {
       });
       this.inicio = false;
       this.loading = false;
+      this.loadingBuscar = false;
     });  
   }
 
@@ -152,6 +158,7 @@ export class TrazabilidadComponent implements OnInit {
   // Buscar
   buscar(parametro: string, registros: number): void {
     this.loading = true;
+    this.loadingBuscar = true;
     this.filtroParametro(parametro);
     this.registros = Number(registros);
     this.reiniciarPaginacion(); 

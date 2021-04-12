@@ -102,11 +102,11 @@
             [disabled]="loading"
             [ngClass]="{'bg-gray-200': loading}"
             (click)="buscar(txtParametro.value, txtRegistros.value)">
-                <span *ngIf="loading">
+                <span *ngIf="loadingBuscar">
                     <i class="fas fa-spinner animate-spin"></i>
                     Cargando
                 </span> 
-                <span *ngIf="!loading">
+                <span *ngIf="!loadingBuscar">
                     <i class="fas fa-search"></i>
                     Buscar
                 </span>
@@ -114,12 +114,23 @@
 
     </div>
 
+    <!-- No se encontraron resultados -->
+    <div class="border shadow rounded w-full p-4 h-full lg:w-3/5 mr-auto ml-auto mt-2 lg:mt-0 bg-white animate__animated animate__zoomIn" *ngIf="total == 0 && !inicio && !loading">
+        <div class="bg-gray-100 text-sm p-2 font-semibold text-gray-600 ronded p-3">
+            <i class="fas fa-exclamation-circle mr-1"></i>
+            No se encontraron resultados
+        </div>
+    </div>
+
     <div class="border shadow rounded-t w-full lg:w-3/5 mr-auto ml-auto mt-2 lg:mt-0 bg-white animate__animated animate__zoomIn" *ngIf="total !== 0">
-        
+
         <!-- Titulo y ordenamiento -->
         
         <div class="flex items-center justify-between bg-gray-100 p-2 border-b">
-            <h1 class=" font-semibold text-xl text-gray-600 ml-4"> Trazabilidad ({{ total }}) </h1>
+            <div class="flex">
+                <h1 class=" font-semibold text-xl text-gray-600 ml-4"> Trazabilidad ({{ total }}) </h1>
+                <i *ngIf="loading" class="fas fa-spinner animate-spin text-2xl text-gray-500 ml-2"></i>
+            </div>
             <div>
                 <button class="px-3 py-2 border border-gray-300 shadow rounded cursor-pointer bg-white"
                         title="Ordenar por fecha"
@@ -127,7 +138,7 @@
                         [disabled]="loading"
                         (click)="ordenarFecha()">
                     <i *ngIf="ordenar.direccion === -1" class="fas fa-sort-amount-down text-gray-700"></i> 
-                    <i *ngIf="ordenar.direccion === 1" class="fas fa-sort-amount-up-alt text-gray-700"></i> 
+                    <i *ngIf="ordenar.direccion === 1" class="fas fa-sort-amount-down-alt text-gray-700"></i> 
                 </button>
             </div>
         </div>
@@ -157,6 +168,7 @@
                 [routerLink]="traza.tipo === 'Ingreso' ? ['/dashboard/ingreso_productos/detalles/', traza.documento] : ['/dashboard/egreso_productos/detalles/', traza.documento]"
                 class="animate__animated animate__zoomIn shadow border rounded mb-3 cursor-pointer"
                 [ngClass]="{'border-green-200 hover:bg-green-100': traza.tipo === 'Ingreso', 'border-red-200 hover:bg-red-100': traza.tipo === 'Egreso'}">
+                
                 <div class="text-white px-2 py-1 flex items-center justify-between rounded-t"
                     [ngClass]="{'bg-green-600': traza.tipo === 'Ingreso', 'bg-red-600': traza.tipo === 'Egreso'}"
                 >
@@ -192,25 +204,11 @@
                             </p>
                         </div>
                     </div>
-                    <!-- <div class="p-2 border border-gray-300 bg-white shadow hidden lg:inline-block text-xs bg-white"
-                        [ngClass]="{'text-green-700':traza.tipo === 'Ingreso', 'text-red-700':traza.tipo === 'Egreso'}"
-                        >
-                        <div class="w-max">
-                            <span class="font-semibold"> {{ traza.stock_anterior }} </span>
-                            <i class="fas fa-arrow-right"></i>
-                            <span class="font-semibold"> ({{ traza.tipo === 'Ingreso' ? '+' : '-'}}{{traza.cantidad}}) </span>
-                            <i class="fas fa-arrow-right"></i>
-                            <span class="font-semibold"> {{ traza.stock_nuevo }} </span>
-                        </div>
-                    </div> -->
-                </div>
+                </div>     
             </div>
         </div>
-
     </div>
-
     <br>
-
 </div>
 
 <br>
