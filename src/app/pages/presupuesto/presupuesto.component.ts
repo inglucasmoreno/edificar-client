@@ -207,9 +207,8 @@ export class PresupuestoComponent implements OnInit {
     if(descripcion.trim() === ''){
       this.productos = [];  
     }else{
-      this.loading = true;
+      // this.loading = true;
       this.descripcion = descripcion;
-      this.buscarProducto();  
     }
   }
 
@@ -230,6 +229,11 @@ export class PresupuestoComponent implements OnInit {
         this.precioTotal = 0;
       }
     })
+  }
+
+  // Borrar listado
+  borrarListado(): void {
+    this.productos = [];
   }
 
 }
