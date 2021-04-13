@@ -58,7 +58,6 @@ export class TrazabilidadComponent implements OnInit {
 
   // Listado de resulados
   listarTrazabilidad(): void {
-    console.log(this.paginacion);
     this.inicio = false;
     this.trazabilidadService.listarTrazabilidad(
       this.paginacion.hasta,

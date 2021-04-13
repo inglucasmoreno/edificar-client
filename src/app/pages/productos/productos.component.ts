@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Producto } from 'src/app/models/producto.model';
+import { AuthService } from 'src/app/services/auth.service';
 import Swal from 'sweetalert2';
 import { ProductosService } from '../../services/productos.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-productos',
@@ -10,6 +12,8 @@ import { ProductosService } from '../../services/productos.service';
   ]
 })
 export class ProductosComponent implements OnInit {
+  
+  public usuarioLogin;
 
   public total = 0;
   public loading = true;
@@ -34,9 +38,12 @@ export class ProductosComponent implements OnInit {
     columna: 'codigo'
   }
 
-  constructor(private productosService: ProductosService) {}
+  constructor(private productosService: ProductosService,
+              private authService: AuthService,
+              private router: Router) {}
 
   ngOnInit(): void {
+    this.usuarioLogin = this.authService.usuario;
     this.listarProductos();
   }
 
@@ -105,6 +112,19 @@ export class ProductosComponent implements OnInit {
     this.paginacion.desde = 0;
     this.paginacion.hasta = 10;
     this.paginacion.limit = 10;
+  }
+
+  detalleProducto(id): void {
+    if(this.usuarioLogin.role !== 'ADMIN_ROLE'){
+      Swal.fire({
+        icon: 'info',
+        title: 'Información',
+        text: 'No tienes permiso para ingresar',
+        confirmButtonText: 'Entendido'
+      });
+      return;
+    }
+    this.router.navigateByUrl(`/dashboard/producto/${id}`);
   }
 
   // Filtrar Activo/Inactivo

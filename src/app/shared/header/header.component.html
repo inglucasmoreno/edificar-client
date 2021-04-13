@@ -19,7 +19,7 @@
         </a>
         
         <!-- Boton Usuarios -->
-        <div class="relative">
+        <div class="relative" *ngIf="usuarioLogin.role === 'ADMIN_ROLE'">
           <button (click)="showUsuarios = !showUsuarios" class="flex flex-row items-center w-full px-4 py-2 mt-2 text-sm font-semibold text-left bg-transparent rounded-lg lg:block focus:outline-none focus:shadow-outline">
             <span> 
               <i class="fas fa-user mr-1"></i>
@@ -48,17 +48,17 @@
             <a routerLinkActive="text-yellow-500" [routerLinkActiveOptions]="{exact:true}" routerLink="productos" class="cursor-pointer block px-4 py-2 mt-1 text-sm font-semibold text-gray-900 bg-transparent rounded-lg hover:text-yellow-500 hover:text-gray-900 focus:outline-none focus:shadow-outline"> 
               Listar productos 
             </a>
-            <a routerLinkActive="text-yellow-500" [routerLinkActiveOptions]="{exact:true}" routerLink="productos/nuevo" class="cursor-pointer block mb-1 px-4 py-2 text-sm font-semibold text-gray-900 bg-transparent rounded-lg hover:text-yellow-500 hover:text-gray-900 focus:outline-none focus:shadow-outline"> 
+            <a *ngIf="usuarioLogin.role === 'ADMIN_ROLE'" routerLinkActive="text-yellow-500" [routerLinkActiveOptions]="{exact:true}" routerLink="productos/nuevo" class="cursor-pointer block mb-1 px-4 py-2 text-sm font-semibold text-gray-900 bg-transparent rounded-lg hover:text-yellow-500 hover:text-gray-900 focus:outline-none focus:shadow-outline"> 
               Nuevo producto 
             </a>
-            <a routerLinkActive="text-yellow-500" [routerLinkActiveOptions]="{exact:true}" routerLink="unidad-medida" class="cursor-pointer block mb-1 px-4 py-2 text-sm font-semibold text-gray-900 bg-transparent rounded-lg hover:text-yellow-500 hover:text-gray-900 focus:outline-none focus:shadow-outline"> 
+            <a *ngIf="usuarioLogin.role === 'ADMIN_ROLE'" routerLinkActive="text-yellow-500" [routerLinkActiveOptions]="{exact:true}" routerLink="unidad-medida" class="cursor-pointer block mb-1 px-4 py-2 text-sm font-semibold text-gray-900 bg-transparent rounded-lg hover:text-yellow-500 hover:text-gray-900 focus:outline-none focus:shadow-outline"> 
               Unidades de medida
             </a>
           </div>
         </div>
 
         <!-- Boton Ingreso/Egreso -->
-        <div class="relative">
+        <div class="relative" *ngIf="usuarioLogin.role === 'ADMIN_ROLE'">
           <button (click)="showIngresoEgreso = !showIngresoEgreso" class="flex flex-row items-center w-full px-4 py-2 mt-2 text-sm font-semibold text-left bg-transparent rounded-lg lg:block focus:outline-none focus:shadow-outline">
             <span> 
               <i class="fas fa-exchange-alt mr-1"></i>
@@ -80,7 +80,7 @@
         </div>
 
         <!-- Trazabilidad -->
-        <a routerLinkActive="text-yellow-500" routerLink="trazabilidad" class="block px-4 py-2 mt-2 text-sm font-semibold text-gray-900 rounded-lg hover:text-gray-900 focus:outline-none focus:shadow-outline cursor-pointer hover:text-yellow-500"> 
+        <a *ngIf="usuarioLogin.role === 'ADMIN_ROLE'" routerLinkActive="text-yellow-500" routerLink="trazabilidad" class="block px-4 py-2 mt-2 text-sm font-semibold text-gray-900 rounded-lg hover:text-gray-900 focus:outline-none focus:shadow-outline cursor-pointer hover:text-yellow-500"> 
           <i class="fas fa-chart-line mr-1"></i>
           Trazabilidad
         </a>

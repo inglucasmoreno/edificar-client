@@ -13,8 +13,20 @@ import { ProductosService } from '../../services/productos.service';
 })
 export class PresupuestoComponent implements OnInit {
 
+  // Fecha
   public fechaHoy = Date.now();
+
+  // Loadings
   public loading = false;
+
+  // Datos de cliente
+  public cliente = {
+    descripcion: '',
+    tipoIdentificacion: 'DNI',
+    identificacion: ''
+  };
+
+  // Variables de producto
   public total = 0;
   public precioTotal = 0;
   public productos: any = [];
@@ -29,6 +41,11 @@ export class PresupuestoComponent implements OnInit {
 
   ngOnInit(): void {}
   
+  // Cargando datos de cliente
+  datosCliente(data: string, selector: string): void{
+    this.cliente[selector] = data.toUpperCase();
+  }
+
   // Presupuesto en PDF
   async presupuestoPDF() {
     const hoy = moment().format('DD/MM/YYYY');
