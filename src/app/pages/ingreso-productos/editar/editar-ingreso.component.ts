@@ -95,17 +95,19 @@ export class EditarIngresoComponent implements OnInit {
     });
   }
 
-  // Buscando proveedores
-  buscarProveedor(parametro: string): void {
-  this.loading = true;
-  this.descripcion = parametro;
-  if(parametro.trim() !== ''){
-    this.listarProveedores();
-  }else{
-    this.loading = false;
-    this.proveedores = [];
+  // Buscar proveedores
+  buscarProveedores(): void {  
+    if(this.descripcion.trim() === ''){
+      Swal.fire({
+        icon: 'info',
+        title: 'Información',
+        text: 'Formulario inválido',
+        confirmButtonText: 'Entendido'
+      });
+      return;
+    }
+    this.listarProveedores();  
   }
-}
 
   // Seleccionar proveedor
   seleccionarProveedor(proveedorSeleccionado: any): void {
@@ -125,6 +127,12 @@ export class EditarIngresoComponent implements OnInit {
       activo: false,
       domicilio: '' 
     };
+  }
+
+  // Filtro por descripcion
+  filtroDescripcion(descripcion: string): void {
+    if(descripcion.trim() === '') this.proveedores = [];
+    this.descripcion = descripcion; 
   }
 
   // Actualizar ingreso

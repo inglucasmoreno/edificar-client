@@ -68,21 +68,33 @@
                 </div>
             </div>
             
-            <!-- Buscardor producto -->         
-            <input type="text"
-                    *ngIf="!productoSeleccionado"
-                    #txtBuscar 
-                    placeholder="Código o descripción" 
-                    (keyup)="buscarProductos(txtBuscar.value)"
-                    class="my-2 w-full text-sm bg-grey-light text-grey-darkest rounded h-10 p-3 focus:outline-none border shadow">          
-            
-            <!-- Loading -->
-            <div *ngIf="loading" class="text-gray-400 w-full text-sm">
-                <i class="fas fa-spinner animate-spin text-gray-400 ml-2"></i> Cargando productos 
-            </div>
+            <!-- Buscardor producto -->        
+            <div *ngIf="!productoSeleccionado">
+                <input type="text"
+                        #txtBuscar 
+                        placeholder="Código o descripción"
+                        (keyup)="filtroDescripcion(txtBuscar.value)"
+                        [disabled]="loading" 
+                        class="my-2 text-sm bg-grey-light text-grey-darkest rounded h-10 p-3 focus:outline-none border shadow">          
+                <button class="border border-gray-300 bg-gray-100 text-gray-500 hover:bg-yellow-100 py-2 px-3 rounded mt-4 ml-2"
+                        [ngClass]="{'bg-yellow-100': loading}"
+                        (click)="buscarProductos()">
+                        <i *ngIf="loading" class="fas fa-spinner animate-spin text-xl text-gray-400"></i>
+                        <span *ngIf="!loading">
+                            <i class="fas fa-search"></i> Buscar
+                        </span>
+                </button>
+            </div> 
             
             <!-- Lista de productos buscados -->
-            <div *ngIf="!productoSeleccionado && !loading" class="w-full">
+            <div *ngIf="!productoSeleccionado && !loading && productos.length > 0" class="w-11/12 animate__animated animate__zoomIn lg:absolute bg-white p-2 rounded shadow border border-gray-200 z-50 mb-10">
+                <div class="flex items-center justify-between p-2 bg-gray-100 rounded mb-2 border border-gray-200">
+                    <h1 class="text-gray-700 font-semibold"> 
+                        <i class="fas fa-searc"></i>
+                        Buscador de productos
+                    </h1>
+                    <i (click)="borrarProductoSeleccionado()" class="fas fa-times bg-red-100 border border-red-200 bg-white py-2 px-3 border-gray-200 shadow text-red-500 hover:bg-red-400 hover:text-white cursor-pointer"></i>
+                </div>
                 <div *ngFor="let producto of productos" 
                      class="animate__animated animate__fadeIn flex mb-2 cursor-pointer border shadow hover:bg-yellow-100"
                      [ngClass]="{'bg-red-100': (producto.stock_minimo && producto.cantidad < producto.cantidad_minima)}"
@@ -98,6 +110,7 @@
                 </div>
                 </div>
             </div>   
+        
         </div> 
     </div>
 </app-tarjeta-formulario>

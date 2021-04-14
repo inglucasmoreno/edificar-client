@@ -181,6 +181,17 @@ export class PresupuestoComponent implements OnInit {
 
   // Listar productos
   buscarProducto(): void{
+
+    if(this.descripcion.trim() === ''){
+      Swal.fire({
+        icon: 'info',
+        title: 'Información',
+        text: 'Formulario inválido',
+        confirmButtonText: 'Entendido'
+      });
+      return;
+    }
+
     this.loading = true;
     this.productosService.listarProductos(
       this.limit,
@@ -204,12 +215,8 @@ export class PresupuestoComponent implements OnInit {
 
   // Filtro por descripcion
   filtroDescripcion(descripcion: string): void {
-    if(descripcion.trim() === ''){
-      this.productos = [];  
-    }else{
-      // this.loading = true;
-      this.descripcion = descripcion;
-    }
+    if(descripcion.trim() === '') this.productos = [];
+    this.descripcion = descripcion;      
   }
 
   // Eliminar presupuesto

@@ -16,11 +16,12 @@ export class NuevoProductoEgresoComponent implements OnInit {
   public id;
   public loading = false;
   public loadingCreacion = false;
-  public limit = 10;
+  public limit = 5;
   public productos = [];
   public producto: Producto;
   public productoSeleccionado = false;
   public ultimoIngresado = { codigo: '' }
+  public descripcion = '';
 
   constructor(private activatedRoute: ActivatedRoute,
               private productosService: ProductosService,
@@ -98,13 +99,13 @@ export class NuevoProductoEgresoComponent implements OnInit {
   }
 
   // Listar productos
-  listarProductos(parametro: string): void {
+  listarProductos(): void {
     this.loading = true;
     this.productosService.listarProductos(
       this.limit,
       0,
       true,
-      parametro,
+      this.descripcion,
       1,
       'codigo'
     ).subscribe(({ productos }) => {
@@ -129,12 +130,23 @@ export class NuevoProductoEgresoComponent implements OnInit {
   }
 
   // Buscar productos
-  buscarProductos(parametro): void {
-    if(parametro.trim() != ''){
-      this.listarProductos(parametro);  
-    }else{
-      this.productos = [];
-    } 
+  buscarProductos(): void {  
+    if(this.descripcion.trim() === ''){
+      Swal.fire({
+        icon: 'info',
+        title: 'Información',
+        text: 'Formulario inválido',
+        confirmButtonText: 'Entendido'
+      });
+      return;
+    }
+    this.listarProductos();  
+  }
+
+  // Filtro por descripcion
+  filtroDescripcion(descripcion: string): void {
+    if(descripcion.trim() === '') this.productos = [];
+    this.descripcion = descripcion;    
   }
 
   // Borrar proveedor seleccionado
