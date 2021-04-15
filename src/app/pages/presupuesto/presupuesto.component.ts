@@ -18,6 +18,7 @@ export class PresupuestoComponent implements OnInit {
 
   // Loadings
   public loading = false;
+  public loadingTabla = false;
 
   // Datos de cliente
   public cliente = {
@@ -35,6 +36,13 @@ export class PresupuestoComponent implements OnInit {
   public seleccionados = [];
   public limit = 5;
   public descripcion = '';
+
+  // Paginacion
+  public paginacion = {
+    limit: 5,
+    desde: 0,
+    hasta: 5
+  }
 
   constructor(private productosService: ProductosService,
               private deviceService: DeviceDetectorService) { }
@@ -155,7 +163,6 @@ export class PresupuestoComponent implements OnInit {
 
   // Seleccionar producto
   seleccionarProducto(producto: any): void {
-
     // Se controla si el producto ya esa en el presupuesto
     const existe = this.seleccionados.find(elemento => elemento.id == producto._id);
     if(existe){
@@ -181,7 +188,6 @@ export class PresupuestoComponent implements OnInit {
 
   // Listar productos
   buscarProducto(): void{
-
     if(this.descripcion.trim() === ''){
       Swal.fire({
         icon: 'info',
@@ -191,17 +197,23 @@ export class PresupuestoComponent implements OnInit {
       });
       return;
     }
-
     this.loading = true;
+    this.reiniciarPaginacion();
+    this.listarProductos();
+  }
+
+  // Listar productos
+  listarProductos(): void {
     this.productosService.listarProductos(
-      this.limit,
-      0,
+      this.paginacion.hasta,
+      this.paginacion.desde,
       true,
       this.descripcion
     ).subscribe(({productos, total}) => {
       this.total = total;
       this.productos = productos;
       this.loading = false;
+      this.loadingTabla = false;
     },({error}) => {
       Swal.fire({
         icon: 'error',
@@ -210,6 +222,7 @@ export class PresupuestoComponent implements OnInit {
         confirmButtonText: 'Entendido'
       });
       this.loading = false;
+      this.loadingTabla = false;
     });
   }
 
@@ -242,5 +255,31 @@ export class PresupuestoComponent implements OnInit {
   borrarListado(): void {
     this.productos = [];
   }
+
+    // Reiniciar paginación
+    reiniciarPaginacion(): void {
+      this.paginacion.desde = 0;
+      this.paginacion.hasta = 5;
+      this.paginacion.limit = 5;
+    }
+  
+    // Funcion de paginación
+    actualizarDesdeHasta(selector): void { 
+      this.loadingTabla = true;
+      if (selector === 'siguiente'){ // Incrementar
+        if (this.paginacion.hasta < this.total){
+          this.paginacion.desde += this.paginacion.limit;
+          this.paginacion.hasta += this.paginacion.limit;
+        }
+      }else{                         // Decrementar
+        this.paginacion.desde -= this.paginacion.limit;
+        if (this.paginacion.desde < 0){
+          this.paginacion.desde = 0;
+        }else{
+          this.paginacion.hasta -= this.paginacion.limit;
+        }
+      }
+      this.listarProductos();
+    }
 
 }

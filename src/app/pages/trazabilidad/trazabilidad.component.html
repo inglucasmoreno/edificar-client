@@ -100,7 +100,6 @@
 
         <button class="border border-gray-200 shadow bg-gray-100 p-2 hover:bg-yellow-100 mt-4 text-gray-700 w-full"
             [disabled]="loading"
-            [ngClass]="{'bg-gray-200': loading}"
             (click)="buscar(txtParametro.value, txtRegistros.value)">
                 <span *ngIf="loadingBuscar">
                     <i class="fas fa-spinner animate-spin"></i>

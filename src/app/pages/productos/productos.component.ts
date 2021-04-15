@@ -146,7 +146,7 @@ export class ProductosComponent implements OnInit {
   // Funcion de paginación
   actualizarDesdeHasta(selector): void {
     
-    this.loading = true;
+    // this.loading = true;
     
     if (selector === 'siguiente'){ // Incrementar
       if (this.paginacion.hasta < this.total){

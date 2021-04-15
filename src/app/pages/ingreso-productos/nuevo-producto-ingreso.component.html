@@ -25,7 +25,7 @@
             <span class="font-semibold text-xs"> Cantidad: {{ ultimoIngresado.cantidad }} </span>
         </div>
 
-        <div class="flex-grow mt-3">
+        <div class="flex-grow mt-3 relative">
             <span *ngIf="!productoSeleccionado" class="text-gray-600 font-semibold text-sm mb-2"> Nuevo producto </span>
             
             <!-- Producto seleccionado -->
@@ -73,7 +73,8 @@
                         class="my-2 text-sm bg-grey-light text-grey-darkest rounded h-10 p-3 focus:outline-none border shadow">          
                 <button class="border border-gray-300 bg-gray-100 text-gray-500 hover:bg-yellow-100 py-2 px-3 rounded ml-2"
                         [ngClass]="{'bg-yellow-100': loading}"
-                        (click)="buscarProductos()">
+                        (click)="buscarProductos()"
+                        >
                         <i *ngIf="loading" class="fas fa-spinner animate-spin text-xl text-gray-400"></i>
                         <span *ngIf="!loading">
                             <i class="fas fa-search"></i> Buscar
@@ -82,16 +83,36 @@
             </div>
             
             <!-- Lista de productos buscados -->
-            <div *ngIf="!productoSeleccionado && !loading && productos.length > 0" class="w-11/12 animate__animated animate__zoomIn lg:absolute z-50 bg-white p-3 rounded border border-gray-200 shadow">
+            <div *ngIf="!productoSeleccionado && !loading && productos.length > 0" class="w-11/12 animate__animated animate__zoomIn absolute z-50 bg-white p-3 rounded border border-gray-200 shadow">
                 <div class="flex items-center justify-between p-2 bg-gray-100 rounded mb-2 border border-gray-200">
                     <h1 class="text-gray-700 font-semibold"> 
                         <i class="fas fa-searc"></i>
-                        Buscador de productos ({{ productos.length }})
+                        Buscador de productos
                     </h1>
                     <i (click)="borrarProductoSeleccionado()" class="fas fa-times bg-red-100 border border-red-200 bg-white py-2 px-3 border-gray-200 shadow text-red-500 hover:bg-red-400 hover:text-white cursor-pointer"></i>
                 </div>
+                
+                <!-- Paginador -->
+                <div class="flex items-center justify-center mt-3">
+                    <button class="mr-4 px-4 py-2 border rounded shadow hover:bg-yellow-100 text-gray-700 cursor-pointer bg-white text-xs"
+                            (click)="actualizarDesdeHasta('anterior')"
+                            [disabled]="loadingTabla"
+                            [ngClass]="{'bg-gray-100':loadingTabla}">
+                                <i *ngIf="loadingTabla" class="fas fa-spinner animate-spin text-xs text-gray-400"></i> 
+                                <i *ngIf="!loadingTabla" class="fas fa-arrow-left"></i> 
+                    </button>
+                    <div class="text-gray-500 text-xs text-center font-semibold"> Mostrando {{ total > 0 ? paginacion.desde + 1 : 0 }} - {{ paginacion.hasta < total ? paginacion.hasta : total }} de {{ total }} elementos </div>
+                    <button class="ml-4 px-4 py-2 border rounded shadow hover:bg-yellow-100 text-gray-700 cursor-pointer bg-white text-xs" 
+                            (click)="actualizarDesdeHasta('siguiente')"
+                            [disabled]="loadingTabla"
+                            [ngClass]="{'bg-gray-100':loadingTabla}"> 
+                            <i *ngIf="loadingTabla" class="fas fa-spinner animate-spin text-xs text-gray-400"></i> 
+                            <i *ngIf="!loadingTabla" class="fas fa-arrow-right"></i> 
+                    </button>
+                </div>
+                
                 <div *ngFor="let producto of productos" 
-                        class="animate__animated animate__fadeIn flex mb-2 cursor-pointer border shadow hover:bg-yellow-100"
+                        class="animate__animated animate__fadeIn flex mb-2 mt-3 cursor-pointer border shadow hover:bg-yellow-100"
                         [ngClass]="{'bg-red-100': (producto.stock_minimo && producto.cantidad < producto.cantidad_minima)}"
                         (click)="seleccionarProducto(producto)"
                 >

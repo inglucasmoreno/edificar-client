@@ -15,6 +15,7 @@ export class NuevoProductoEgresoComponent implements OnInit {
 
   public id;
   public loading = false;
+  public loadingTabla = false;
   public loadingCreacion = false;
   public limit = 5;
   public productos = [];
@@ -22,6 +23,15 @@ export class NuevoProductoEgresoComponent implements OnInit {
   public productoSeleccionado = false;
   public ultimoIngresado = { codigo: '' }
   public descripcion = '';
+
+  public total = 0;
+
+  // Paginacion
+  public paginacion = {
+    limit: 5,
+    desde: 0,
+    hasta: 5
+  }
 
   constructor(private activatedRoute: ActivatedRoute,
               private productosService: ProductosService,
@@ -100,7 +110,6 @@ export class NuevoProductoEgresoComponent implements OnInit {
 
   // Listar productos
   listarProductos(): void {
-    this.loading = true;
     this.productosService.listarProductos(
       this.limit,
       0,
@@ -108,9 +117,11 @@ export class NuevoProductoEgresoComponent implements OnInit {
       this.descripcion,
       1,
       'codigo'
-    ).subscribe(({ productos }) => {
+    ).subscribe(({ productos, total }) => {
+      this.total = total;
       this.productos = productos;
       this.loading = false;  
+      this.loadingTabla = false;
     },({error}) => {
       Swal.fire({
         icon: 'error',
@@ -118,7 +129,8 @@ export class NuevoProductoEgresoComponent implements OnInit {
         text: error.msg,
         confirmButtonText: 'Entendido'
       })
-      this.loading = false;  
+      this.loading = false;
+      this.loadingTabla = false;
     });
   }
 
@@ -140,6 +152,7 @@ export class NuevoProductoEgresoComponent implements OnInit {
       });
       return;
     }
+    this.reiniciarPaginacion();
     this.listarProductos();  
   }
 
@@ -154,6 +167,32 @@ export class NuevoProductoEgresoComponent implements OnInit {
     this.loading = false;
     this.productoSeleccionado = false;
     this.productos = [];
+  }
+
+  // Reiniciar paginación
+  reiniciarPaginacion(): void {
+    this.paginacion.desde = 0;
+    this.paginacion.hasta = 5;
+    this.paginacion.limit = 5;
+  }
+
+  // Funcion de paginación
+  actualizarDesdeHasta(selector): void {
+    this.loadingTabla = true;
+    if (selector === 'siguiente'){ // Incrementar
+      if (this.paginacion.hasta < this.total){
+        this.paginacion.desde += this.paginacion.limit;
+        this.paginacion.hasta += this.paginacion.limit;
+      }
+    }else{                         // Decrementar
+      this.paginacion.desde -= this.paginacion.limit;
+      if (this.paginacion.desde < 0){
+        this.paginacion.desde = 0;
+      }else{
+        this.paginacion.hasta -= this.paginacion.limit;
+      }
+    }
+    this.listarProductos();
   }
 
 }

@@ -20,13 +20,22 @@ export class NuevoProductoIngresoComponent implements OnInit {
 
   public id;
   public loading = false;
+  public loadingTabla = false;
   public loadingCreacion = false;
-  public limit = 5;
   public productos = [];
   public producto: Producto;
   public productoSeleccionado = false;
   public ultimoIngresado = { codigo: '' }
   public descripcion = '';
+
+  public total = 0;
+
+  // Paginacion
+  public paginacion = {
+    limit: 5,
+    desde: 0,
+    hasta: 5
+  }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe( ({ id }) => {
@@ -80,17 +89,19 @@ export class NuevoProductoIngresoComponent implements OnInit {
   
   // Listar productos
   listarProductos(): void {
-    this.loading = true;
     this.productosService.listarProductos(
-      this.limit,
-      0,
+      this.paginacion.hasta,
+      this.paginacion.desde,
       true,
       this.descripcion,
       1,
       'codigo'
-    ).subscribe(({ productos }) => {
+    ).subscribe(({ productos, total }) => {
+      this.total = total;
       this.productos = productos;
-      this.loading = false;  
+      this.loading = false;
+      this.loadingTabla = false;
+      this.loadingCreacion = false;  
     },({error}) => {
       Swal.fire({
         icon: 'error',
@@ -98,7 +109,8 @@ export class NuevoProductoIngresoComponent implements OnInit {
         text: error.msg,
         confirmButtonText: 'Entendido'
       })
-      this.loading = false;  
+      this.loading = false;
+      this.loadingTabla = false;
     });
   }
 
@@ -115,6 +127,32 @@ export class NuevoProductoIngresoComponent implements OnInit {
     this.descripcion = descripcion;    
   }
 
+  // Reiniciar paginación
+  reiniciarPaginacion(): void {
+    this.paginacion.desde = 0;
+    this.paginacion.hasta = 5;
+    this.paginacion.limit = 5;
+  }
+
+  // Funcion de paginación
+  actualizarDesdeHasta(selector): void {
+    this.loadingTabla = true;
+    if (selector === 'siguiente'){ // Incrementar
+      if (this.paginacion.hasta < this.total){
+        this.paginacion.desde += this.paginacion.limit;
+        this.paginacion.hasta += this.paginacion.limit;
+      }
+    }else{                         // Decrementar
+      this.paginacion.desde -= this.paginacion.limit;
+      if (this.paginacion.desde < 0){
+        this.paginacion.desde = 0;
+      }else{
+        this.paginacion.hasta -= this.paginacion.limit;
+      }
+    }
+    this.listarProductos();
+  }
+
   // Buscar productos
   buscarProductos(): void {  
     if(this.descripcion.trim() === ''){
@@ -126,6 +164,8 @@ export class NuevoProductoIngresoComponent implements OnInit {
       });
       return;
     }
+    this.loading = true;
+    this.reiniciarPaginacion();
     this.listarProductos();  
   }
 
