@@ -152,6 +152,7 @@ export class NuevoProductoEgresoComponent implements OnInit {
       });
       return;
     }
+    this.loading = true;
     this.reiniciarPaginacion();
     this.listarProductos();  
   }

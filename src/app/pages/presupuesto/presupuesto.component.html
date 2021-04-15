@@ -61,8 +61,14 @@
                            class="p-2 rounded border shadow text-sm mt-4"
                            (keyup)="filtroDescripcion(txtDescripcion.value)"
                            placeholder="Buscar producto">   
-                    <button (click)="buscarProducto()" class="border border-gray-300 bg-gray-100 text-gray-500 hover:bg-yellow-100 py-2 px-3 rounded mt-4 ml-2">
-                        <i class="fas fa-search"></i> Buscar
+                    <button (click)="buscarProducto()" 
+                                class="border border-gray-300 bg-gray-100 text-gray-500 hover:bg-yellow-100 py-2 px-3 rounded mt-4 ml-2"
+                                [ngClass]="{'bg-yellow-100': loading}"
+                            >
+                        <i *ngIf="loading" class="fas fa-spinner animate-spin text-xl text-gray-400"></i>
+                        <span *ngIf="!loading">
+                            <i class="fas fa-search"></i> Buscar
+                        </span>
                     </button>
                 </div>
 
