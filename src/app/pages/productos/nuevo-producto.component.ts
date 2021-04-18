@@ -40,7 +40,7 @@ export class NuevoProductoComponent implements OnInit {
   // Se crea el nuevo producto
   crearProducto(): void {
   
-    const {codigo, descripcion, cantidad, stock_minimo, cantidad_minima, precio} = this.productoForm.value;   
+    const {codigo, descripcion, cantidad, stock_minimo, cantidad_minima, unidad_medida, precio} = this.productoForm.value;   
     
     const cantidadMinimaValida = stock_minimo && Number(cantidad_minima) < 0;
 
@@ -56,7 +56,8 @@ export class NuevoProductoComponent implements OnInit {
 
     const formularioValido = this.productoForm.valid && 
                              codigo.trim() !== '' && 
-                             descripcion.trim() !== '' && 
+                             descripcion.trim() !== '' &&
+                             unidad_medida.trim() !== '' && 
                              Number(cantidad) >= 0 && 
                              Number(precio) >= 0 
 
@@ -95,8 +96,8 @@ export class NuevoProductoComponent implements OnInit {
 
   obtenerUnidades(): void {
     this.unidadMedidaService.listarUnidades(0, 0, true).subscribe( ({ unidades }) => {
-      this.unidades= unidades; 
-      this.reiniciarFormulario();
+      this.unidades= unidades;      
+      if(unidades) this.reiniciarFormulario();
       this.loadingInicio = false;
     },({error}) => {
       Swal.fire({

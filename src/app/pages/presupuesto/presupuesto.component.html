@@ -121,10 +121,6 @@
                 <span class="text-gray-700 block text-sm font-semibold"> Precio: ${{ producto.precio | moneda }} </span>    
             </div>
         </div>
-        <!-- Loading -->
-        <div *ngIf="loading" class="text-gray-400 w-full text-sm ml-2">
-            <i class="fas fa-spinner animate-spin text-gray-400 ml-2"></i> Cargando productos 
-        </div>
 
         <!-- Producto seleccionado -->
         <div *ngIf="flagSeleccionado" class="px-4">
