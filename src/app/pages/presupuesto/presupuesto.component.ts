@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { format } from 'date-fns';
-import { DeviceDetectorService } from 'ngx-device-detector';
-import { Img, PdfMakeWrapper, Table, Txt } from 'pdfmake-wrapper';
 import Swal from 'sweetalert2';
 import { ProductosService } from '../../services/productos.service';
+import { PresupuestosService } from '../../services/presupuestos.service';
+import { environment } from '../../../environments/environment';
+
+const base_url = environment.base_url;
 
 @Component({
   selector: 'app-presupuesto',
@@ -29,6 +30,7 @@ export class PresupuestoComponent implements OnInit {
 
   // Variables de producto
   public total = 0;
+  public loadingPDF = false;
   public precioTotal = 0;
   public productos: any = [];
   public seleccionado: any = {};
@@ -45,7 +47,7 @@ export class PresupuestoComponent implements OnInit {
   }
 
   constructor(private productosService: ProductosService,
-              private deviceService: DeviceDetectorService) { }
+              private presupuestosService: PresupuestosService) { }
 
   ngOnInit(): void {}
   
@@ -54,65 +56,36 @@ export class PresupuestoComponent implements OnInit {
     this.cliente[selector] = data.toUpperCase();
   }
 
-  // Presupuesto en PDF
-  async presupuestoPDF() {
-    const hoy = format(this.fechaHoy, 'dd/MM/yyyy');
-    const pdf = new PdfMakeWrapper();
-  
-    pdf.info({
-      title: `Presupuesto | ${hoy}`,
-      author: 'Equinoccio Technology',
-      subject: 'Presupuesto'      
-    });
-    
-    const titulo = new Txt(`Presupuesto - Fecha: ${hoy}`).fontSize(10).bold().end;
+  // Se el presupuesto
+  crearPresupuesto(): void {
 
-    // Tabla - Presupuesto
-    const productosPresupuesto = this.extractData();
-    const tabla = new Table([
-   
-      [ // Cabecera
-        new Txt('Productos').bold().fontSize(10).margin([0, 5]).end, 
-        new Txt('Precio (c/u)').bold().fontSize(10).alignment('center').margin([0, 5]).end, 
-        new Txt('Cantidad').bold().fontSize(10).alignment('center').margin([0, 5]).end, 
-        new Txt('Precio total').bold().fontSize(10).alignment('center').margin([0, 5]).end], 
-        ...productosPresupuesto,
-        [ // Productos
-          new Txt('PRECIO TOTAL').fontSize(10).bold().margin([0, 5]).end, 
-          '', 
-          '', 
-          new Txt('$' + new Intl.NumberFormat('es-AR', { minimumFractionDigits: 2 }).format(this.precioTotal)).fontSize(10).alignment('center').bold().margin([0, 5]).end,]
-    ])
-    .layout('lightHorizontalLines')
-    .widths(['*', 100, 50, 80])
-    .end;
-
-    const isMobile = this.deviceService.isMobile();
-    // const isDesktop = this.deviceService.isDesktop();
-    const isTablet = this.deviceService.isTablet();
-    
-    pdf.add(await new Img('assets/Logo-Pdf-2.png').width(520).build());
-    pdf.add(new Txt('').margin([0,10]).end);
-    pdf.add(titulo);
-    pdf.add(new Txt('').margin([0,4]).end);
-    pdf.add(tabla);
-
-    if(isMobile || isTablet){
-      pdf.create().download(); // Se genera PDF y se descarga    
-    }else{
-      pdf.create().open(); // Se genera PDF y se abre en otra pestaña  
+    if(this.cliente.descripcion.trim() === '' || this.cliente.identificacion.trim() === ''){
+      Swal.fire({
+        icon: 'info',
+        title: 'Información',
+        text: 'Debe completar los datos del cliente',
+        confirmButtonText: 'Entendido'
+      });
+      return;
     }
-  
-  }
 
-  extractData(): any{
-    return this.seleccionados.map( seleccionado => [
-        new Txt(seleccionado.descripcion).fontSize(8).margin([0, 10]).end, 
-        new Txt('$' + new Intl.NumberFormat('es-AR', { minimumFractionDigits: 2 }).format(seleccionado.precio)).fontSize(8).alignment('center').margin([0, 10]).end,
-        new Txt(seleccionado.cantidad).alignment('center').fontSize(8).margin([0, 10]).end,
-        new Txt('$' + new Intl.NumberFormat('es-AR', { minimumFractionDigits: 2 }).format(seleccionado.total)).fontSize(8).alignment('center').margin([0, 10]).end,
-      ],
-    );
+    const data = {
+      cliente: this.cliente,
+      productos: this.seleccionados
+    }
+    this.loadingPDF = true;
+    this.presupuestosService.generarPresupuesto(data).subscribe( resp => {
+      this.loadingPDF = false;
+      window.open(`${base_url}/presupuestos`, '_blank');  
+    },({error}) => {
+      this.loadingPDF = false;
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: error.msg,
+        confirmButtonText: 'Entendido'
+      });  
+    });
   }
 
   // Agregar producto al presupuesto

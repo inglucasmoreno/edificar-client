@@ -106,8 +106,7 @@
                 <div class="text-gray-500 text-xs text-center font-semibold"> Mostrando {{ total > 0 ? paginacion.desde + 1 : 0 }} - {{ paginacion.hasta < total ? paginacion.hasta : total }} de {{ total }} elementos </div>
                 <button class="ml-4 px-4 py-2 border rounded shadow hover:bg-yellow-100 text-gray-700 cursor-pointer bg-white text-xs" 
                         (click)="actualizarDesdeHasta('siguiente')"
-                        [disabled]="loadingTabla"
-                        [ngClass]="{'bg-gray-100':loadingTabla}"> 
+                        [disabled]="loadingTabla"> 
                         <i *ngIf="loadingTabla" class="fas fa-spinner animate-spin text-xs text-gray-400"></i> 
                         <i *ngIf="!loadingTabla" class="fas fa-arrow-right"></i> 
                 </button>
@@ -179,8 +178,11 @@
                         <i class="far fa-trash-alt"></i> 
                     </span>
                     <span class="px-3 py-2 bg-white hover:bg-yellow-100 text-gray-600 bg-white border ml-3 rounded cursor-pointer shadow"
-                          (click)="presupuestoPDF()">
-                        <i class="fas fa-print"></i>
+                          [ngClass]="{'bg-yellow-100': laodingPDF}"
+                          [disabled]="loadingPDF"
+                            (click)="crearPresupuesto()">
+                        <i *ngIf="!loadingPDF" class="fas fa-print"></i>
+                        <i *ngIf="loadingPDF" class="fas fa-spinner animate-spin text-gray-600"></i>
                     </span>
                 </div>             
             </div>
