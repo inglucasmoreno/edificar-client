@@ -7,7 +7,6 @@ export class Egreso {
         public fecha_egreso: Date,
         public estado: string,
         public activo: boolean,
-        public productos: any[],
         public _id?: string
     ){}
 }

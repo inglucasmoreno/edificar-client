@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import * as moment from 'moment';
+import { format } from 'date-fns';
 
 @Pipe({
   name: 'fecha'
@@ -7,6 +7,6 @@ import * as moment from 'moment';
 
 export class FechaPipe implements PipeTransform {
   transform(fecha: Date): string {
-    return moment(fecha).format('DD/MM/YYYY');
+    return format(new Date(fecha), 'dd/MM/yyyy');
   }
 }

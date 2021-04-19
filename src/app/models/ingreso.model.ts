@@ -4,7 +4,6 @@ export class Ingreso {
         public proveedor: any,
         public fecha_ingreso: Date,
         public estado: string,
-        public productos: any[],
         public activo?: boolean
     ){}
 };

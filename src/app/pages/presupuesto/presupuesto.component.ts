@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import * as moment from 'moment';
+import { format } from 'date-fns';
 import { DeviceDetectorService } from 'ngx-device-detector';
-import { Cell, Img, PdfMakeWrapper, Table, Txt } from 'pdfmake-wrapper';
+import { Img, PdfMakeWrapper, Table, Txt } from 'pdfmake-wrapper';
 import Swal from 'sweetalert2';
 import { ProductosService } from '../../services/productos.service';
 
@@ -56,7 +56,7 @@ export class PresupuestoComponent implements OnInit {
 
   // Presupuesto en PDF
   async presupuestoPDF() {
-    const hoy = moment().format('DD/MM/YYYY');
+    const hoy = format(this.fechaHoy, 'dd/MM/yyyy');
     const pdf = new PdfMakeWrapper();
   
     pdf.info({
