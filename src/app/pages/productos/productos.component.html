@@ -43,18 +43,23 @@
                                         class="appearance-none rounded-r rounded-l sm:rounded-l-none border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none" />
                             </div>
                             <span *ngIf="loading">
-                                <i class="fas fa-spinner animate-spin text-2xl text-gray-400 ml-2"></i>
+                                <i class="fas fa-spinner hidden md:block animate-spin text-2xl text-gray-400 ml-2"></i>
                             </span>
                         </div>
                     </div>
-                    <div class="flex items-center">
-                        <button *ngIf="usuarioLogin.role === 'ADMIN_ROLE'" routerLink="/dashboard/productos/nuevo" class="mr-4 border border-gray-300 bg-gray-100 text-gray-600 shadow hover:bg-yellow-100 rounded p-2 px-3">
-                            <i class="fas fa-box mr-1"></i>
-                            Nuevo producto
-                        </button>
-                        <span class="block-inline md:hidden" *ngIf="loading">
-                            <i class="fas fa-spinner animate-spin text-3xl text-gray-400"></i>
-                        </span>
+                    <div class="flex items-center">        
+                        <div>
+                            <i (click)="generarReporte()" title="Reporte de productos" class="fas fa-print text-xl text-gray-600 py-1 px-3 mr-2 border border-gray-300 shadow rounded cursor-pointer bg-gray-100 hover:bg-yellow-100"></i>
+                        </div>
+                        <div>
+                            <button *ngIf="usuarioLogin.role === 'ADMIN_ROLE'" routerLink="/dashboard/productos/nuevo" class="mr-4 border border-gray-300 bg-gray-100 text-gray-600 shadow hover:bg-yellow-100 rounded p-2 px-3">
+                                <i class="fas fa-box mr-1"></i>
+                                Nuevo producto
+                            </button>
+                            <span class="block-inline md:hidden" *ngIf="loading">
+                                <i class="fas fa-spinner animate-spin text-3xl text-gray-400"></i>
+                            </span>
+                        </div>
                     </div>
                 </div>
                 <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">

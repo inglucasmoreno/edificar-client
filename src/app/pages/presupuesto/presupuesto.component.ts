@@ -57,35 +57,63 @@ export class PresupuestoComponent implements OnInit {
   }
 
   // Se el presupuesto
-  crearPresupuesto(): void {
+  crearPresupuesto(): void { 
+    Swal.fire({
+      title: '¿Está seguro?',
+      text: "Está por generar un nuevo presupuesto",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Generar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        
+        if(this.cliente.descripcion.trim() === '' || this.cliente.identificacion.trim() === ''){
+          Swal.fire({
+            icon: 'info',
+            title: 'Información',
+            text: 'Debe completar los datos del cliente',
+            confirmButtonText: 'Entendido',
+          });
+          return;
+        }
 
-    if(this.cliente.descripcion.trim() === '' || this.cliente.identificacion.trim() === ''){
-      Swal.fire({
-        icon: 'info',
-        title: 'Información',
-        text: 'Debe completar los datos del cliente',
-        confirmButtonText: 'Entendido'
-      });
-      return;
-    }
+        const data = {
+          cliente: this.cliente,
+          productos: this.seleccionados
+        }
 
-    const data = {
-      cliente: this.cliente,
-      productos: this.seleccionados
-    }
-    this.loadingPDF = true;
-    this.presupuestosService.generarPresupuesto(data).subscribe( resp => {
-      this.loadingPDF = false;
-      window.open(`${base_url}/presupuestos`, '_blank');  
-    },({error}) => {
-      this.loadingPDF = false;
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: error.msg,
-        confirmButtonText: 'Entendido'
-      });  
-    });
+        Swal.fire({
+          title: 'Generando',
+          html: 'Creando presupuesto',
+          timerProgressBar: true,
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading()
+          },
+        });
+
+        this.loadingPDF = true;
+        this.presupuestosService.generarPresupuesto(data).subscribe( resp => {
+          this.loadingPDF = false;    
+          Swal.close();
+          window.open(`${base_url}/presupuestos`, '_blank');  
+        },({error}) => {
+          this.loadingPDF = false;
+          Swal.close();
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: error.msg,
+            confirmButtonText: 'Entendido'
+          });
+        });
+
+      }
+    })
+
   }
 
   // Agregar producto al presupuesto

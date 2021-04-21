@@ -3,6 +3,9 @@ import Swal from 'sweetalert2';
 
 import { UsuariosService } from '../../services/usuarios.service';
 import { Usuario } from '../../models/usuario.model';
+import { ReportesService } from '../../services/reportes.service';
+
+import { saveAs } from 'file-saver-es'; 
 
 @Component({
   selector: 'app-usuarios',
@@ -17,7 +20,7 @@ export class UsuariosComponent implements OnInit {
   public total = 0;
 
   // Paginacion
-  public paginacion = {
+  public paginacion = { 
     limit: 10,
     desde: 0,
     hasta: 10
@@ -41,10 +44,54 @@ export class UsuariosComponent implements OnInit {
   public totalReporte = 0;
   public usuariosReporte = [];
 
-  constructor(private usuariosService: UsuariosService) { }
+  constructor(private usuariosService: UsuariosService,
+              private reportesService: ReportesService) { }
 
   ngOnInit(): void {
     this.listarUsuarios();
+  }
+
+  // Generar reporte de usuarios
+  generarReporte(): void {
+
+    Swal.fire({
+      title: "¿Está seguro?",
+      text: "Está por generar un reporte",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Generar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+
+        Swal.fire({
+          title: 'Generando',
+          html: 'Creando reporte',
+          timerProgressBar: true,
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading()
+          },
+        });
+
+        this.reportesService.usuarios().subscribe(archivoExcel => {
+          Swal.close();
+          saveAs(archivoExcel,'Usuarios.xlsx');
+        },({error})=>{
+          Swal.close();
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: error.msg,
+            showCancelButton: false,
+            confirmButtonText: 'Entendido'
+          });
+        }); 
+      }
+    })
+
   }
 
   // Listar usuarios

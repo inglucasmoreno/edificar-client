@@ -4,6 +4,9 @@ import { AuthService } from 'src/app/services/auth.service';
 import Swal from 'sweetalert2';
 import { ProductosService } from '../../services/productos.service';
 import { Router } from '@angular/router';
+import { ReportesService } from '../../services/reportes.service';
+
+import { saveAs } from 'file-saver-es'; 
 
 @Component({
   selector: 'app-productos',
@@ -40,6 +43,7 @@ export class ProductosComponent implements OnInit {
 
   constructor(private productosService: ProductosService,
               private authService: AuthService,
+              private reportesService: ReportesService,
               private router: Router) {}
 
   ngOnInit(): void {
@@ -47,6 +51,49 @@ export class ProductosComponent implements OnInit {
     this.listarProductos();
   }
 
+  // Generar reporte de usuarios
+  generarReporte(): void {
+
+    Swal.fire({
+      title: "¿Está seguro?",
+      text: "Está por generar un reporte",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Generar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+
+        Swal.fire({
+          title: 'Generando',
+          html: 'Creando reporte',
+          timerProgressBar: true,
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading()
+          },
+        });
+
+        this.reportesService.productos().subscribe(archivoExcel => {
+          Swal.close();
+          saveAs(archivoExcel,'Productos.xlsx');
+        },({error})=>{
+          Swal.close();
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: error.msg,
+            showCancelButton: false,
+            confirmButtonText: 'Entendido'
+          });
+        }); 
+      }
+    })
+
+  }
+  
   // Listar productos
   listarProductos() {
     this.productosService.listarProductos(
