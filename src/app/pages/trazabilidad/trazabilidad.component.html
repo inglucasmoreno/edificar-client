@@ -198,7 +198,7 @@
                             </p>
                             <p class="text-xs font-semibold"
                             [ngClass]="{'text-green-700' : traza.tipo === 'Ingreso', 'text-red-700' : traza.tipo === 'Egreso'}"
-                            > Cantidad: {{ traza.cantidad }} </p>
+                            > Cantidad: {{ traza.cantidad }} ({{ traza.producto.unidad_medida.descripcion }}) </p>
                             <p>
                                 <span class="font-semibold text-xs text-gray-700"> <i class="far fa-calendar"></i> {{ traza.createdAt | fecha }} </span>
                             </p>
