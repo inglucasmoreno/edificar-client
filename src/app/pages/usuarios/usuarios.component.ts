@@ -4,6 +4,7 @@ import Swal from 'sweetalert2';
 import { UsuariosService } from '../../services/usuarios.service';
 import { Usuario } from '../../models/usuario.model';
 import { ReportesService } from '../../services/reportes.service';
+import { format } from 'date-fns';
 
 import { saveAs } from 'file-saver-es'; 
 
@@ -76,9 +77,14 @@ export class UsuariosComponent implements OnInit {
           },
         });
 
-        this.reportesService.usuarios().subscribe(archivoExcel => {
+        this.reportesService.usuarios(
+          this.filtro.activo, 
+          this.filtro.parametro,
+          this.ordenar.direccion,
+          this.ordenar.columna
+        ).subscribe(archivoExcel => {
           Swal.close();
-          saveAs(archivoExcel,'Usuarios.xlsx');
+          saveAs(archivoExcel,`Usuarios ${format(new Date(), 'dd-MM-yyyy')}.xlsx`);
         },({error})=>{
           Swal.close();
           Swal.fire({

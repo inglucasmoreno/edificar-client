@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 import { UnidadMedidaService } from '../../../services/unidad-medida.service';
 import  { UnidadMedida } from '../../../models/unidad-medida.model';
+import { ReportesService } from '../../../services/reportes.service';
+import { format } from 'date-fns';
+
+import { saveAs } from 'file-saver-es'; 
 
 @Component({
   selector: 'app-unidad-medida',
@@ -37,10 +41,59 @@ export class UnidadMedidaComponent implements OnInit {
     columna: 'descripcion'
   }
 
-  constructor(private unidadMedidaService: UnidadMedidaService) { }
+  constructor(private unidadMedidaService: UnidadMedidaService,
+              private reportesService: ReportesService) { }
 
   ngOnInit(): void {
      this.listarUnidades(); 
+  }
+
+  // Generar reporte de usuarios
+  generarReporte(): void {
+
+    Swal.fire({
+      title: "¿Está seguro?",
+      text: "Está por generar un reporte",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Generar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+
+        Swal.fire({
+          title: 'Generando',
+          html: 'Creando reporte',
+          timerProgressBar: true,
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading()
+          },
+        });
+
+        this.reportesService.unidades(
+          this.filtro.activo,
+          this.filtro.descripcion,
+          this.ordenar.direccion,
+          this.ordenar.columna
+        ).subscribe(archivoExcel => {
+          Swal.close();
+          saveAs(archivoExcel,`Unidades ${format(new Date(), 'dd-MM-yyyy')}.xlsx`);
+        },({error})=>{
+          Swal.close();
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: error.msg,
+            showCancelButton: false,
+            confirmButtonText: 'Entendido'
+          });
+        }); 
+      }
+    })
+
   }
 
   // Nueva unidad

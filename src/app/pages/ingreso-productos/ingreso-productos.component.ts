@@ -2,6 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 import { Ingreso } from '../../models/ingreso.model';
 import { IngresosService } from '../../services/ingresos.service';
+import { format } from 'date-fns';
+
+import { saveAs } from 'file-saver-es'; 
+import { ReportesService } from '../../services/reportes.service';
+
 
 @Component({
   selector: 'app-ingreso-productos',
@@ -33,10 +38,59 @@ export class IngresoProductosComponent implements OnInit {
     direccion: -1,  // Asc (1) | Desc (-1)
     columna: 'createdAt'
   }
-  constructor(private ingresosService: IngresosService) { }
+  constructor(private ingresosService: IngresosService,
+              private reportesService: ReportesService) { }
 
   ngOnInit(): void {
     this.listarIngresos();
+  }
+
+  // Generar reporte de ingresos
+  generarReporte(): void {
+
+  Swal.fire({
+    title: "¿Está seguro?",
+    text: "Está por generar un reporte",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Generar',
+    cancelButtonText: 'Cancelar'
+  }).then((result) => {
+    if (result.isConfirmed) {
+
+      Swal.fire({
+        title: 'Generando',
+        html: 'Creando reporte',
+        timerProgressBar: true,
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading()
+        },
+      });
+
+      this.reportesService.ingresos(
+        this.filtro.estado,
+        this.filtro.descripcion,
+        this.ordenar.direccion,
+        this.ordenar.columna  
+      ).subscribe(archivoExcel => {
+        Swal.close();
+        saveAs(archivoExcel, `Ingresos ${format(new Date(), 'dd-MM-yyyy')}.xlsx`);
+      },({error})=>{
+        Swal.close();
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: error.msg,
+          showCancelButton: false,
+          confirmButtonText: 'Entendido'
+        });
+      }); 
+    }
+  })
+
   }
 
   listarIngresos(): void {

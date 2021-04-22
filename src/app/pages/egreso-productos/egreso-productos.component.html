@@ -48,7 +48,10 @@
                             </div>
                         </div>
                     </div>
-                    <div>
+                    <div class="flex items-center">
+                        <div>
+                            <i (click)="generarReporte()" title="Reporte de egresos" class="fas fa-print text-xl text-gray-600 py-1 px-3 mr-2 border border-gray-300 shadow rounded cursor-pointer bg-gray-100 hover:bg-yellow-100"></i>
+                        </div>
                         <button class="border p-2 rounded shadow bg-gray-100 border-gray-300 text-gray-600 hover:bg-yellow-100"
                                 routerLink="nuevo">
                             Nuevo egreso
@@ -145,7 +148,7 @@
                                             {{ 
                                                 egreso.estado !== 'Completado'
                                                 ? 'Todavia activo'
-                                                : egreso.fecha_despacho | fecha
+                                                : egreso.fecha_egreso | fecha
                                             }}
                                         </p>
                                     </td>

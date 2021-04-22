@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 import { TrazabilidadService } from '../../services/trazabilidad.service';
 import { ProductosService } from '../../services/productos.service';
+import { ReportesService } from '../../services/reportes.service';
+import { format } from 'date-fns';
+
+import { saveAs } from 'file-saver-es'; 
 
 @Component({
   selector: 'app-trazabilidad',
@@ -50,10 +54,61 @@ export class TrazabilidadComponent implements OnInit {
   }
 
   constructor(private trazabilidadService: TrazabilidadService,
+              private reportesService: ReportesService,
               private productosService: ProductosService) { }
 
   ngOnInit(): void {
     this.listarProductos();
+  }
+
+  // Reporte - Trazabilidad
+  generarReporte(): void {
+
+    Swal.fire({
+      title: "¿Está seguro?",
+      text: "Está por generar un reporte",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Generar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+
+        Swal.fire({
+          title: 'Generando',
+          html: 'Creando reporte',
+          timerProgressBar: true,
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading()
+          },
+        });
+
+        this.reportesService.trazabilidad(
+          this.filtro.tipo,
+          this.filtro.producto,
+          this.filtro.parametro,
+          this.ordenar.direccion,
+          this.ordenar.columna,
+          this.fecha.antes,
+          this.fecha.despues      
+        ).subscribe(archivoExcel => {
+          Swal.close();
+          saveAs(archivoExcel,`Trazabilidad ${format(new Date(), 'dd-MM-yyyy')}.xlsx`);
+        },({error})=>{
+          Swal.close();
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: error.msg,
+            confirmButtonText: 'Entendido'
+          });      
+        });    
+
+      }
+    })
   }
 
   // Listado de resulados
@@ -70,6 +125,7 @@ export class TrazabilidadComponent implements OnInit {
       this.fecha.antes,
       this.fecha.despues
     ).subscribe( ({ trazabilidad, total }) => {
+      console.log(trazabilidad);
       this.trazabilidad = trazabilidad;
       this.total = total;
       this.loading = false;

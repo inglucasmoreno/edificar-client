@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import { ProductosService } from '../../services/productos.service';
 import { Router } from '@angular/router';
 import { ReportesService } from '../../services/reportes.service';
+import { format } from 'date-fns';
 
 import { saveAs } from 'file-saver-es'; 
 
@@ -76,9 +77,14 @@ export class ProductosComponent implements OnInit {
           },
         });
 
-        this.reportesService.productos().subscribe(archivoExcel => {
+        this.reportesService.productos(
+          this.filtro.activo, 
+          this.filtro.descripcion,
+          this.ordenar.direccion,
+          this.ordenar.columna
+        ).subscribe(archivoExcel => {
           Swal.close();
-          saveAs(archivoExcel,'Productos.xlsx');
+          saveAs(archivoExcel, `Productos ${format(new Date(), 'dd-MM-yyyy')}.xlsx`);
         },({error})=>{
           Swal.close();
           Swal.fire({

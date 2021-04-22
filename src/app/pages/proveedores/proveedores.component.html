@@ -49,8 +49,13 @@
                                 </div>
                             </div>
                         </div>
-                        <button routerLink="nuevo"
-                                class="mr-2 border shadow bg-gray-100 text-gray-600 hover:bg-yellow-100 border-gray-300 p-2 rounded"> Nuevo proveedor </button>
+                        <div class="flex items-center">
+                            <div>
+                                <i (click)="generarReporte()" title="Reporte de proveedores" class="fas fa-print text-xl text-gray-600 py-1 px-3 mr-2 border border-gray-300 shadow rounded cursor-pointer bg-gray-100 hover:bg-yellow-100"></i>
+                            </div>
+                            <button routerLink="nuevo"
+                                    class="mr-2 border shadow bg-gray-100 text-gray-600 hover:bg-yellow-100 border-gray-300 p-2 rounded"> Nuevo proveedor </button>
+                        </div>
                     </div>
                     <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
                         <div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
