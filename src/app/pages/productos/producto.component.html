@@ -1,109 +1,103 @@
 
 <app-tarjeta-formulario>
-    <div class="p-4 flex justify-between items-center">
-        <h1 *ngIf="!loading"  class="flex items-center text-gray-700">
-            <i routerLink="/dashboard/productos" title="Regresar" class="fas fa-arrow-left border bg-gray-100 text-gray-600 hover:text-yellow-500 border-gray-300 rounded p-2 px-3 shadow cursor-pointer"></i>
-            <div class="flex flex-col ml-2">
-                <span class="ml-2 text-xl text-gray-600"> Productos </span>
-                <span *ngIf="producto.activo" class="text-xs mt-1 ml-1 font-semibold border py-1 px-2 rounded border-green-200 text-green-500 bg-green-100"> 
-                    <i class="fas fa-check mr-1"></i>
-                    Producto activo
-                </span>
-                <span *ngIf="!producto.activo" class="text-xs mt-1 ml-1 font-semibold border py-1 px-2 rounded text-red-500 bg-red-100 border-red-200"> 
-                    <i class="fas fa-times mr-1"></i>
-                    Producto inactivo
-                </span>
-            </div>
-        </h1>
-        <h1 *ngIf="loading"  class="flex items-center text-gray-700">
-            <i routerLink="/dashboard/productos" class="fas fa-arrow-left border bg-gray-500 text-white border-gray-300 rounded p-2 px-3 shadow cursor-pointer"></i>
-            <div class="flex flex-col ml-2">
-                <span class="ml-2 text-xl text-gray-600"> Producto </span>
-                <span class="text-xs mt-1 ml-1 font-semibold border py-1 px-2 rounded text-white bg-gray-500"> 
-                    <i class="fas fa-spinner animate-spin mr-1"></i>
-                    Cargando estado
-                </span>
-            </div>
-        </h1>
-        <div *ngIf="!loading" 
-             title="Editar producto"
-             [routerLink]="['/dashboard/productos/editar', producto._id]" 
-             class="text-gray-600 border border-gray-300 bg-gray-100 rounded shadow cursor-pointer hover:text-yellow-500">
-            <i class="fas fa-pencil-alt px-3 py-2 text-xl"></i>
-        </div>
+    <div class="p-3 text-gray-500" *ngIf="loading">
+        <i class="fas fa-spinner animate-spin mr-2"></i>
+        Cargando datos
     </div>
-    
-    <div *ngIf="!loading">
-        <div class="border shadow p-4 bg-gray-100">
-            <h1 class="font-semibold text-gray-600"> DETALLES GENERALES </h1>
-        </div>
-    
-        <div class="p-6">
-            <div class="lg:flex lg:items-center">
-                <div class="border shadow border-gray-300 p-2 rounded">
-                    <i class="fas fa-box text-gray-600 mr-1 text-sm"></i>
-                    <span class="text-gray-600 text-sm"> Código del producto </span>
-                    <span class="ml-1 font-semibold text-md"> {{ producto.codigo }} </span>
+    <div *ngIf="!loading"> 
+        <div class="p-4 flex justify-between items-center">
+            <h1 class="flex items-center text-gray-700">
+                <i routerLink="/dashboard/productos" title="Regresar" class="fas fa-arrow-left border bg-gray-100 text-gray-600 hover:text-yellow-500 border-gray-300 rounded p-2 px-3 shadow cursor-pointer"></i>
+                <div class="flex flex-col ml-2">
+                    <span class="ml-2 text-xl text-gray-600"> Productos </span>
+                    <span *ngIf="producto.activo" class="text-xs mt-1 ml-1 font-semibold border py-1 px-2 rounded border-green-200 text-green-500 bg-green-100"> 
+                        <i class="fas fa-check mr-1"></i>
+                        Producto activo
+                    </span>
+                    <span *ngIf="!producto.activo" class="text-xs mt-1 ml-1 font-semibold border py-1 px-2 rounded text-red-500 bg-red-100 border-red-200"> 
+                        <i class="fas fa-times mr-1"></i>
+                        Producto inactivo
+                    </span>
                 </div>
-                <div class="border shadow border-gray-300 p-2 rounded mt-2 lg:mt-0 lg:ml-10">
-                    <i class="fas fa-money-bill-wave text-gray-600 mr-1 text-sm"></i>
-                    <span class="text-sm text-gray-600"> Precio </span>
-                    <span class="ml-2 font-semibold text-md"> ${{ producto.precio | moneda}} </span>
-                </div>
-            </div> 
-            <div class="mt-4 text-gray-800 border shadow rounded text-sm">
-                <h1 class="font-semibold bg-gray-100 border-b p-2"> Descripción </h1>
-                <div class="p-2">
-                    <span class="text-xs"> {{ producto.descripcion }} </span>
-                </div>
+            </h1>
+            <div *ngIf="!loading" 
+                 title="Editar producto"
+                 [routerLink]="['/dashboard/productos/editar', producto._id]" 
+                 class="text-gray-600 border border-gray-300 bg-gray-100 rounded shadow cursor-pointer hover:text-yellow-500">
+                <i class="fas fa-pencil-alt px-3 py-2 text-xl"></i>
             </div>
         </div>
-
-        <div class="border shadow p-4 bg-gray-100">
-            <h1 class="font-semibold text-gray-600"> DETALLES DE STOCK </h1>
-        </div>
-
-        <div class="p-6">
-            <div *ngIf="producto.stock_minimo && producto.cantidad <= producto.cantidad_minima" class="flex">
-                <div class="border border-red-200 bg-red-100 rounded shadow py-2 px-4 mb-3">
-                    <i class="far fa-bell text-red-800 mr-1 text-sm"></i>
-                    <span class="text-red-800 font-semibold"> Alerta de stock </span>
-                </div>
+        
+        <div *ngIf="!loading">
+            <div class="border shadow p-4 bg-gray-100">
+                <h1 class="font-semibold text-gray-600"> DETALLES GENERALES </h1>
             </div>
-            <div class="flex">
-                <div class="border rounded shadow border border-gray-300 py-2 px-3">
-                    <i class="fas fa-circle text-blue-600 mr-1 text-sm"></i>
-                    <span class="text-gray-600 text-sm"> Unidad de medida </span>
-                    <span class="ml-1 rounded font-semibold text-md"> {{ producto.unidad_medida.descripcion }} </span>
-                </div>
-            </div>
-            <div class="lg:flex lg:items-center mt-3">
-                <div class="flex">
-                    <div class="border border-gray-300 rounded shadow py-2 px-3">
-                        <i class="fas fa-circle text-green-500 mr-1 text-sm"></i>
-                        <span class="text-gray-600 text-sm"> Stock actual </span>
-                        <span class="ml-1 rounded font-semibold text-md"
-                              [ngClass]="{ 'text-red-500' : producto.cantidad < 0, 'text-gray-900' : producto.cantidad >= 0}"
-                        > {{ producto.cantidad }} </span>
+        
+            <div class="p-6">
+                <div class="lg:flex lg:items-center">
+                    <div class="border shadow border-gray-300 p-2 rounded">
+                        <i class="fas fa-box text-gray-600 mr-1 text-sm"></i>
+                        <span class="text-gray-600 text-sm"> Código del producto </span>
+                        <span class="ml-1 font-semibold text-md"> {{ producto.codigo }} </span>
                     </div>
-                </div>
-                <div class="flex">
-                    <div *ngIf="producto.stock_minimo" class="border border-gray-300 mt-2 lg:mt-0 rounded shadow py-2 px-3 lg:ml-4">
-                        <i class="fas fa-circle text-red-500 mr-1 text-sm"></i>
-                        <span class="text-gray-600 text-sm"> Stock minimo </span>
-                        <span class="ml1 rounded font-semibold text-md"> {{ producto.cantidad_minima }} </span>
+                    <div class="border shadow border-gray-300 p-2 rounded mt-2 lg:mt-0 lg:ml-10">
+                        <i class="fas fa-money-bill-wave text-gray-600 mr-1 text-sm"></i>
+                        <span class="text-sm text-gray-600"> Precio </span>
+                        <span class="ml-2 font-semibold text-md"> ${{ producto.precio | moneda}} </span>
+                    </div>
+                </div> 
+                <div class="mt-4 text-gray-800 border shadow rounded text-sm">
+                    <h1 class="font-semibold bg-gray-100 border-b p-2"> Descripción </h1>
+                    <div class="p-2">
+                        <span class="text-xs"> {{ producto.descripcion }} </span>
                     </div>
                 </div>
             </div>
+    
+            <div class="border shadow p-4 bg-gray-100">
+                <h1 class="font-semibold text-gray-600"> DETALLES DE STOCK </h1>
+            </div>
+    
+            <div class="p-6">
+                <div *ngIf="producto.stock_minimo && producto.cantidad <= producto.cantidad_minima" class="flex">
+                    <div class="border border-red-200 bg-red-100 rounded shadow py-2 px-4 mb-3">
+                        <i class="far fa-bell text-red-800 mr-1 text-sm"></i>
+                        <span class="text-red-800 font-semibold"> Alerta de stock </span>
+                    </div>
+                </div>
+                <div class="flex">
+                    <div class="border rounded shadow border border-gray-300 py-2 px-3">
+                        <i class="fas fa-circle text-blue-600 mr-1 text-sm"></i>
+                        <span class="text-gray-600 text-sm"> Unidad de medida </span>
+                        <span class="ml-1 rounded font-semibold text-md"> {{ producto.unidad_medida.descripcion }} </span>
+                    </div>
+                </div>
+                <div class="lg:flex lg:items-center mt-3">
+                    <div class="flex">
+                        <div class="border border-gray-300 rounded shadow py-2 px-3">
+                            <i class="fas fa-circle text-green-500 mr-1 text-sm"></i>
+                            <span class="text-gray-600 text-sm"> Stock actual </span>
+                            <span class="ml-1 rounded font-semibold text-md"
+                                  [ngClass]="{ 'text-red-500' : producto.cantidad < 0, 'text-gray-900' : producto.cantidad >= 0}"
+                            > {{ producto.cantidad }} </span>
+                        </div>
+                    </div>
+                    <div class="flex">
+                        <div *ngIf="producto.stock_minimo" class="border border-gray-300 mt-2 lg:mt-0 rounded shadow py-2 px-3 lg:ml-4">
+                            <i class="fas fa-circle text-red-500 mr-1 text-sm"></i>
+                            <span class="text-gray-600 text-sm"> Stock minimo </span>
+                            <span class="ml1 rounded font-semibold text-md"> {{ producto.cantidad_minima }} </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
         </div>
-
+    
+        <div *ngIf="loading" class="mt-2 text-gray-500 px-4">
+            <i class="fas fa-spinner animate-spin ml-2"></i> <span> Cargando producto </span>
+        </div>
+        <br>
     </div>
-
-    <div *ngIf="loading" class="mt-2 text-gray-500 px-4">
-        <i class="fas fa-spinner animate-spin ml-2"></i> <span> Cargando producto </span>
-    </div>
-
-    <br>
-
 </app-tarjeta-formulario>
 <br>
