@@ -53,17 +53,14 @@ export class EditarUsuarioComponent implements OnInit {
 
   // Editar usuario
   editarUsuario(): void | boolean{
-
-
-    const {dni, apellido, nombre, email, password, repetir} = this.usuarioForm.value;
+      
+    const {dni, apellido, nombre, email, repetir} = this.usuarioForm.value;
 
     // Se verifica que los campos no tengan un espacio vacio
     const campoVacio = dni.trim() === '' || 
     apellido.trim() === '' || 
     email.trim() === '' || 
-    nombre.trim() === '' ||
-    password.trim() === '' ||
-    repetir.trim() === '';
+    nombre.trim() === '';
 
     // Se verifica que todos los campos esten rellenos
     if (this.usuarioForm.status === 'INVALID' || campoVacio){
