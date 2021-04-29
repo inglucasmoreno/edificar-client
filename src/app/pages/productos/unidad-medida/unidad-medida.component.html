@@ -16,6 +16,7 @@
             <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
                 <input #txtUnidad
                        placeholder="Ej. bolsas"
+                       (keyup.enter)="nuevaUnidad(txtUnidad)"
                        class="p-1 px-2 appearance-none outline-none w-full text-sm text-gray-800"
                        ></div>
         </div>

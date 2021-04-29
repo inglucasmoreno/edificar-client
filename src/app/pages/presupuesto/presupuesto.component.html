@@ -60,6 +60,7 @@
                            #txtDescripcion
                            class="p-2 rounded border shadow text-sm mt-4"
                            (keyup)="filtroDescripcion(txtDescripcion.value)"
+                           (keyup.enter)="buscarProducto()"
                            placeholder="Buscar producto">   
                     <button (click)="buscarProducto()" 
                                 class="border border-gray-300 bg-gray-100 text-gray-500 hover:bg-yellow-100 py-2 px-3 rounded mt-4 ml-2"
@@ -130,7 +131,8 @@
                     
                     <span class="text-sm font-semibold mt-2 block"> Cantidad </span>
                     <input type="number"
-                           #txtCantidad 
+                           #txtCantidad
+                           (keyup.enter)="agregarProducto(txtCantidad)" 
                            [placeholder]="seleccionado.unidad_medida.descripcion"
                            class="border mt-1 rounded p-1 text-sm"
                            min="0"
