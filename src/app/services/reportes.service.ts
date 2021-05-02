@@ -12,6 +12,17 @@ const base_url = environment.base_url;
 export class ReportesService {
 
   constructor(private http: HttpClient) { }
+
+  // Guia de usuario
+  guiaUsuarios(): Observable<any>{
+    return this.http.get(`${base_url}/reportes/guia`,{
+      responseType: 'blob',
+      headers: { 
+        'x-token': localStorage.getItem('token'),
+        'Content-Type':"application/json"
+      }
+    });
+  }
   
   // Reporte - Usuarios
   usuarios(
