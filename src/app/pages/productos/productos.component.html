@@ -103,7 +103,7 @@
                                             </span>
                                         </div>
                                     </th>
-                                    <th *ngIf="usuarioLogin.role === 'ADMIN_ROLE'" 
+                                    <th 
                                         (click)="ordenarPorColumna('cantidad')"
                                         class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         <div class="cursor-pointer w-max flex focus:outline-none items-center justify-center">
@@ -167,7 +167,7 @@
                                         </p>
                                     </td>
                                     <!-- Cantidad - Stock Inicial -->
-                                    <td *ngIf="usuarioLogin.role === 'ADMIN_ROLE'" class="px-5 py-2 border-b border-gray-200 text-sm text-center"
+                                    <td class="px-5 py-2 border-b border-gray-200 text-sm text-center"
                                         [ngClass]="{'text-red-500 font-semibold' : producto.cantidad < 0, 'text-gray-900' : producto.cantidad >= 0}">
                                         <p class="whitespace-no-wrap tracking-wider font-semibold">
                                             {{ producto.cantidad }}

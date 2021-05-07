@@ -25,7 +25,9 @@ export class PresupuestoComponent implements OnInit {
   public cliente = {
     descripcion: '',
     tipoIdentificacion: 'DNI',
-    identificacion: ''
+    identificacion: '',
+    telefono: '',
+    correo: ''
   };
 
   // Variables de producto
@@ -53,7 +55,11 @@ export class PresupuestoComponent implements OnInit {
   
   // Cargando datos de cliente
   datosCliente(data: string, selector: string): void{
-    this.cliente[selector] = data.toUpperCase();
+    if(selector === 'correo'){
+      this.cliente[selector] = data.toLowerCase();
+    }else{
+      this.cliente[selector] = data.toUpperCase();
+    }
   }
 
   // Se el presupuesto
@@ -69,12 +75,18 @@ export class PresupuestoComponent implements OnInit {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-        
-        if(this.cliente.descripcion.trim() === '' || this.cliente.identificacion.trim() === ''){
+      
+        console.log(this.cliente);
+
+        // Se verifican los datos obligatorios
+        if(this.cliente.descripcion.trim() === '' || 
+           this.cliente.identificacion.trim() === '' ||
+           this.cliente.telefono.trim() === ''      
+        ){
           Swal.fire({
             icon: 'info',
             title: 'Información',
-            text: 'Debe completar los datos del cliente',
+            text: 'Debe completar los datos obligatorios',
             confirmButtonText: 'Entendido',
           });
           return;
