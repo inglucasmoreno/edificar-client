@@ -35,6 +35,7 @@ import { NuevoProductoEgresoComponent } from './egreso-productos/nuevo-producto-
 import { TrazabilidadComponent } from './trazabilidad/trazabilidad.component';
 import { PresupuestoComponent } from './presupuesto/presupuesto.component';
 import { RemitosEntregaComponent } from './egreso-productos/remitos-entrega/remitos-entrega.component';
+import { RemitosDetallesComponent } from './egreso-productos/remitos-entrega/remitos-detalles.component';
 
 @NgModule({
   declarations: [
@@ -66,6 +67,7 @@ import { RemitosEntregaComponent } from './egreso-productos/remitos-entrega/remi
     TrazabilidadComponent,
     PresupuestoComponent,
     RemitosEntregaComponent,
+    RemitosDetallesComponent,
   ],
   imports: [
     CommonModule,

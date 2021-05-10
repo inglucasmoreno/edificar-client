@@ -32,6 +32,7 @@ import { TrazabilidadComponent } from './trazabilidad/trazabilidad.component';
 import { PresupuestoComponent } from './presupuesto/presupuesto.component';
 import { AdminGuard } from '../guards/admin.guard';
 import { RemitosEntregaComponent } from './egreso-productos/remitos-entrega/remitos-entrega.component';
+import { RemitosDetallesComponent } from './egreso-productos/remitos-entrega/remitos-detalles.component';
 
 const routes: Routes = [
   {
@@ -68,6 +69,7 @@ const routes: Routes = [
       { path: 'egreso_productos/nuevo-producto/:id', canActivate: [ AdminGuard ] , component: NuevoProductoEgresoComponent},
 
       { path: 'egreso_productos/remitos-entrega/:id', canActivate: [ AdminGuard ] , component: RemitosEntregaComponent},
+      { path: 'egreso_productos/remitos-detalles/:id', canActivate: [ AdminGuard ] , component: RemitosDetallesComponent},
 
       // Unidades de medida
       { path: 'unidad-medida', canActivate: [ AdminGuard ], component: UnidadMedidaComponent},

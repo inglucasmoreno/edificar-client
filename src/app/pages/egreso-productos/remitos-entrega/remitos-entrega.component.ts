@@ -149,10 +149,11 @@ export class RemitosEntregaComponent implements OnInit {
         productoParciales.forEach(producto => {
           console.log(producto.cantidad > producto.cantidad_restante);
           if(producto.cantidad > producto.cantidad_restante){
+            console.log(producto);
             Swal.fire({
               icon: 'info',
               title: 'Información',
-              text: 'Cantidad inválida',
+              text: `Cantidad inválida en ${producto.descripcion}`,
               confirmButtonText: 'Entendido' 
             })
             cantidadInvalida = true;  
@@ -219,7 +220,7 @@ export class RemitosEntregaComponent implements OnInit {
       this.productos = productos; 
       // Se crean los productos parciales - Solo si tienen cantidades restantes
       this.productos.forEach(producto => { 
-        this.parciales.push({id: producto._id, cantidad: 0, cantidad_restante: producto.cantidad_restante}); 
+        this.parciales.push({id: producto._id, descripcion: producto.producto.descripcion, cantidad: 0, cantidad_restante: producto.cantidad_restante}); 
       });
     })
   }

@@ -10,7 +10,10 @@
                 No hay remitos de entrega
             </span>
         </p>
-        <div *ngFor="let remito of remitos" class="border rounded p-3 mt-2 hover:bg-yellow-100 cursor-pointer">
+        <div *ngFor="let remito of remitos" 
+              class="border shadow rounded p-3 mt-2 hover:bg-yellow-100 cursor-pointer"
+              [routerLink]="['/dashboard/egreso_productos/remitos-detalles', remito._id]"
+             >
             <p class="text-sm"> 
                 <span class="font-semibold"> Código 1: </span>
                 {{ remito.dato_1 }} </p>
@@ -26,7 +29,7 @@
         </div>
     </div>
     <div class="bg-white px-4 py-5 w-11/12 lg:w-1/2 ml-auto lg:ml-2 mt-2 lg:mt-0 mr-auto lg:mr-2 p-4 lg:h-full rounded animate__animated animate__zoomIn" >     
-        <div class="flex items-center justify-center bg-gray-100 p-2 rounded border">
+        <div class="text-center bg-gray-100 p-2 rounded border">
             <h1 class="font-semibold text-gray-600"> Remito de entrega </h1>
         </div>
         <p *ngIf="egresoEstado === 'Completado'" class="p-2 bg-gray-100 rounded text-gray-500 border mt-2"> 
@@ -38,29 +41,29 @@
         <div *ngIf="egresoEstado === 'Pendiente'">
             <div class="flex flex-col lg:flex-row">
                 <div class="w-full mx-2 flex-1 svelte-1l8159u">
-                    <div class="font-semibold mt-3 text-gray-600 text-md"> Codigo 1 </div>
+                    <div class="font-semibold mt-3 text-gray-600 text-sm"> Codigo 1 </div>
                     <input type="text" 
                            #txtDato1
                            (keyup)="completandoDatosRemito('dato_1', txtDato1.value)"
                            placeholder="Ej. Dato 1" 
-                           class="border rounded py-1 px-2 mt-2 w-full">
+                           class="border rounded py-2 px-2 mt-2 shadow text-sm w-full">
                 </div>
                 <div class="w-full mx-2 flex-1 svelte-1l8159u">
-                    <div class="font-semibold mt-3 text-gray-600 text-md"> Codigo 2 </div>
+                    <div class="font-semibold mt-3 text-gray-600 text-sm"> Codigo 2 </div>
                     <input type="text" 
                            #txtDato2
                            (keyup)="completandoDatosRemito('dato_2', txtDato2.value)" 
                            placeholder="Ej. Dato 2" 
-                           class="border rounded py-1 px-2 mt-2 w-full">
+                           class="border rounded py-2 px-2 mt-2 shadow text-sm w-full">
                 </div>
             </div>
             <div class="px-2 text-center mt-5">
                 <h1 class="font-semibold mb-3 p-2 bg-gray-100 rounded border text-gray-600"> Listado de productos </h1>
                 <div *ngIf="parciales.length !== 0" class="mt-4">
-                    <button class="py-1 px-2 rounded text-md text-gray-700 bg-gray-100 border hover:bg-yellow-100"
+                    <button class="py-1 px-2 shadow border border-gray-300 rounded text-md text-gray-700 bg-gray-100 border hover:bg-yellow-100"
                     (click)="entregaParcial(txtDato1, txtDato2)"
                     > Entrega parcial </button>
-                    <button class="ml-3 py-1 px-2 border bg-gray-100 text-gray-700 rounded text-md hover:bg-green-100"
+                    <button class="ml-3 py-1 px-2 shadow border border-gray-300 bg-gray-100 text-gray-700 rounded text-md hover:bg-green-100"
                     (click)="entregaTotal(txtDato1, txtDato2)"
                     > Entrega total </button>
                 </div>
@@ -73,22 +76,24 @@
                 </p>
             </div>
     
-            <div *ngIf="parciales.length !== 0" class="mt-3">
+            <div *ngIf="parciales.length !== 0" class="mt-4">
                 <!-- Listado de producos -->
-                <div class="border p-2 rounded">
-                    <h3 class="font-semibold text-gray-700"> Productos - Entrega parcial </h3>
-                    <div *ngFor="let producto of productos"
-                         class="flex items-center text-sm p-2 justify-between border-b"
-                    >
-                        <div class="w-5/6">
-                            <p class="text-xs"> {{ producto.producto.descripcion }} </p>
-                            <p> Resta entregar: {{ producto.cantidad - producto.cantidad_entregada }} </p>
+                <div class="border rounded">
+                    <h3 class="font-semibold p-2 text-gray-600 text-sm bg-gray-100"> Productos - Entrega parcial </h3>
+                    <div class="p-2">
+                        <div *ngFor="let producto of productos"
+                             class="flex items-center text-sm p-2 justify-between border-b"
+                        >
+                            <div class="w-5/6">
+                                <p class="text-xs"> {{ producto.producto.descripcion }} </p>
+                                <p class="font-semibold"> Resta entregar: {{ producto.cantidad - producto.cantidad_entregada }} </p>
+                            </div>
+                            <input type="number"
+                                #txtValor
+                                (keyup)="actualizandoProductos(producto._id, txtValor.value)"
+                                class="border shadow rounded p-1 text-center font-semibold w-1/5"
+                                placeholder="Cantidad">   
                         </div>
-                        <input type="number"
-                            #txtValor
-                            (keyup)="actualizandoProductos(producto._id, txtValor.value)"
-                            class="border rounded p-1 w-1/5"
-                            placeholder="Cantidad">   
                     </div>
                 </div>
             </div>

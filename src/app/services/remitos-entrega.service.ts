@@ -12,6 +12,20 @@ export class RemitosEntregaService {
 
   constructor(private http: HttpClient) {}
   
+  // Traer datos de remito por ID
+  getRemito(remito: string): Observable<any>{
+    return this.http.get(`${base_url}/remitos_entrega/getRemito/${remito}`,{
+      headers: {'x-token': localStorage.getItem('token')}
+    })
+  }
+
+  // Listar productos de un remito
+  listarProductosRemito(remito: string): Observable<any>{
+    return this.http.get(`${base_url}/remitos_entrega/getProductos/${remito}`, {
+      headers: {'x-token': localStorage.getItem('token')}
+    })
+  }
+
   // Listar remitos de entrega
   listarRemitosEntrega(egreso: string): Observable<any> {
     return this.http.get(`${base_url}/remitos_entrega/${egreso}`, {
