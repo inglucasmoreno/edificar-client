@@ -13,6 +13,12 @@ import { EgresoService } from '../../../services/egreso.service';
 })
 export class RemitosEntregaComponent implements OnInit {
 
+  public loadingProductosInicio = true;
+  public loadingRemitosInicio = true;
+
+  public loadingProductos = false;
+  public loadingRemitos = false;
+
   public id;
   public egresoEstado = '';
   public datosRemito = {
@@ -58,7 +64,6 @@ export class RemitosEntregaComponent implements OnInit {
   actualizandoProductos(id, valor): void {
     // Actualizando parciales
     this.parciales.find(resp => { resp.id === id ? resp.cantidad = Number(valor) : null; })
-    console.log(this.parciales);
   }
   
   // Entregar todos los productos
@@ -82,7 +87,9 @@ export class RemitosEntregaComponent implements OnInit {
             confirmButtonText: 'Entendido'    
           });
           return;
-        }  
+        }
+        this.loadingProductos = true;
+        this.loadingRemitos = true;  
         this.remitosEntregaService.nuevoRemitoEntrega(this.datosRemito).subscribe(() => {
            txtDato1.value = '';
            txtDato2.value = '';
@@ -91,6 +98,8 @@ export class RemitosEntregaComponent implements OnInit {
            this.listarRemitos();
            this.listarProductos();
            this.parciales = [];
+           this.loadingProductos = false;
+           this.loadingRemitos = false;
            Swal.fire({
              icon: 'success',
              title: 'Completado',
@@ -106,6 +115,8 @@ export class RemitosEntregaComponent implements OnInit {
           this.listarRemitos();
           this.listarProductos();
           this.parciales = [];
+          this.loadingProductos = false;
+          this.loadingRemitos = false;
           Swal.fire({
             icon: 'error',
             title: 'Error',
@@ -161,7 +172,6 @@ export class RemitosEntregaComponent implements OnInit {
         })
         if(cantidadInvalida) return;
 
-
         if(productoParciales.length === 0){
           Swal.fire({
             icon: 'info',
@@ -178,6 +188,9 @@ export class RemitosEntregaComponent implements OnInit {
           egreso: this.id,
           productos: productoParciales
         }
+
+        this.loadingProductos = true;
+        this.loadingRemitos = true;
         this.remitosEntregaService.entregaParcial(data).subscribe(resp => {
           txtDato1.value = '';
           txtDato2.value = '';
@@ -186,6 +199,8 @@ export class RemitosEntregaComponent implements OnInit {
           this.parciales = [];
           this.listarRemitos();
           this.listarProductos();
+          this.loadingProductos = false;
+          this.loadingRemitos = false;
           Swal.fire({
             icon: 'success',
             title: 'Completado',
@@ -201,6 +216,8 @@ export class RemitosEntregaComponent implements OnInit {
           this.parciales = [];
           this.listarRemitos();
           this.listarProductos();
+          this.loadingProductos = false;
+          this.loadingRemitos = false;
           Swal.fire({
             icon: 'error',
             title: 'Error',
@@ -222,13 +239,7 @@ export class RemitosEntregaComponent implements OnInit {
       this.productos.forEach(producto => { 
         this.parciales.push({id: producto._id, descripcion: producto.producto.descripcion, cantidad: 0, cantidad_restante: producto.cantidad_restante}); 
       });
-    })
-  }
-
-  // Listar remitos de entrega
-  listarRemitos(): void {
-    this.remitosEntregaService.listarRemitosEntrega(this.id).subscribe(({ remitos }) => {
-      this.remitos = remitos;
+      this.loadingProductosInicio = false;
     },({error}) => {
       Swal.fire({
         icon: 'error',
@@ -236,6 +247,23 @@ export class RemitosEntregaComponent implements OnInit {
         text: error.msg,
         confirmButtonText: 'Entendido'
       });
+      this.loadingProductosInicio = false;
+    })
+  }
+
+  // Listar remitos de entrega
+  listarRemitos(): void {
+    this.remitosEntregaService.listarRemitosEntrega(this.id).subscribe(({ remitos }) => {
+      this.remitos = remitos;
+      this.loadingRemitosInicio = false;
+    },({error}) => {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: error.msg,
+        confirmButtonText: 'Entendido'
+      });
+      this.loadingRemitosInicio = false;
     });  
   }
 }

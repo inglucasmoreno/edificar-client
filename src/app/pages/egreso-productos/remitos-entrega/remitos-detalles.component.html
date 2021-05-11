@@ -1,5 +1,5 @@
 <app-tarjeta-formulario>
-    <div class="p-3 text-gray-500" *ngIf="loadingDatos && loadingProductos">
+    <div class="p-3 text-gray-500" *ngIf="loadingDatos || loadingProductos">
         <i class="fas fa-spinner animate-spin mr-2"></i>
         Cargando remito de entrega
     </div>
@@ -32,8 +32,8 @@
         </div>
         <div class="mt-4">
             <h1 class="font-semibold text-gray-700 bg-gray-100 px-2 py-1 rounded border border-gray-200"> Listado de productos </h1>
-            <div *ngFor="let producto of productos" class="text-sm p-2 border-b">
-                <p> {{ producto.producto.descripcion }} </p>
+            <div *ngFor="let producto of productos" class="text-xs p-3 border-b">
+                <p> {{ producto.producto.codigo }} - {{ producto.producto.descripcion }} </p>
                 <p class="font-semibold"> Cantidad entregada: {{ producto.cantidad }} ({{ producto.producto.unidad_medida.descripcion }}) </p>        
             </div>
         </div>   

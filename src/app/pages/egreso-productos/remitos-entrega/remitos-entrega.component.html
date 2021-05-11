@@ -1,98 +1,134 @@
 <div class="mt-1 ml-2 lg:flex">
     <div class="bg-white px-4 py-5 lg:h-full w-11/12 animate__animated animate__zoomIn mr-auto ml-auto lg:mr-0 lg:ml-0 lg:w-1/2 rounded shadow">
-        <div class="flex items-center bg-gray-100 p-2 rounded border">
-            <i [routerLink]="['/dashboard/egreso_productos/detalles', id]" class="fas fa-arrow-left border bg-white hover:text-yellow-500 text-gray-600 border-gray-300 rounded p-2 px-3 shadow cursor-pointer"></i>
-            <h1 class="font-semibold text-gray-600 ml-2"> Historial de remitos </h1>
+        
+        <div class="p-3 text-gray-500" *ngIf="loadingRemitosInicio || loadingProductosInicio">
+            <i class="fas fa-spinner animate-spin mr-2"></i>
+            Cargando historial de remitos
         </div>
-        <p *ngIf="remitos.length === 0" class="mt-2 p-2 bg-gray-100 rounded text-gray-500 border"> 
-            <i class="fas fa-exclamation-circle"></i>
-            <span class="ml-1 text-sm">
-                No hay remitos de entrega
-            </span>
-        </p>
-        <div *ngFor="let remito of remitos" 
-              class="border shadow rounded p-3 mt-2 hover:bg-yellow-100 cursor-pointer"
-              [routerLink]="['/dashboard/egreso_productos/remitos-detalles', remito._id]"
-             >
-            <p class="text-sm"> 
-                <span class="font-semibold"> Código 1: </span>
-                {{ remito.dato_1 }} </p>
-            <p class="text-sm"> 
-                <span class="font-semibold"> Código 2: </span>
-                {{ remito.dato_2 }}  </p>
-            <p class="text-sm text-gray-600 font-semibold"> 
-                <i class="far fa-calendar"></i>
-                <span>
-                    {{ remito.createdAt | fecha }} 
+
+        <div *ngIf="!loadingRemitosInicio && !loadingProductosInicio">
+            <div class="flex items-center bg-gray-100 p-2 rounded border">
+                <i [routerLink]="['/dashboard/egreso_productos/detalles', id]" class="fas fa-arrow-left border bg-white hover:text-yellow-500 text-gray-600 border-gray-300 rounded p-2 px-3 shadow cursor-pointer"></i>
+                <h1 class="font-semibold text-gray-600 ml-2"> Historial de remitos </h1>
+            </div>
+            <p *ngIf="remitos.length === 0" class="mt-2 p-2 bg-gray-100 rounded text-gray-500 border"> 
+                <i class="fas fa-exclamation-circle"></i>
+                <span class="ml-1 text-sm">
+                    No hay remitos de entrega
                 </span>
             </p>
-        </div>
-    </div>
-    <div class="bg-white px-4 py-5 w-11/12 lg:w-1/2 ml-auto lg:ml-2 mt-2 lg:mt-0 mr-auto lg:mr-2 p-4 lg:h-full rounded animate__animated animate__zoomIn" >     
-        <div class="text-center bg-gray-100 p-2 rounded border">
-            <h1 class="font-semibold text-gray-600"> Remito de entrega </h1>
-        </div>
-        <p *ngIf="egresoEstado === 'Completado'" class="p-2 bg-gray-100 rounded text-gray-500 border mt-2"> 
-            <i class="fas fa-exclamation-circle"></i>
-            <span class="ml-1 text-sm">
-                La nota de venta esta cerrada
-            </span>
-        </p>
-        <div *ngIf="egresoEstado === 'Pendiente'">
-            <div class="flex flex-col lg:flex-row">
-                <div class="w-full mx-2 flex-1 svelte-1l8159u">
-                    <div class="font-semibold mt-3 text-gray-600 text-sm"> Codigo 1 </div>
-                    <input type="text" 
-                           #txtDato1
-                           (keyup)="completandoDatosRemito('dato_1', txtDato1.value)"
-                           placeholder="Ej. Dato 1" 
-                           class="border rounded py-2 px-2 mt-2 shadow text-sm w-full">
-                </div>
-                <div class="w-full mx-2 flex-1 svelte-1l8159u">
-                    <div class="font-semibold mt-3 text-gray-600 text-sm"> Codigo 2 </div>
-                    <input type="text" 
-                           #txtDato2
-                           (keyup)="completandoDatosRemito('dato_2', txtDato2.value)" 
-                           placeholder="Ej. Dato 2" 
-                           class="border rounded py-2 px-2 mt-2 shadow text-sm w-full">
-                </div>
-            </div>
-            <div class="px-2 text-center mt-5">
-                <h1 class="font-semibold mb-3 p-2 bg-gray-100 rounded border text-gray-600"> Listado de productos </h1>
-                <div *ngIf="parciales.length !== 0" class="mt-4">
-                    <button class="py-1 px-2 shadow border border-gray-300 rounded text-md text-gray-700 bg-gray-100 border hover:bg-yellow-100"
-                    (click)="entregaParcial(txtDato1, txtDato2)"
-                    > Entrega parcial </button>
-                    <button class="ml-3 py-1 px-2 shadow border border-gray-300 bg-gray-100 text-gray-700 rounded text-md hover:bg-green-100"
-                    (click)="entregaTotal(txtDato1, txtDato2)"
-                    > Entrega total </button>
-                </div>
-                <!-- No hay productos para entregar -->
-                <p *ngIf="parciales.length === 0" class="p-2 bg-gray-100 rounded text-gray-500 border"> 
-                    <i class="fas fa-exclamation-circle"></i>
-                    <span class="ml-1 text-sm">
-                        No hay productos para entregar
+            <div *ngFor="let remito of remitos" 
+                  class="border shadow rounded p-3 mt-2 hover:bg-yellow-100 cursor-pointer"
+                  [routerLink]="['/dashboard/egreso_productos/remitos-detalles', remito._id]"
+                 >
+                <p class="text-sm"> 
+                    <span class="font-semibold"> Código 1: </span>
+                    {{ remito.dato_1 }} </p>
+                <p class="text-sm"> 
+                    <span class="font-semibold"> Código 2: </span>
+                    {{ remito.dato_2 }}  </p>
+                <p class="text-sm text-gray-600 font-semibold"> 
+                    <i class="far fa-calendar"></i>
+                    <span>
+                        {{ remito.createdAt | fecha }} 
                     </span>
                 </p>
             </div>
-    
-            <div *ngIf="parciales.length !== 0" class="mt-4">
-                <!-- Listado de producos -->
-                <div class="border rounded">
-                    <h3 class="font-semibold p-2 text-gray-600 text-sm bg-gray-100"> Productos - Entrega parcial </h3>
-                    <div class="p-2">
-                        <div *ngFor="let producto of productos"
-                             class="flex items-center text-sm p-2 justify-between border-b"
-                        >
-                            <div class="w-5/6">
-                                <p class="text-xs"> {{ producto.producto.descripcion }} </p>
-                                <p class="font-semibold"> Resta entregar: {{ producto.cantidad - producto.cantidad_entregada }} </p>
+        </div>
+
+    </div>
+
+    <div class="bg-white px-4 py-5 w-11/12 lg:w-1/2 ml-auto lg:ml-2 mt-2 lg:mt-0 mr-auto lg:mr-2 p-4 lg:h-full rounded animate__animated animate__zoomIn" >     
+        
+        <div class="p-3 text-gray-500" *ngIf="loadingRemitosInicio || loadingProductosInicio">
+            <i class="fas fa-spinner animate-spin mr-2"></i>
+            Cargando productos
+        </div>
+        
+        <div *ngIf="!loadingRemitosInicio && !loadingProductosInicio">
+            <div class="text-center bg-gray-100 p-2 rounded border">
+                <h1 class="font-semibold text-gray-600"> Remito de entrega </h1>
+            </div>
+            <p *ngIf="egresoEstado === 'Completado'" class="p-2 bg-gray-100 rounded text-gray-500 border mt-2"> 
+                <i class="fas fa-exclamation-circle"></i>
+                <span class="ml-1 text-sm">
+                    La nota de venta esta cerrada
+                </span>
+            </p>
+            <div *ngIf="egresoEstado === 'Pendiente'">
+                <div class="flex flex-col lg:flex-row">
+                    <div class="w-full mx-2 flex-1 svelte-1l8159u">
+                        <div class="font-semibold mt-3 text-gray-600 text-sm"> Codigo 1 </div>
+                        <input type="text" 
+                               #txtDato1
+                               (keyup)="completandoDatosRemito('dato_1', txtDato1.value)"
+                               placeholder="Ej. Dato 1" 
+                               class="border rounded py-2 px-2 mt-2 shadow text-sm w-full">
+                    </div>
+                    <div class="w-full mx-2 flex-1 svelte-1l8159u">
+                        <div class="font-semibold mt-3 text-gray-600 text-sm"> Codigo 2 </div>
+                        <input type="text" 
+                               #txtDato2
+                               (keyup)="completandoDatosRemito('dato_2', txtDato2.value)" 
+                               placeholder="Ej. Dato 2" 
+                               class="border rounded py-2 px-2 mt-2 shadow text-sm w-full">
+                    </div>
+                </div>
+                <div class="px-2 text-center mt-5">
+                    <h1 class="font-semibold mb-3 p-2 bg-gray-100 rounded border text-gray-600"> Listado de productos </h1>
+                    <div *ngIf="parciales.length !== 0" class="mt-4">
+                        <button 
+                            [disabled]="loadingProductos || loadingRemitos"
+                            class="py-1 px-2 shadow border border-gray-300 rounded text-md text-gray-700 bg-gray-100 border hover:bg-yellow-100"
+                            (click)="entregaParcial(txtDato1, txtDato2)"
+                        > 
+                            <span *ngIf="!loadingProductos || !loadingRemitos"> Entrega parcial </span>
+                            <span class="text-sm" *ngIf="loadingProductos || loadingRemitos">
+                                <i class="fas fa-spinner animate-spin mr-1"></i>
+                                Entregando    
+                            </span>
+                        </button>
+                        <button 
+                            [disabled]="loadingProductos || loadingRemitos"
+                            class="ml-3 py-1 px-2 shadow border border-gray-300 bg-gray-100 text-gray-700 rounded text-md hover:bg-green-100"
+                            (click)="entregaTotal(txtDato1, txtDato2)"
+                        > 
+                            <span *ngIf="!loadingProductos || !loadingRemitos"> Entrega total </span>
+                            <span class="text-sm" *ngIf="loadingProductos || loadingRemitos">
+                                <i class="fas fa-spinner animate-spin mr-1"></i>
+                                Entregando    
+                            </span>                   
+                        </button>
+                    </div>
+                    <!-- No hay productos para entregar -->
+                    <p *ngIf="parciales.length === 0" class="p-2 bg-gray-100 rounded text-gray-500 border"> 
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span class="ml-1 text-sm">
+                            No hay productos para entregar
+                        </span>
+                    </p>
+                </div>
+        
+                <div *ngIf="parciales.length !== 0" class="mt-4">
+                    <!-- Listado de producos -->
+                    <div class="border rounded">
+                        <h3 class="font-semibold p-2 text-gray-600 text-sm bg-gray-100"> Productos - Entrega parcial </h3>
+                        <div class="p-2">
+                            <div *ngFor="let producto of productos"
+                                 class="flex items-center text-sm p-2 justify-between border-b"
+                            >
+                                <div class="w-5/6">
+                                    <p class="text-sm font-semibold"> {{ producto.producto.codigo }} </p>
+                                    <p class="text-xs"> {{ producto.producto.descripcion }} </p>
+                                    <p class="font-semibold"> Resta entregar: {{ producto.cantidad - producto.cantidad_entregada }} ({{ producto.producto.unidad_medida.descripcion }}) </p>
+                                </div>
+                                <input type="number"
+                                    [disabled]="loadingProductos || loadingRemitos"
+                                    #txtValor
+                                    (keyup)="actualizandoProductos(producto._id, txtValor.value)"
+                                    class="border shadow rounded p-1 text-center font-semibold w-1/5"
+                                    placeholder="Cantidad">   
                             </div>
-                            <input type="number"
-                                #txtValor
-                                (keyup)="actualizandoProductos(producto._id, txtValor.value)"
-                                class="border shadow rounded p-1 text-center font-semibold w-1/5"
-                                placeholder="Cantidad">   
                         </div>
                     </div>
                 </div>

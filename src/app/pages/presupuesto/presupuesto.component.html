@@ -151,8 +151,9 @@
                   class="p-2 border rounded shadow mb-2 cursor-pointer mt-3 hover:bg-yellow-100"
                   (click)="seleccionarProducto(producto)">
                 <span class="font-semibold"> {{ producto.codigo }} </span>
-                <span class="text-gray-600 block text-sm"> {{ producto.descripcion }} </span>  
-                <span class="text-gray-700 block text-sm font-semibold"> Precio: ${{ producto.precio | moneda }} </span>    
+                <span class="text-gray-600 block text-sm"> {{ producto.descripcion }} </span>
+                <span class="text-gray-800 block text-sm font-semibold"> Disponible: {{ producto.cantidad }} </span>  
+                <span class="text-gray-800 block text-sm font-semibold"> Precio: ${{ producto.precio | moneda }} </span>    
             </div>
         </div>
 
@@ -163,7 +164,7 @@
                     <span class="text-sm font-semibold"> Producto seleccionado </span>
                     <span class="text-gray-700 block text-sm"> {{ seleccionado.codigo }} - {{ seleccionado.descripcion }} </span>
                     
-                    <span class="text-sm font-semibold mt-2 block"> Cantidad </span>
+                    <span class="text-sm font-semibold mt-2 block"> Cantidad (Disponible: {{ seleccionado.cantidad }}) </span>
                     <input type="number"
                            #txtCantidad
                            (keyup.enter)="agregarProducto(txtCantidad)" 
