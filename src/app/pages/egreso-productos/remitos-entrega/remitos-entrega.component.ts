@@ -158,9 +158,7 @@ export class RemitosEntregaComponent implements OnInit {
         // - No deben superar la cantidad a entregar
         let cantidadInvalida = false;
         productoParciales.forEach(producto => {
-          console.log(producto.cantidad > producto.cantidad_restante);
           if(producto.cantidad > producto.cantidad_restante){
-            console.log(producto);
             Swal.fire({
               icon: 'info',
               title: 'Información',

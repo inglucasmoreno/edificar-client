@@ -32,9 +32,9 @@
         </div>
         <div class="mt-4">
             <h1 class="font-semibold text-gray-700 bg-gray-100 px-2 py-1 rounded border border-gray-200"> Listado de productos </h1>
-            <div *ngFor="let producto of productos" class="text-xs p-3 border-b">
-                <p> {{ producto.producto.codigo }} - {{ producto.producto.descripcion }} </p>
-                <p class="font-semibold"> Cantidad entregada: {{ producto.cantidad }} ({{ producto.producto.unidad_medida.descripcion }}) </p>        
+            <div *ngFor="let producto of productos" class="p-3 border mt-2">
+                <p class="text-sm"> {{ producto.producto.codigo }} - {{ producto.producto.descripcion }} </p>
+                <p class="font-semibold text-xs"> Cantidad entregada: {{ producto.cantidad }} ({{ producto.producto.unidad_medida.descripcion }}) </p>        
             </div>
         </div>   
     </div>

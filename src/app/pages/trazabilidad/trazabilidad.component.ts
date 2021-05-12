@@ -125,7 +125,6 @@ export class TrazabilidadComponent implements OnInit {
       this.fecha.antes,
       this.fecha.despues
     ).subscribe( ({ trazabilidad, total }) => {
-      console.log(trazabilidad);
       this.trazabilidad = trazabilidad;
       this.total = total;
       this.loading = false;
