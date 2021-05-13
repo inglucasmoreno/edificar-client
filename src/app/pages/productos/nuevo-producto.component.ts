@@ -58,8 +58,8 @@ export class NuevoProductoComponent implements OnInit {
                              codigo.trim() !== '' && 
                              descripcion.trim() !== '' &&
                              unidad_medida.trim() !== '' && 
-                             Number(cantidad) >= 0 && 
-                             Number(precio) >= 0 
+                             Number(cantidad) >= 0
+                            //  Number(precio) >= 0 
 
     if(formularioValido){
       this.loadingCarga = true;
