@@ -22,12 +22,12 @@
                   [routerLink]="['/dashboard/egreso_productos/remitos-detalles', remito._id]"
                  >
                 <p class="text-sm"> 
-                    <span class="font-semibold"> Código 1: </span>
-                    {{ remito.dato_1 }} </p>
+                    <span class="font-semibold"> Número de remito: </span>
+                    {{ remito.numero_remito }} </p>
                 <p class="text-sm"> 
-                    <span class="font-semibold"> Código 2: </span>
-                    {{ remito.dato_2 }}  </p>
-                <p class="text-sm text-gray-700 mt-2 font-semibold"> 
+                    <span class="font-semibold"> Cliente: </span>
+                    {{ egresoCliente }}  </p>
+                <p class="text-sm text-gray-800 mt-2 font-semibold"> 
                     <i class="far fa-calendar"></i>
                     <span>
                         {{ remito.createdAt | fecha }} 
@@ -58,19 +58,19 @@
             <div *ngIf="egresoEstado === 'Pendiente'">
                 <div class="flex flex-col lg:flex-row">
                     <div class="w-full mx-2 flex-1 svelte-1l8159u">
-                        <div class="font-semibold mt-3 text-gray-600 text-sm"> Codigo 1 </div>
+                        <div class="font-semibold mt-3 text-gray-600 text-sm"> Punto de venta </div>
                         <input type="text" 
-                               #txtDato1
-                               (keyup)="completandoDatosRemito('dato_1', txtDato1.value)"
-                               placeholder="Ej. Dato 1" 
+                               #txtPuntoVenta
+                               (keyup)="completandoDatosRemito('punto_venta', txtPuntoVenta.value)"
+                               placeholder="Ej. 0001" 
                                class="border rounded py-2 px-2 mt-2 shadow text-sm w-full">
                     </div>
                     <div class="w-full mx-2 flex-1 svelte-1l8159u">
-                        <div class="font-semibold mt-3 text-gray-600 text-sm"> Codigo 2 </div>
+                        <div class="font-semibold mt-3 text-gray-600 text-sm"> Número de comprobante </div>
                         <input type="text" 
-                               #txtDato2
-                               (keyup)="completandoDatosRemito('dato_2', txtDato2.value)" 
-                               placeholder="Ej. Dato 2" 
+                               #txtNroComprobante
+                               (keyup)="completandoDatosRemito('nro_comprobante', txtNroComprobante.value)" 
+                               placeholder="Ej. 00000082" 
                                class="border rounded py-2 px-2 mt-2 shadow text-sm w-full">
                     </div>
                 </div>
@@ -80,7 +80,7 @@
                         <button 
                             [disabled]="loadingProductos || loadingRemitos"
                             class="py-1 px-2 shadow border border-gray-300 rounded text-md text-gray-700 bg-gray-100 border hover:bg-yellow-100"
-                            (click)="entregaParcial(txtDato1, txtDato2)"
+                            (click)="entregaParcial(txtPuntoVenta, txtNroComprobante)"
                         > 
                             <span *ngIf="!loadingProductos || !loadingRemitos"> Entrega parcial </span>
                             <span class="text-sm" *ngIf="loadingProductos || loadingRemitos">
@@ -91,7 +91,7 @@
                         <button 
                             [disabled]="loadingProductos || loadingRemitos"
                             class="ml-3 py-1 px-2 shadow border border-gray-300 bg-gray-100 text-gray-700 rounded text-md hover:bg-green-100"
-                            (click)="entregaTotal(txtDato1, txtDato2)"
+                            (click)="entregaTotal(txtPuntoVenta, txtNroComprobante)"
                         > 
                             <span *ngIf="!loadingProductos || !loadingRemitos"> Entrega total </span>
                             <span class="text-sm" *ngIf="loadingProductos || loadingRemitos">

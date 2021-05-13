@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
 import { RemitosEntregaService } from '../../../services/remitos-entrega.service';
+import { EgresoService } from '../../../services/egreso.service';
 
 @Component({
   selector: 'app-remitos-detalles',
@@ -15,10 +16,12 @@ export class RemitosDetallesComponent implements OnInit {
   public loadingDatos = true;
   public loadingProductos = true;
   public remito;
+  public egreso;
   public productos = [];
 
   constructor(private remitosEntregaService: RemitosEntregaService,
-              private activatedRoute: ActivatedRoute) { }
+              private activatedRoute: ActivatedRoute,
+              private egresoService: EgresoService) { }
 
 
   ngOnInit(): void {
@@ -33,7 +36,19 @@ export class RemitosDetallesComponent implements OnInit {
   getRemito(): void {
     this.remitosEntregaService.getRemito(this.id).subscribe( ({ remito }) => {
       this.remito = remito;
-      this.loadingDatos = false;
+      this.egresoService.getEgreso(remito.egreso).subscribe(({egreso}) => {
+        this.egreso = egreso;
+        this.loadingDatos = false;
+      },({error}) => {
+        this.loadingDatos = false;
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: error.msg,
+          confirmButtonText: 'Entendido'
+        });
+      }     
+      );
     },({error}) => {
       this.loadingDatos = false;
       Swal.fire({

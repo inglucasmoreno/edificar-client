@@ -21,9 +21,11 @@ export class RemitosEntregaComponent implements OnInit {
 
   public id;
   public egresoEstado = '';
+  public egresoCliente = '';
+
   public datosRemito = {
-    dato_1: '',
-    dato_2: '',
+    punto_venta: '',
+    nro_comprobante: '',
     egreso: ''  
   }
   public remitos = [];
@@ -44,6 +46,7 @@ export class RemitosEntregaComponent implements OnInit {
       this.listarRemitos();
       this.egresoService.getEgreso(id).subscribe(({ egreso }) => {
         this.egresoEstado = egreso.estado;
+        this.egresoCliente = egreso.descripcion_cliente;
       },({error}) => {
         Swal.fire({
           icon: 'error',
@@ -67,7 +70,7 @@ export class RemitosEntregaComponent implements OnInit {
   }
   
   // Entregar todos los productos
-  entregaTotal(txtDato1: any, txtDato2: any): void {
+  entregaTotal(txtPuntoVenta: any, txtNroComprobante: any): void {
     Swal.fire({
       title: '¿Está seguro?',
       html: "Está por realizar una <b style='color: green'>entrega total</b>",
@@ -79,7 +82,7 @@ export class RemitosEntregaComponent implements OnInit {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-        if(this.datosRemito.dato_1.trim() === '' || this.datosRemito.dato_2.trim() === ''){
+        if(this.datosRemito.punto_venta.trim() === '' || this.datosRemito.nro_comprobante.trim() === ''){
           Swal.fire({
             icon: 'info',
             title: 'Información',
@@ -91,10 +94,10 @@ export class RemitosEntregaComponent implements OnInit {
         this.loadingProductos = true;
         this.loadingRemitos = true;  
         this.remitosEntregaService.nuevoRemitoEntrega(this.datosRemito).subscribe(() => {
-           txtDato1.value = '';
-           txtDato2.value = '';
-           this.datosRemito.dato_1 = '';
-           this.datosRemito.dato_2 = '';
+           txtPuntoVenta.value = '';
+           txtNroComprobante.value = '';
+           this.datosRemito.punto_venta = '';
+           this.datosRemito.nro_comprobante = '';
            this.listarRemitos();
            this.listarProductos();
            this.parciales = [];
@@ -108,10 +111,10 @@ export class RemitosEntregaComponent implements OnInit {
              showConfirmButton: false
            });
         },({error}) => {
-          txtDato1.value = '';
-          txtDato2.value = '';
-          this.datosRemito.dato_1 = '';
-          this.datosRemito.dato_2 = '';
+          txtPuntoVenta.value = '';
+          txtNroComprobante.value = '';
+          this.datosRemito.punto_venta = '';
+          this.datosRemito.nro_comprobante = '';
           this.listarRemitos();
           this.listarProductos();
           this.parciales = [];
@@ -129,7 +132,7 @@ export class RemitosEntregaComponent implements OnInit {
   }
 
   // Entregar parcial
-  entregaParcial(txtDato1: any, txtDato2: any): void {
+  entregaParcial(txtPuntoVenta: any, txtNroComprobante: any): void {
   
     Swal.fire({
       title: '¿Está seguro?',
@@ -142,7 +145,7 @@ export class RemitosEntregaComponent implements OnInit {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-        if(this.datosRemito.dato_1.trim() === '' || this.datosRemito.dato_2.trim() === ''){
+        if(this.datosRemito.punto_venta.trim() === '' || this.datosRemito.nro_comprobante.trim() === ''){
           Swal.fire({
             icon: 'info',
             title: 'Información',
@@ -181,8 +184,8 @@ export class RemitosEntregaComponent implements OnInit {
         }
 
         const data = {
-          dato_1: txtDato1.value,
-          dato_2: txtDato2.value,
+          punto_venta: txtPuntoVenta.value,
+          nro_comprobante: txtNroComprobante.value,
           egreso: this.id,
           productos: productoParciales
         }
@@ -190,10 +193,10 @@ export class RemitosEntregaComponent implements OnInit {
         this.loadingProductos = true;
         this.loadingRemitos = true;
         this.remitosEntregaService.entregaParcial(data).subscribe(resp => {
-          txtDato1.value = '';
-          txtDato2.value = '';
-          this.datosRemito.dato_1 = '';
-          this.datosRemito.dato_2 = '';
+          txtPuntoVenta.value = '';
+          txtNroComprobante.value = '';
+          this.datosRemito.punto_venta = '';
+          this.datosRemito.nro_comprobante = '';
           this.parciales = [];
           this.listarRemitos();
           this.listarProductos();
@@ -207,10 +210,10 @@ export class RemitosEntregaComponent implements OnInit {
             showConfirmButton: false
           });
         },({error}) => {
-          txtDato1.value = '';
-          txtDato2.value = '';
-          this.datosRemito.dato_1 = '';
-          this.datosRemito.dato_2 = '';
+          txtPuntoVenta.value = '';
+          txtNroComprobante.value = '';
+          this.datosRemito.punto_venta = '';
+          this.datosRemito.nro_comprobante = '';
           this.parciales = [];
           this.listarRemitos();
           this.listarProductos();

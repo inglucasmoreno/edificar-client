@@ -76,6 +76,7 @@ export class EgresoDetallesComponent implements OnInit {
     });
   };
 
+  // Primer ingreso a la vista
   primerIngreso(): void {
     this.egresoProductosService.listarProductosPorEgreso(
       this.id,
@@ -171,46 +172,6 @@ export class EgresoDetallesComponent implements OnInit {
           });
           this.loadingCompletar = false;
         });
-      }
-    })
-  }
-
-  // Egreso parcial
-  egresoParcial(producto: string): void {
-    Swal.fire({
-      title: '¿Estas seguro?',
-      text: "Estas por realizar un egreso",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Realizar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.loadingTabla = true;
-        const data = {
-          persona_empresa: this.egreso.descripcion_cliente,
-          documento_codigo: this.egreso.codigo_cadena  
-        };
-        this.egresoProductosService.egresoParcial(producto, data).subscribe(()=>{
-          Swal.fire({
-            icon: 'success',
-            title: 'Completado',
-            text: 'Egreso realizado correctamente',
-            timer: 1000,
-            showConfirmButton: false
-          });
-          this.listarProductos();
-        },({error})=>{
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: error.msg,
-            confirmButtonText: 'Entendido'
-          });
-          this.loadingTabla = false;
-        });    
       }
     })
   }
