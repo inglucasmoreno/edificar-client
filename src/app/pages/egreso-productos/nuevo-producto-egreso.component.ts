@@ -111,8 +111,8 @@ export class NuevoProductoEgresoComponent implements OnInit {
   // Listar productos
   listarProductos(): void {
     this.productosService.listarProductos(
-      this.limit,
-      0,
+      this.paginacion.hasta, 
+      this.paginacion.desde, 
       true,
       this.descripcion,
       1,
