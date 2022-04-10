@@ -3,11 +3,13 @@ import { CommonModule } from '@angular/common';
 import { HeaderComponent } from './header/header.component';
 import { RouterModule } from '@angular/router';
 import { LoaderComponent } from './loader/loader.component';
+import { StatebarComponent } from './statebar/statebar.component';
 
 @NgModule({
   declarations: [
     HeaderComponent,
-    LoaderComponent
+    LoaderComponent,
+    StatebarComponent
   ],
   imports: [
     CommonModule,
@@ -15,7 +17,8 @@ import { LoaderComponent } from './loader/loader.component';
   ],
   exports: [
     HeaderComponent,
-    LoaderComponent
+    LoaderComponent,
+    StatebarComponent
   ]
 })
 export class SharedModule { }

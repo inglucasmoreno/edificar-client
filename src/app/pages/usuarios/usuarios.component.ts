@@ -7,6 +7,8 @@ import { ReportesService } from '../../services/reportes.service';
 import { format } from 'date-fns';
 
 import { saveAs } from 'file-saver-es'; 
+import { DataService } from 'src/app/services/data.service';
+import { AlertService } from 'src/app/services/alert.service';
 
 @Component({
   selector: 'app-usuarios',
@@ -39,65 +41,47 @@ export class UsuariosComponent implements OnInit {
     columna: 'apellido'
   }
 
-  public loading = true;
-
   // Para reportes
   public totalReporte = 0;
   public usuariosReporte = [];
 
   constructor(private usuariosService: UsuariosService,
+              private alertService: AlertService,
+              private dataService: DataService,
               private reportesService: ReportesService) { }
 
   ngOnInit(): void {
+    this.dataService.ubicacionActual = 'Dashboard - Usuarios';
+    this.alertService.loading();
     this.listarUsuarios();
   }
 
   // Generar reporte de usuarios
   generarReporte(): void {
 
-    Swal.fire({
-      title: "¿Está seguro?",
-      text: "Está por generar un reporte",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Generar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-
-        Swal.fire({
-          title: 'Generando',
-          html: 'Creando reporte',
-          timerProgressBar: true,
-          allowOutsideClick: false,
-          didOpen: () => {
-            Swal.showLoading()
-          },
-        });
-
-        this.reportesService.usuarios(
-          this.filtro.activo, 
-          this.filtro.parametro,
-          this.ordenar.direccion,
-          this.ordenar.columna
-        ).subscribe(archivoExcel => {
-          Swal.close();
-          saveAs(archivoExcel,`Usuarios ${format(new Date(), 'dd-MM-yyyy')}.xlsx`);
-        },({error})=>{
-          Swal.close();
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: error.msg,
-            showCancelButton: false,
-            confirmButtonText: 'Entendido'
-          });
-        }); 
-      }
-    })
-
+    this.alertService.question({ msg: 'Está por generar un reporte', buttonText: 'Generar' })
+        .then(({isConfirmed}) => {  
+          if (isConfirmed) {
+            this.reportesService.usuarios(
+              this.filtro.activo, 
+              this.filtro.parametro,
+              this.ordenar.direccion,
+              this.ordenar.columna
+            ).subscribe(archivoExcel => {
+              Swal.close();
+              saveAs(archivoExcel,`Usuarios ${format(new Date(), 'dd-MM-yyyy')}.xlsx`);
+            },({error})=>{
+              Swal.close();
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: error.msg,
+                showCancelButton: false,
+                confirmButtonText: 'Entendido'
+              });
+            }); 
+          }
+        });  
   }
 
   // Listar usuarios
@@ -110,61 +94,44 @@ export class UsuariosComponent implements OnInit {
       this.ordenar.direccion,
       this.ordenar.columna
       )
-    .subscribe( resp => {
-      const { usuarios, total } = resp;
+    .subscribe( ({ usuarios, total }) => {
+      this.alertService.close();
       this.usuarios = usuarios;
       this.total = total;
-      this.loading = false;
     }, (({error}) => {
-      this.loading = false;
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: error.msg,
-        confirmButtonText: 'Entendido'
-      });
+      this.alertService.errorApi(error.msg);
     }));
   }
 
   // Actualizar estado Activo/Inactivo
   actualizarEstado(usuario: Usuario): void {
-    const { uid, activo } = usuario;
-    Swal.fire({
-      title: '¿Estas seguro?',
-      text: `¿Quieres actualizar el estado?`,
-      icon: 'info',
-      showCancelButton: true,
-      confirmButtonText: 'Actualizar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.loading = true;  
-        this.usuariosService.actualizarUsuario(uid, {activo: !activo}).subscribe(resp => {
-          this.listarUsuarios();
-          Swal.fire({
-            icon: 'success',
-            title: 'Completado',
-            text: `Estado actualizado`,
-            showConfirmButton: false,
-            timer: 1000
-          });
-        }, ({error}) => {
-          this.loading = false;
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: error.msg,
-            confirmButtonText: 'Entendido'
-          });
-        });
-      }
-    });
 
+    const { uid, activo } = usuario;
+
+    this.alertService.question({ msg: '¿Quiere actualizar el estado?', buttonText: 'Actualizar' })
+        .then(({isConfirmed}) => {  
+          if (isConfirmed) {
+            this.alertService.loading();
+            this.usuariosService.actualizarUsuario(uid, {activo: !activo}).subscribe(resp => {
+              this.listarUsuarios();
+              Swal.fire({
+                icon: 'success',
+                title: 'Completado',
+                text: `Estado actualizado`,
+                showConfirmButton: false,
+                timer: 1000
+              });
+            }, ({error}) => {
+              this.alertService.errorApi(error.msg);
+            });
+          }
+        });  
   }
 
   // Funcion de paginación
   actualizarDesdeHasta(selector): void {
-    this.loading = true;
+    
+    this.alertService.loading();
 
     if (selector === 'siguiente'){ // Incrementar
       if (this.paginacion.hasta < this.total){
@@ -193,7 +160,7 @@ export class UsuariosComponent implements OnInit {
 
   // Filtrar Activo/Inactivo
   filtrarActivos(activo: any): void{
-    this.loading = true;
+    this.alertService.loading();
     this.filtro.activo = activo;
     this.reiniciarPaginacion();
     this.listarUsuarios();
@@ -201,7 +168,7 @@ export class UsuariosComponent implements OnInit {
 
   // Filtrar por Parametro
   filtrarParametro(parametro: string): void{
-    this.loading = true;
+    this.alertService.loading();
     this.filtro.parametro = parametro;
     this.reiniciarPaginacion();
     this.listarUsuarios();
@@ -209,7 +176,7 @@ export class UsuariosComponent implements OnInit {
   
   // Ordenar por columna
   ordenarPorColumna(columna: string){
-    this.loading = true;
+    this.alertService.loading();
     this.ordenar.columna = columna;
     this.ordenar.direccion = this.ordenar.direccion == 1 ? -1 : 1; 
     this.listarUsuarios();

@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 import { ReportesService } from '../../services/reportes.service';
 import { saveAs } from 'file-saver-es';
+import { DataService } from 'src/app/services/data.service';
+import gsap from 'gsap';
+import { AlertService } from 'src/app/services/alert.service';
 
 @Component({
   selector: 'app-home',
@@ -11,51 +14,28 @@ import { saveAs } from 'file-saver-es';
 })
 export class HomeComponent implements OnInit {
 
-  public showModal = false;
-
-  constructor(private reportesService: ReportesService) { }
+  constructor(private reportesService: ReportesService,
+              private alertService: AlertService,
+              private dataService: DataService) { }
 
   ngOnInit(): void {
-  }
+    this.dataService.ubicacionActual = 'Dashboard - Home';
+    gsap.from('.gsap-contenido', { y:100, opacity: 0, duration: .5 });
+  } 
 
   descargarGuia(): void {
-    Swal.fire({
-      title: "¿Está seguro?",
-      text: "Está por descargar la guía de usuario",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Descargar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-
-        Swal.fire({
-          title: 'Descargando',
-          html: 'Preparando guía...',
-          timerProgressBar: true,
-          allowOutsideClick: false,
-          didOpen: () => {
-            Swal.showLoading()
-          },
-        });
-
-        this.reportesService.guiaUsuarios().subscribe(guiaPDF => {
-          Swal.close();
-          saveAs(guiaPDF, `Guia de usuario.pdf`);
-        },({error})=>{
-          Swal.close();
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: error.msg,
-            showCancelButton: false,
-            confirmButtonText: 'Entendido'
-          });
-        }); 
-      }
-    })
+    this.alertService.question({ msg: 'Está por descargar la guía de usuario', buttonText: 'Descargar' })
+        .then(({isConfirmed}) => {  
+          if (isConfirmed) {
+            this.alertService.loading();
+            this.reportesService.guiaUsuarios().subscribe(guiaPDF => {
+              this.alertService.close();
+              saveAs(guiaPDF, `Guia de usuario.pdf`);
+            },({error})=>{
+              this.alertService.errorApi(error.msg);
+            }); 
+          }
+        });    
   }
-
+  
 }

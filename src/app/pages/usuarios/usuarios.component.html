@@ -1,13 +1,32 @@
-<app-tarjeta-tabla>
+<app-tarjeta-lista>
     <div class="antialiased font-sans bg-white">
-        <div class="container mx-auto px-4 sm:px-8">
-            <div class="py-8">
-                <div>
-                    <h2 class="text-2xl font-semibold leading-tight text-gray-600"> 
-                        Usuarios ({{ total }}) 
-                    </h2>
+        <div class="container mx-auto">
+            <div>
+
+                <!-- Cabecera de tabla -->
+                <div class="bg-gray-800 flex items-center justify-between text-white p-4 rounded-t">
+                    <div>
+                        <h2 class="text-2xl leading-tight">  Listado de usuarios </h2>
+                        <p> Total de usuarios: {{ total }} </p>
+                    </div>
+                    <div class="flex items-center">
+                        <div title="Reporte de usuarios" class="bg-white text-gray-800 px-3 hover:text-yellow-500 cursor-pointer py-2 mr-2 rounded" (click)="generarReporte()" >
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <button title="Nuevo usuario" routerLink="/dashboard/usuarios/nuevo" class="mr-4 border border-gray-300 shadow bg-white rounded px-3 py-2 text-gray-800 hover:text-yellow-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <div class="md:flex md:items-center md:justify-between">
+
+                <!-- Buscadores -->
+                <div class="md:flex md:items-center md:justify-between p-3">
                     <div class="my-2 flex sm:flex-row flex-col">
                         <div class="flex flex-row mb-1 sm:mb-0">
                             <div class="relative">
@@ -41,25 +60,10 @@
                                 (change)="filtrarParametro(txtParametro.value)"
                                 class="appearance-none rounded-r rounded-l sm:rounded-l-none border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none" />
                             </div>
-                            <span class="hidden md:block" *ngIf="loading">
-                                <i class="fas fa-spinner animate-spin text-2xl text-gray-400 ml-2"></i>
-                            </span>
-                    </div>
-                    <div class="flex items-center">
-                        <div>
-                            <i (click)="generarReporte()" title="Reporte de usuarios" class="fas fa-print text-xl text-gray-600 py-1 px-3 mr-2 border border-gray-300 shadow rounded cursor-pointer bg-gray-100 hover:bg-yellow-100"></i>
-                        </div>
-                        <div>
-                            <button routerLink="/dashboard/usuarios/nuevo" class="mr-4 border border-gray-300 shadow bg-gray-100 rounded p-2 px-3 text-gray-600 hover:bg-yellow-100">
-                                <i class="fas fa-user-plus"></i>
-                                Nuevo usuario
-                            </button>
-                            <span class="block-inline md:hidden" *ngIf="loading">
-                                <i class="fas fa-spinner animate-spin text-3xl text-gray-400"></i>
-                            </span>
-                        </div>
                     </div>
                 </div>
+                
+                <!-- Tabla -->
                 <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
                     <div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
                         <table class="min-w-full leading-normal">
@@ -70,9 +74,15 @@
                                         <div (click)="ordenarPorColumna('apellido')" class="cursor-pointer flex items-center focus:outline-none">
                                             <span> Apellido </span>
                                             <span class="ml-2">
-                                                <i *ngIf="ordenar.columna == 'apellido' && ordenar.direccion == 1" class="fas fa-sort-down"></i>
-                                                <i *ngIf="ordenar.columna == 'apellido' && ordenar.direccion == -1" class="fas fa-sort-up"></i>
-                                                <i *ngIf="ordenar.columna != 'apellido'" class="fas fa-sort text-gray-500"></i>
+                                                <svg *ngIf="ordenar.columna != 'apellido'" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z" clip-rule="evenodd" />
+                                                </svg> 
+                                                <svg *ngIf="ordenar.columna == 'apellido' && ordenar.direccion == 1" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                                </svg>
+                                                <svg *ngIf="ordenar.columna == 'apellido' && ordenar.direccion == -1" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd" />
+                                                </svg>
                                             </span>
                                         </div>
                                     </th>
@@ -83,9 +93,15 @@
                                                 Nombre
                                             </span>
                                             <span class="ml-2">
-                                                <i *ngIf="ordenar.columna == 'nombre' && ordenar.direccion == 1" class="fas fa-sort-down"></i>
-                                                <i *ngIf="ordenar.columna == 'nombre' && ordenar.direccion == -1" class="fas fa-sort-up"></i>
-                                                <i *ngIf="ordenar.columna != 'nombre'" class="fas fa-sort text-gray-500"></i>
+                                                <svg *ngIf="ordenar.columna != 'nombre'" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z" clip-rule="evenodd" />
+                                                </svg> 
+                                                <svg *ngIf="ordenar.columna == 'nombre' && ordenar.direccion == 1" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                                </svg>
+                                                <svg *ngIf="ordenar.columna == 'nombre' && ordenar.direccion == -1" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd" />
+                                                </svg>
                                             </span>
                                         </div>
                                     </th>   
@@ -96,9 +112,15 @@
                                                 Usuario                                               
                                             </span>
                                             <span class="ml-2">
-                                                <i *ngIf="ordenar.columna == 'dni' && ordenar.direccion == 1" class="fas fa-sort-down"></i>
-                                                <i *ngIf="ordenar.columna == 'dni' && ordenar.direccion == -1" class="fas fa-sort-up"></i>
-                                                <i *ngIf="ordenar.columna != 'dni'" class="fas fa-sort text-gray-500"></i>
+                                                <svg *ngIf="ordenar.columna != 'dni'" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z" clip-rule="evenodd" />
+                                                </svg> 
+                                                <svg *ngIf="ordenar.columna == 'dni' && ordenar.direccion == 1" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                                </svg>
+                                                <svg *ngIf="ordenar.columna == 'dni' && ordenar.direccion == -1" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd" />
+                                                </svg>
                                             </span>
                                         </div>
                                     </th>
@@ -109,9 +131,15 @@
                                                 Rol                                                
                                             </span>
                                             <span class="ml-2">
-                                                <i *ngIf="ordenar.columna == 'role' && ordenar.direccion == 1" class="fas fa-sort-down"></i>
-                                                <i *ngIf="ordenar.columna == 'role' && ordenar.direccion == -1" class="fas fa-sort-up"></i>
-                                                <i *ngIf="ordenar.columna != 'role'" class="fas fa-sort text-gray-500"></i>
+                                                <svg *ngIf="ordenar.columna != 'role'" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z" clip-rule="evenodd" />
+                                                </svg> 
+                                                <svg *ngIf="ordenar.columna == 'role' && ordenar.direccion == 1" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                                </svg>
+                                                <svg *ngIf="ordenar.columna == 'role' && ordenar.direccion == -1" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd" />
+                                                </svg>
                                             </span>
                                         </div>
                                     </th>
@@ -122,9 +150,15 @@
                                                 Fecha de creación                                                
                                             </span>
                                             <span class="ml-2">
-                                                <i *ngIf="ordenar.columna == 'createdAt' && ordenar.direccion == 1" class="fas fa-sort-down"></i>
-                                                <i *ngIf="ordenar.columna == 'createdAt' && ordenar.direccion == -1" class="fas fa-sort-up"></i>
-                                                <i *ngIf="ordenar.columna != 'createdAt'" class="fas fa-sort text-gray-500"></i>
+                                                <svg *ngIf="ordenar.columna != 'createdAt'" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z" clip-rule="evenodd" />
+                                                </svg> 
+                                                <svg *ngIf="ordenar.columna == 'createdAt' && ordenar.direccion == 1" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                                </svg>
+                                                <svg *ngIf="ordenar.columna == 'createdAt' && ordenar.direccion == -1" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd" />
+                                                </svg>
                                             </span>
                                         </div>
                                     </th>
@@ -135,9 +169,15 @@
                                                 Estado                                               
                                             </span>
                                             <span class="ml-2">
-                                                <i *ngIf="ordenar.columna == 'activo' && ordenar.direccion == 1" class="fas fa-sort-down"></i>
-                                                <i *ngIf="ordenar.columna == 'activo' && ordenar.direccion == -1" class="fas fa-sort-up"></i>
-                                                <i *ngIf="ordenar.columna != 'activo'" class="fas fa-sort text-gray-500"></i>
+                                                <svg *ngIf="ordenar.columna != 'activo'" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z" clip-rule="evenodd" />
+                                                </svg> 
+                                                <svg *ngIf="ordenar.columna == 'activo' && ordenar.direccion == 1" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                                </svg>
+                                                <svg *ngIf="ordenar.columna == 'activo' && ordenar.direccion == -1" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd" />
+                                                </svg>
                                             </span>
                                         </div>
                                     </th>
@@ -150,31 +190,31 @@
                             <tbody>
                                 <tr class="animate__animated animate__fadeIn" *ngFor="let usuario of usuarios">
                                     <td class="px-5 py-2 border-b border-gray-200 text-xs">
-                                        <p class="text-gray-900 whitespace-no-wrap">
-                                            {{ usuario.apellido }}
+                                        <p class="text-gray-900 whitespace-no-wrap capitalize">
+                                            {{ usuario.apellido.toLowerCase() }}
+                                        </p>
+                                    </td>
+                                    <td class="px-5 py-2 border-b border-gray-200 text-xs">
+                                        <p class="text-gray-900 whitespace-no-wrap capitalize">
+                                            {{ usuario.nombre.toLowerCase() }}
                                         </p>
                                     </td>
                                     <td class="px-5 py-2 border-b border-gray-200 text-xs">
                                         <p class="text-gray-900 whitespace-no-wrap">
-                                            {{ usuario.nombre }}
-                                        </p>
-                                    </td>
-                                    <td class="px-5 py-2 border-b border-gray-200 text-xs text-center">
-                                        <p class="text-gray-900 whitespace-no-wrap">
                                             {{ usuario.dni }}
                                         </p>
                                     </td>
-                                    <td class="px-5 py-2 border-b border-gray-200 text-xs text-center">
+                                    <td class="px-5 py-2 border-b border-gray-200 text-xs">
                                         <p class="text-gray-900 whitespace-no-wrap">
                                             {{ usuario.role | rol }}
                                         </p>
                                     </td>
-                                    <td class="px-5 py-2 border-b border-gray-200 text-xs text-center">
+                                    <td class="px-5 py-2 border-b border-gray-200 text-xs">
                                         <p class="text-gray-900 whitespace-no-wrap">
                                             {{ usuario.createdAt | fecha }}
                                         </p>
                                     </td>
-                                    <td class="px-5 py-2 border-b border-gray-200 text-xs text-center">
+                                    <td class="px-5 py-2 border-b border-gray-200 text-xs">
                                         <app-pastilla-estado [activo]="usuario.activo"
                                                              (click)="actualizarEstado(usuario)"
                                         ></app-pastilla-estado>   
@@ -187,7 +227,7 @@
                                             <app-icono-tabla
                                                 [routerLink]="['/dashboard/usuarios/password', usuario.uid]"
                                                 class="ml-2"
-                                                icono="fas fa-lock"
+                                                icono="password"
                                                 titulo="Actualizar password"
                                             ></app-icono-tabla>
                                         </p>
@@ -204,15 +244,11 @@
                             <div class="inline-flex mt-2 xs:mt-0">
                                 <button
                                     (click)="actualizarDesdeHasta('anterior')"
-                                    [disabled]="loading"
-                                    [ngClass]="{'text-gray-400': loading, 'text-gray-800': !loading}"
                                     class="text-sm bg-gray-200 hover:bg-yellow-100 border border-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-l">
                                     Anterior
                                 </button>
                                 <button
                                     (click)="actualizarDesdeHasta('siguiente')"
-                                    [disabled]="loading"
-                                    [ngClass]="{'text-gray-400': loading, 'text-gray-800': !loading}"
                                     class="text-sm bg-gray-200 hover:bg-yellow-100 border border-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-r">
                                     Proximo
                                 </button>
@@ -220,7 +256,8 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
-</app-tarjeta-tabla>
+</app-tarjeta-lista>

@@ -10,7 +10,7 @@ export class IconoTablaComponent implements OnInit {
 
   constructor() { }
 
-  @Input() icono = "fas fa-pencil-alt";
+  @Input() icono = "editar";
   @Input() titulo = "Editar";
 
   ngOnInit(): void {

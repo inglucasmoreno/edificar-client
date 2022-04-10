@@ -8,6 +8,7 @@ import { ReportesService } from '../../services/reportes.service';
 import { format } from 'date-fns';
 
 import { saveAs } from 'file-saver-es'; 
+import { AlertService } from 'src/app/services/alert.service';
 
 @Component({
   selector: 'app-productos',
@@ -43,6 +44,7 @@ export class ProductosComponent implements OnInit {
   }
 
   constructor(private productosService: ProductosService,
+              private alertService: AlertService,
               private authService: AuthService,
               private reportesService: ReportesService,
               private router: Router) {}
@@ -54,7 +56,6 @@ export class ProductosComponent implements OnInit {
 
   // Generar reporte de usuarios
   generarReporte(): void {
-
     Swal.fire({
       title: "¿Está seguro?",
       text: "Está por generar un reporte",
