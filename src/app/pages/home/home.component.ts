@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import Swal from 'sweetalert2';
 import { ReportesService } from '../../services/reportes.service';
 import { saveAs } from 'file-saver-es';
 import { DataService } from 'src/app/services/data.service';

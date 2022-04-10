@@ -4,8 +4,11 @@ import { TrazabilidadService } from '../../services/trazabilidad.service';
 import { ProductosService } from '../../services/productos.service';
 import { ReportesService } from '../../services/reportes.service';
 import { format } from 'date-fns';
+import gsap from 'gsap';
 
 import { saveAs } from 'file-saver-es'; 
+import { AlertService } from 'src/app/services/alert.service';
+import { DataService } from 'src/app/services/data.service';
 
 @Component({
   selector: 'app-trazabilidad',
@@ -17,9 +20,6 @@ export class TrazabilidadComponent implements OnInit {
   
   public total = 0;
   public inicio = true;
-
-  public loading = false;
-  public loadingBuscar = false;
   
   public productos = [];
   public flagSeleccionado = false;
@@ -54,38 +54,23 @@ export class TrazabilidadComponent implements OnInit {
   }
 
   constructor(private trazabilidadService: TrazabilidadService,
+              private dataService: DataService,
+              private alertService: AlertService,
               private reportesService: ReportesService,
               private productosService: ProductosService) { }
 
   ngOnInit(): void {
+    this.dataService.ubicacionActual = "Dashboard - Trazabilidad";
+    gsap.from('.gsap-contenido', { y:100, opacity: 0, duration: .5 });
     this.listarProductos();
   }
 
   // Reporte - Trazabilidad
   generarReporte(): void {
-
-    Swal.fire({
-      title: "¿Está seguro?",
-      text: "Está por generar un reporte",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Generar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-
-        Swal.fire({
-          title: 'Generando',
-          html: 'Creando reporte',
-          timerProgressBar: true,
-          allowOutsideClick: false,
-          didOpen: () => {
-            Swal.showLoading()
-          },
-        });
-
+    this.alertService.question({ msg: 'Esta por generar un reporte', buttonText: 'Generar' })
+    .then(({isConfirmed}) => {  
+      if (isConfirmed) {
+        this.alertService.loading();   
         this.reportesService.trazabilidad(
           this.filtro.tipo,
           this.filtro.producto,
@@ -95,20 +80,13 @@ export class TrazabilidadComponent implements OnInit {
           this.fecha.antes,
           this.fecha.despues      
         ).subscribe(archivoExcel => {
-          Swal.close();
+          this.alertService.close();
           saveAs(archivoExcel,`Trazabilidad ${format(new Date(), 'dd-MM-yyyy')}.xlsx`);
         },({error})=>{
-          Swal.close();
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: error.msg,
-            confirmButtonText: 'Entendido'
-          });      
-        });    
-
+          this.alertService.errorApi(error.msg);   
+        });  
       }
-    })
+    }); 
   }
 
   // Listado de resulados
@@ -127,19 +105,11 @@ export class TrazabilidadComponent implements OnInit {
     ).subscribe( ({ trazabilidad, total }) => {
       this.trazabilidad = trazabilidad;
       this.total = total;
-      this.loading = false;
       this.buscando = true;
-      this.loadingBuscar = false;
+      this.alertService.close();
     },({error})=>{
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: error.msg,
-        confirmButtonText: 'Entendido'
-      });
+      this.alertService.errorApi(error.msg);
       this.inicio = false;
-      this.loading = false;
-      this.loadingBuscar = false;
     });  
   }
 
@@ -147,19 +117,13 @@ export class TrazabilidadComponent implements OnInit {
     this.productosService.listarProductos().subscribe(({productos}) => {
       this.productos = productos    
     },({error})=>{
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: error.msg,
-        confirmButtonText: 'Entendido'
-      });
-      this.loading = false;
+      this.alertService.errorApi(error.msg);
     });
   }
 
   // Ordenar por fecha
   ordenarFecha(): void {
-    this.loading = true;
+    this.alertService.loading();
     this.ordenar.direccion === 1 ? this.ordenar.direccion = -1 : this.ordenar.direccion = 1;
     this.listarTrazabilidad();
   }
@@ -181,11 +145,8 @@ export class TrazabilidadComponent implements OnInit {
 
   // Funcion de paginación
   actualizarDesdeHasta(selector): void {
-    this.loading = true;
+    this.alertService.loading();
   
-    console.log(this.paginacion.desde);
-    console.log(this.paginacion.hasta);
-
     if (selector === 'siguiente'){ // Incrementar
       if (this.paginacion.hasta < this.total){
         this.paginacion.desde += this.paginacion.limit;
@@ -211,8 +172,7 @@ export class TrazabilidadComponent implements OnInit {
 
   // Buscar
   buscar(parametro: string, registros: number): void {
-    this.loading = true;
-    this.loadingBuscar = true;
+    this.alertService.loading();
     this.filtroParametro(parametro);
     this.registros = Number(registros);
     this.reiniciarPaginacion(); 
