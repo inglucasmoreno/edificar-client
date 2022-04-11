@@ -10,7 +10,7 @@ import { PipesModule } from '../pipes/pipes.module';
 import { UsuariosComponent } from './usuarios/usuarios.component';
 import { ComponentsModule } from '../components/components.module';
 import { NuevoUsuarioComponent } from './usuarios/nuevo-usuario.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActualizarPasswordComponent } from './usuarios/editar/actualizar-password.component';
 import { EditarUsuarioComponent } from './usuarios/editar/editar-usuario.component';
 import { ProductosComponent } from './productos/productos.component';
@@ -71,6 +71,7 @@ import { RemitosDetallesComponent } from './egreso-productos/remitos-entrega/rem
   ],
   imports: [
     CommonModule,
+    FormsModule,
     AppRoutingModule,
     SharedModule,
     PipesModule,

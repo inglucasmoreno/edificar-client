@@ -29,6 +29,7 @@ import { TarjetaMiniComponent } from './tarjeta-mini/tarjeta-mini.component';
   imports: [
     CommonModule
   ],exports: [
+    ModalComponent,
     TarjetaTablaComponent,
     TarjetaListaComponent,
     TarjetaMiniComponent,

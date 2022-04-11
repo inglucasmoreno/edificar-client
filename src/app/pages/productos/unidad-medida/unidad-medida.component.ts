@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import Swal from 'sweetalert2';
 import { UnidadMedidaService } from '../../../services/unidad-medida.service';
 import  { UnidadMedida } from '../../../models/unidad-medida.model';
 import { ReportesService } from '../../../services/reportes.service';
 import { format } from 'date-fns';
-
 import { saveAs } from 'file-saver-es'; 
+import { AlertService } from 'src/app/services/alert.service';
+import { DataService } from 'src/app/services/data.service';
 
 @Component({
   selector: 'app-unidad-medida',
@@ -17,10 +17,6 @@ export class UnidadMedidaComponent implements OnInit {
 
   public total = 0;
   public unidades: UnidadMedida[] = [];
-  public loadingNuevaUnidad = false;
-  public loadingTabla = true;
-
-  public loading = true;
 
   // Paginación
   public paginacion = {
@@ -41,99 +37,62 @@ export class UnidadMedidaComponent implements OnInit {
     columna: 'descripcion'
   }
 
+  public modo = 'crear';
+  public descripcion = '';
+  public unidadSeleccionada: any;
+  public showModal = false;
+
   constructor(private unidadMedidaService: UnidadMedidaService,
+              private dataService: DataService,
+              private alertService: AlertService,
               private reportesService: ReportesService) { }
 
   ngOnInit(): void {
-     this.listarUnidades(); 
+    this.dataService.ubicacionActual = "Dashboard - Unidades de medida";
+    this.alertService.loading();
+    this.listarUnidades(); 
   }
 
   // Generar reporte de usuarios
   generarReporte(): void {
-
-    Swal.fire({
-      title: "¿Está seguro?",
-      text: "Está por generar un reporte",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Generar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-
-        Swal.fire({
-          title: 'Generando',
-          html: 'Creando reporte',
-          timerProgressBar: true,
-          allowOutsideClick: false,
-          didOpen: () => {
-            Swal.showLoading()
-          },
-        });
-
+    this.alertService.question({ msg: 'Está por generar un reporte', buttonText: 'Actualizar' })
+    .then(({isConfirmed}) => {  
+      if (isConfirmed) {
+        this.alertService.loading();
         this.reportesService.unidades(
           this.filtro.activo,
           this.filtro.descripcion,
           this.ordenar.direccion,
           this.ordenar.columna
         ).subscribe(archivoExcel => {
-          Swal.close();
+          this.alertService.close();
           saveAs(archivoExcel,`Unidades ${format(new Date(), 'dd-MM-yyyy')}.xlsx`);
         },({error})=>{
-          Swal.close();
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: error.msg,
-            showCancelButton: false,
-            confirmButtonText: 'Entendido'
-          });
-        }); 
+          this.alertService.errorApi(error.msg);
+        });         
       }
-    })
-
+    });  
   }
 
   // Nueva unidad
-  nuevaUnidad(descripcionCtrl: any): void {
-    const descripcion = descripcionCtrl.value;
+  nuevaUnidad(): void {
+    const descripcion = this.descripcion;
     if(descripcion.trim() === ''){
-      Swal.fire({
-        icon: 'info',
-        title: 'Información',
-        text: 'Formulario inválido',
-        confirmButtonText: 'Entendido'  
-      });
+      this.alertService.info('Formulario inválido');
       return;
     }
-    this.loadingNuevaUnidad = true;
-    descripcionCtrl.value = '';
-    this.unidadMedidaService.nuevaUnidad({ descripcion }).subscribe( resp => {
-      Swal.fire({
-        icon: 'success',
-        title: 'Completado',
-        text: 'Unidad creada correctamente',
-        timer: 1000,
-        showConfirmButton: false
-      })
-      this.loadingNuevaUnidad = false;
-      this.listarUnidades();
+    this.descripcion = '';
+    this.alertService.loading();
+    this.unidadMedidaService.nuevaUnidad({ descripcion }).subscribe( () => {
+    this.showModal = false;
+    this.listarUnidades();
     },(({error}) => {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: error.msg,
-        confirmButtonText: 'Entendido'
-      });
-      this.loadingNuevaUnidad = false;
+      this.alertService.errorApi(error.msg);
     }));
   }
 
   // Listar unidades
   listarUnidades(): void {
-    this.loadingTabla = true;
     this.unidadMedidaService.listarUnidades(
       this.paginacion.limit,
       this.paginacion.desde,
@@ -144,53 +103,64 @@ export class UnidadMedidaComponent implements OnInit {
     ).subscribe( ({ total, unidades }) => {
       this.total = total;
       this.unidades = unidades; 
-      this.loadingTabla = false;
+      this.alertService.close();
     },(({error}) => {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: error.msg,
-        confirmButtonText: 'Entendido'
-      });
-      this.loadingTabla = false;
+      this.alertService.errorApi(error.msg);
     }));
   }
 
   // Actualizar estado
   actualizarEstado(unidad: UnidadMedida): void {
-    Swal.fire({
-      title: '¿Estas seguro?',
-      text: "Se esta por actualizar un estado",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Actualizar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.loadingTabla = true;
+    this.alertService.question({ msg: 'Está por actualizar un estado', buttonText: 'Actualizar' })
+    .then(({isConfirmed}) => {  
+      if (isConfirmed) {
+        this.alertService.loading();
         this.unidadMedidaService.actualizarUnidad(unidad._id, { activo: !unidad.activo }).subscribe( () => {
-          Swal.fire({
-            icon: 'success',
-            title: 'Completado',
-            text: 'Estado actualizado',
-            timer: 1000,
-            showConfirmButton: false
-          });
           this.listarUnidades();          
         },(({ error }) => {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: error.msg,
-            confirmButtonText: 'Entendido'
-          });
-          this.loadingTabla = false;
-        }));
+          this.alertService.errorApi(error.msg);
+        }));        
       }
-    })  
+    });  
   }
+
+  modalNuevaUnidad(): void {
+    this.modo = "crear";
+    this.descripcion = "";
+    this.unidadSeleccionada = null;
+    this.showModal = true;  
+  }
+
+  // Seleccionar unidad
+  seleccionarUnidad(unidad: any): void {
+    this.modo = "editar";
+    this.descripcion = unidad.descripcion;
+    this.unidadSeleccionada = unidad;
+    this.showModal = true;
+  }
+
+  // Actualizar unidad
+  actualizarUnidad(): void {
+    
+    const descripcion = this.descripcion;
+    
+    if(descripcion.trim() === ''){
+      this.alertService.info('Formulario inválido');
+      return;
+    }
+    
+    this.alertService.loading();
+   
+    this.unidadMedidaService.actualizarUnidad(this.unidadSeleccionada._id, {descripcion: this.descripcion}).subscribe( () => {
+      this.listarUnidades();
+    },(({error}) => {
+      this.alertService.errorApi(error.msg);
+    }));
+
+    this.showModal = false;
+
+  }
+
   
   // Reiniciar paginacion
   reiniciarPaginacion(): void {
@@ -201,7 +171,7 @@ export class UnidadMedidaComponent implements OnInit {
 
   // Filtrar Activo/Inactivo
   filtrarActivos(activo: any): void{
-    this.loadingTabla = true;
+    this.alertService.loading();
     this.filtro.activo = activo;
     this.reiniciarPaginacion();
     this.listarUnidades();
@@ -209,7 +179,7 @@ export class UnidadMedidaComponent implements OnInit {
 
   // Filtrar por parametro
   filtrarDescripcion(descripcion: string): void{
-    this.loadingTabla = true;
+    this.alertService.loading();
     this.filtro.descripcion= descripcion;
     this.reiniciarPaginacion();
     this.listarUnidades();
@@ -217,7 +187,8 @@ export class UnidadMedidaComponent implements OnInit {
 
   // Funcion de paginación
   actualizarDesdeHasta(selector): void {
-    this.loadingTabla = true;
+    
+    this.alertService.loading();
   
     if (selector === 'siguiente'){ // Incrementar
       if (this.paginacion.hasta < this.total){
@@ -239,7 +210,7 @@ export class UnidadMedidaComponent implements OnInit {
 
   // Ordenar por columna
   ordenarPorColumna(columna: string){
-    this.loadingTabla = true;
+    this.alertService.loading();
     this.ordenar.columna = columna;
     this.ordenar.direccion = this.ordenar.direccion == 1 ? -1 : 1; 
     this.listarUnidades();

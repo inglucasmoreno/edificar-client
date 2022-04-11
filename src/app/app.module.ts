@@ -8,6 +8,7 @@ import { ErrorPageComponent } from './error-page/error-page.component';
 import { PagesModule } from './pages/pages.module';
 import { AuthModule } from './auth/auth.module';
 import { SharedModule } from './shared/shared.module';
+import { FormControl } from '@angular/forms';
 
 @NgModule({
   declarations: [
