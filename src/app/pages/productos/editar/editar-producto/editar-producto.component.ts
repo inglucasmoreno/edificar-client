@@ -6,6 +6,8 @@ import Swal from 'sweetalert2';
 
 import { ProductosService } from '../../../../services/productos.service';
 import { Producto } from 'src/app/models/producto.model';
+import { DataService } from 'src/app/services/data.service';
+import { AlertService } from 'src/app/services/alert.service';
 
 @Component({
   selector: 'app-editar-producto',
@@ -15,8 +17,6 @@ import { Producto } from 'src/app/models/producto.model';
 })
 export class EditarProductoComponent implements OnInit {
 s
-  public loadingActualizando = false;
-  public loadingInicio = true;
   public unidades = [];
   public productoId = '';
   public stockMinimo = true;
@@ -44,13 +44,17 @@ s
 
   constructor(private activatedRoute: ActivatedRoute,
               private unidadMedidaService: UnidadMedidaService,
+              private dataService: DataService,
+              private alertService: AlertService,
               private fb: FormBuilder,
               private productosService: ProductosService,
               private router: Router) { }
 
   ngOnInit(): void {
+    this.dataService.ubicacionActual = "Dashboard - Productos - Editando"
     this.activatedRoute.params.subscribe( async ({ id }) => {
       this.productoId = id;
+      this.alertService.loading();
       this.obtenerUnidades();
       this.obtenerProducto(id);  
     })
@@ -63,12 +67,7 @@ s
     const cantidadMinimaValida = stock_minimo && Number(cantidad_minima) < 0;
 
     if(cantidadMinimaValida){
-      Swal.fire({
-        icon: 'info',
-        title: 'Información',
-        text: 'Formulario inválido',
-        confirmButtonText: 'Entendido'
-      }); 
+      this.alertService.formularioInvalido();
       return;         
     }
 
@@ -78,36 +77,17 @@ s
                              Number(precio) >= 0 
 
     if(formularioValido){ 
-        this.loadingActualizando = true;       
+        this.alertService.loading();
         const data = this.productoForm.value;
         if(!this.stockMinimo) data.cantidad_minima = 0;
         this.productosService.actualizarProducto(this.producto._id, data).subscribe(()=>{
-          Swal.fire({
-            icon: 'success',
-            title: 'Completado',
-            text: 'Producto actualizado correctamente',
-            timer: 1000,
-            showConfirmButton: false
-          });
-          this.loadingActualizando = false;
+          this.alertService.close();
           this.router.navigateByUrl(`/dashboard/productos`);
         },({error}) =>{
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: error.msg,
-            confirmButtonText: 'Entendido'
-          });
-          this.loadingActualizando = false;
+          this.alertService.errorApi(error.msg);
         });
     }else{
-      Swal.fire({
-        icon:'info',
-        title: 'Información',
-        text: 'Formulario invalido',
-        confirmButtonText: 'Entendido'
-      })  
-      this.loadingActualizando = false;
+      this.alertService.formularioInvalido();
     }
   }
 
@@ -115,7 +95,7 @@ s
     this.productosService.getProducto(id).subscribe(({producto})=>{
       this.producto = producto;
       this.stockMinimo = producto.stock_minimo;
-      this.loadingInicio = false;
+      this.alertService.close();
       this.productoForm.setValue({
         codigo: producto.codigo,
         descripcion: producto.descripcion,
@@ -132,12 +112,7 @@ s
     this.unidadMedidaService.listarUnidades(0, 0, true).subscribe( ({ unidades }) => {
       this.unidades= unidades; 
     },({error}) => {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: error.msg,
-        confirmButtonText: 'Entendido'
-      })
+      this.alertService.errorApi(error.msg);
     }); 
   }
 

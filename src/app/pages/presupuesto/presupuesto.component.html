@@ -1,7 +1,7 @@
 <div class="lg:flex mt-1 p-1">
     
     <!-- Generador de presupuesto -->
-    <div class="bg-white z-0 relative border shadow w-11/12 mr-auto ml-auto rounded-t lg:mr-0 lg:ml-1 lg:w-1/2 h-full">
+    <div class="bg-white z-0 relative gsap-contenido border shadow w-11/12 mr-auto ml-auto rounded-t lg:mr-0 lg:ml-1 lg:w-1/2 h-full">
         <div class="z-0">
             <!-- Titulo -->
             <div class="flex items-center justify-between font-semibold p-2 border bg-gray-800">
@@ -122,7 +122,7 @@
                 </div>
 
                 <div class="p-2 bg-gray-100 text-gray-500 mt-4 border shadow animate__animated animate__fadeIn"
-                     *ngIf="productos.length === 0 && !flagSeleccionado && !loading">
+                     *ngIf="productos.length === 0 && !flagSeleccionado">
                     <p class="text-sm rounded flex items-center"> 
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
@@ -134,7 +134,7 @@
         </div>
         
         <!-- Listado de productos - Para seleccionar -->
-        <div class="p-4 z-50 border border-gray-300 absolute shadow-lg w-11/12 ml-5 mb-40 bg-white rounded animate__animated animate__zoomIn" *ngIf="!flagSeleccionado && !loading && productos.length > 0">
+        <div class="p-4 z-50 border border-gray-300 absolute shadow-lg w-11/12 ml-5 mb-40 bg-white rounded animate__animated animate__zoomIn" *ngIf="!flagSeleccionado && productos.length > 0">
             <div class="flex items-center justify-between p-2 bg-gray-100 rounded mb-2 border border-gray-200">
                 <h1 class="text-gray-800 flex items-center font-semibold"> 
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">

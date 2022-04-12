@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import Swal from 'sweetalert2';
 import { UnidadMedidaService } from '../../services/unidad-medida.service';
 import { ProductosService } from '../../services/productos.service';
+import { AlertService } from 'src/app/services/alert.service';
+import { DataService } from 'src/app/services/data.service';
 
 @Component({
   selector: 'app-nuevo-producto',
@@ -12,8 +13,6 @@ import { ProductosService } from '../../services/productos.service';
 })
 export class NuevoProductoComponent implements OnInit {
 
-  public loadingCarga = false;
-  public loadingInicio = true;
   public stockMinimo = false;
   public unidades = [];
 
@@ -29,11 +28,14 @@ export class NuevoProductoComponent implements OnInit {
   });
   
   constructor(private fb: FormBuilder,
+              private dataService: DataService,
+              private alertService: AlertService,
               private unidadMedidaService: UnidadMedidaService,
               private productosService: ProductosService
     ) { }
    
   ngOnInit(): void {
+    this.dataService.ubicacionActual = "Dashboard - Productos - Creando";
     this.obtenerUnidades();
   }
   
@@ -45,12 +47,7 @@ export class NuevoProductoComponent implements OnInit {
     const cantidadMinimaValida = stock_minimo && Number(cantidad_minima) < 0;
 
     if(cantidadMinimaValida){
-      Swal.fire({
-        icon: 'info',
-        title: 'Información',
-        text: 'Formulario inválido',
-        confirmButtonText: 'Entendido'
-      }); 
+      this.alertService.formularioInvalido();
       return;         
     }
 
@@ -62,51 +59,28 @@ export class NuevoProductoComponent implements OnInit {
                             //  Number(precio) >= 0 
 
     if(formularioValido){
-      this.loadingCarga = true;
+      this.alertService.loading();
       const data = this.productoForm.value;
       if(!this.stockMinimo) data['cantidad_minima'] = 0;
       this.productosService.nuevoProducto(data).subscribe( () => {
-        Swal.fire({
-          icon: 'success',
-          title: 'Completado',
-          text: 'Producto creado correctamente',
-          timer: 1000,
-          showConfirmButton: false
-        });
-        this.reiniciarFormulario();  
-        this.loadingCarga = false;
+        this.reiniciarFormulario(); 
+        this.alertService.success('Producto creado correctamente');        
       },({error}) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: error.msg,
-          confirmButtonText: 'Entendido'
-        });
-        this.loadingCarga = false;
+        this.alertService.errorApi(error.msg);
       }); 
     }else{
-      Swal.fire({
-        icon: 'info',
-        title: 'Información',
-        text: 'Formulario inválido',
-        confirmButtonText: 'Entendido'
-      });
+      this.alertService.formularioInvalido();
     }
   }
 
   obtenerUnidades(): void {
+    this.alertService.loading();
     this.unidadMedidaService.listarUnidades(0, 0, true).subscribe( ({ unidades }) => {
       this.unidades= unidades;      
       if(unidades) this.reiniciarFormulario();
-      this.loadingInicio = false;
+      this.alertService.close();
     },({error}) => {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: error.msg,
-        confirmButtonText: 'Entendido'
-      })
-      this.loadingInicio = false;
+      this.alertService.errorApi(error.msg);
     }); 
   }
   

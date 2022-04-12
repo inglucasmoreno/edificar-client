@@ -1,46 +1,36 @@
 <app-tarjeta-formulario>
-    <div class="p-3 text-gray-500" *ngIf="loadingInicio">
-        <i class="fas fa-spinner animate-spin mr-2"></i>
-        Cargando datos
-    </div>
-    <div *ngIf="!loadingInicio">
-        <div class="p-4">
-            <h1 class="flex items-center text-gray-700">
-                <i [routerLink]="['/dashboard/producto/', productoId]" title="Regresar" class="fas fa-arrow-left border bg-gray-100 hover:text-yellow-500 text-gray-600 border-gray-300 rounded p-2 px-3 shadow cursor-pointer"></i>
-                <div class="flex flex-col ml-2">
-                    <span class="ml-2 text-xl text-gray-600"> Productos </span>
-                    <span class="text-xs mt-1 ml-1 font-semibold border border-gray-200 py-1 px-2 rounded text-gray-600 bg-yellow-100"> 
-                        <i class="fas fa-pencil-alt"></i>
-                        Editando producto
-                    </span>
-                </div>
-            </h1>
-        </div>
+    <div>
+        <h1 class="flex p-3 items-center text-white bg-gray-800">
+            <i [routerLink]="['/dashboard/producto/', productoId]" title="Regresar" class="fas fa-arrow-left border bg-gray-100 hover:text-yellow-500 text-gray-600 border-gray-300 rounded p-2 px-3 shadow cursor-pointer"></i>
+            <div class="flex flex-col ml-2">
+                <span class="ml-2 text-xl"> Editando producto </span>
+            </div>
+        </h1>
         <form 
             [formGroup]="productoForm"
             class="px-5 pb-5">
             <div class="flex flex-col lg:flex-row">
                 <div class="w-full mx-2 flex-1 svelte-1l8159u">
                     <div class="font-semibold mt-3 text-gray-600 text-sm"> Código </div>
-                    <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
+                    <div class="bg-white my-2 flex">
                         <input placeholder="Ej. LB0001"
                                formControlName="codigo" 
-                               class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"
+                               class="p-1 appearance-none border-b-2 transform focus:outline-none duration-500 outline-none w-full border-gray-300 focus:border-yellow-500 text-gray-800 text-sm"
                                ></div>
                 </div>
                 <div class="w-full mx-2 flex-1 svelte-1l8159u">
                     <div class="font-semibold mt-3 text-gray-600 text-sm"> Descripción </div>
-                    <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
+                    <div class="bg-white my-2 flex">
                         <input placeholder="Ej. Ladrillos"
                                formControlName="descripcion" 
-                               class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"></div>
+                               class="p-1 appearance-none border-b-2 transform focus:outline-none duration-500 outline-none w-full border-gray-300 focus:border-yellow-500 text-gray-800 text-sm"></div>
                 </div>
             </div>
             <div class="flex flex-col lg:flex-row">
                 <div class="w-full mx-2 flex-1">
                     <div class="font-semibold mt-3 text-gray-600 text-sm"> Unidad de medida </div>
                     <div class="bg-white my-2 flex">
-                        <select class="border rounded p-1 py-2 w-full text-sm shadow text-sm">
+                        <select class="p-1 border-b-2 transform focus:outline-none duration-500 outline-none w-full border-gray-300 focus:border-yellow-500 text-gray-800 text-sm">
                             <option *ngFor="let unidad of unidades" [value]="unidad._id"> {{ unidad.descripcion }} </option>
                         </select>
                     </div>
@@ -49,7 +39,7 @@
                     <div class="font-semibold mt-3 text-gray-600 text-sm"> 
                             Stock actual
                     </div>
-                    <div class="bg-white my-2 px-3 py-2 flex border border-gray-300 rounded shadow bg-gray-100 text-sm">
+                    <div class="p-1 appearance-none border-b-2 mt-2 transform bg-gray-100 focus:outline-none outline-none w-full border-gray-300 text-gray-800 text-sm">
                      {{ producto.cantidad }}
                     </div>
                 </div>
@@ -60,7 +50,7 @@
                     <div class="bg-white my-2 flex">
                         <select (change)="stockMinimo = !stockMinimo"
                                 formControlName="stock_minimo" 
-                                class="border rounded p-1 py-2 w-full shadow text-sm"
+                                class="p-1 border-b-2 transform focus:outline-none duration-500 outline-none w-full border-gray-300 focus:border-yellow-500 text-gray-800 text-sm"
                                 >
                             <option value=false> No </option>
                             <option value=true> Si </option>
@@ -69,15 +59,15 @@
                 </div>
                 <div class="w-full mx-2 flex-1">
                     <div class="font-semibold mt-3 text-gray-600 text-sm"> Stock mínimo </div>
-                    <div *ngIf="stockMinimo" class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
+                    <div *ngIf="stockMinimo" class="bg-white my-2 flex">
                         <input
                                type="number"
                                formControlName="cantidad_minima" 
                                placeholder="Ej. 20" 
                                min="0"
-                               class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"> </div>
+                               class="p-1 appearance-none border-b-2 transform focus:outline-none focus:border-yellow-500 transform duration-500 outline-none w-full border-gray-300 text-gray-800 text-sm"> </div>
                     <div *ngIf="!stockMinimo"
-                         class="border shadow p-2 my-2 text-gray-500 rounded bg-gray-100 text-sm">
+                         class="p-1 appearance-none border-b-2 mt-2 transform bg-gray-100 focus:outline-none outline-none w-full border-gray-300 text-gray-800 text-sm">
                         Sin stock mínimo
                     </div>        
                 </div>
@@ -85,19 +75,19 @@
             <div class="flex flex-col lg:flex-row">
                 <div class="w-full mx-2 flex-1 svelte-1l8159u">
                     <div class="font-semibold mt-3 text-gray-600 text-sm"> Precio ($) </div>
-                    <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
+                    <div class="bg-white my-2 flex">
                         <input type="number"
                                formControlName="precio"
                                placeholder="Ej. 2500"
                                step="0.01"                           
-                               class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"></div>
+                               class="p-1 border-b-2 transform focus:outline-none duration-500 outline-none w-full border-gray-300 focus:border-yellow-500 text-gray-800 text-sm"></div>
                 </div>
                 <div class="w-full mx-2 flex-1">
                     <div class="font-semibold mt-3 text-gray-600 text-sm"> Estado </div>
                     <div class="bg-white my-2 flex">
                         <select 
                             formControlName="activo"
-                            class="border rounded p-1 py-2 w-full shadow text-sm">
+                            class="p-1 border-b-2 transform focus:outline-none duration-500 outline-none w-full border-gray-300 focus:border-yellow-500 text-gray-800 text-sm">
                             <option value=true> Activo </option>
                             <option value=false> Inactivo </option>
                         </select>
@@ -108,24 +98,11 @@
                 <div class="w-full mx-2 flex-1">
                     <button 
                             (click)="editarProducto()"
-                            [disabled]="loadingActualizando"
-                            [ngClass]="{'bg-yellow-100' : loadingActualizando, 'bg-gray-100 hover:bg-yellow-100' : !loadingActualizando}"
-                            class="p-2 border border-gray-300 text-gray-600 w-full mt-3 rounded shadow"> 
-                                <span *ngIf="loadingActualizando">
-                                    <i class="fas fa-spinner animate-spin"></i> Actualizando
-                                </span>
-                                <span *ngIf="!loadingActualizando" class="font-semibold"> 
-                                    <i class="fas fa-check text-green-500"></i>
+                            class="p-2 border border-gray-300 text-gray-600 bg-gray-100 hover:text-yellow-500 w-full mt-3 rounded shadow"> 
+                                <span class="font-semibold"> 
                                     Actualizar producto 
                                 </span>    
                             </button>
-                </div>
-                <div class="w-full mx-2 flex-1">
-                    <button 
-                            [disabled]="loadingActualizando"
-                            [ngClass]="{'bg-gray-200' : loadingActualizando, 'bg-gray-100 hover:bg-yellow-100' : !loadingActualizando }"
-                            [routerLink]="['/dashboard/producto/', productoId]" 
-                            class="p-2 text-white w-full text-gray-600 border font-semibold border-gray-300 mt-3 rounded shadow"> Regresar </button>
                 </div>
             </div> 
         </form>

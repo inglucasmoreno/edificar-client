@@ -9,6 +9,7 @@ import { format } from 'date-fns';
 
 import { saveAs } from 'file-saver-es'; 
 import { AlertService } from 'src/app/services/alert.service';
+import { DataService } from 'src/app/services/data.service';
 
 @Component({
   selector: 'app-productos',
@@ -21,7 +22,6 @@ export class ProductosComponent implements OnInit {
   public usuarioLogin;
 
   public total = 0;
-  public loading = true;
   public productos = [];
 
   // Paginación
@@ -44,61 +44,38 @@ export class ProductosComponent implements OnInit {
   }
 
   constructor(private productosService: ProductosService,
+              private dataService: DataService,
               private alertService: AlertService,
               private authService: AuthService,
               private reportesService: ReportesService,
               private router: Router) {}
 
   ngOnInit(): void {
+    this.dataService.ubicacionActual = 'Dashboard - Productos';
     this.usuarioLogin = this.authService.usuario;
+    this.alertService.loading();
     this.listarProductos();
   }
 
   // Generar reporte de usuarios
   generarReporte(): void {
-    Swal.fire({
-      title: "¿Está seguro?",
-      text: "Está por generar un reporte",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Generar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-
-        Swal.fire({
-          title: 'Generando',
-          html: 'Creando reporte',
-          timerProgressBar: true,
-          allowOutsideClick: false,
-          didOpen: () => {
-            Swal.showLoading()
-          },
-        });
-
+    this.alertService.question({ msg: 'Está por generar un reporte', buttonText: 'Generar' })
+    .then(({isConfirmed}) => {  
+      if (isConfirmed) {
+        this.alertService.loading();
         this.reportesService.productos(
           this.filtro.activo, 
           this.filtro.descripcion,
           this.ordenar.direccion,
           this.ordenar.columna
         ).subscribe(archivoExcel => {
-          Swal.close();
+          this.alertService.close();
           saveAs(archivoExcel, `Productos ${format(new Date(), 'dd-MM-yyyy')}.xlsx`);
         },({error})=>{
-          Swal.close();
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: error.msg,
-            showCancelButton: false,
-            confirmButtonText: 'Entendido'
-          });
+          this.alertService.errorApi(error.msg);
         }); 
       }
-    })
-
+    }); 
   }
   
   // Listar productos
@@ -113,54 +90,12 @@ export class ProductosComponent implements OnInit {
     ).subscribe( ({productos, total}) => {
       this.productos = productos;
       this.total = total;
-      this.loading = false;
+      this.alertService.close();
     },({error})=>{
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: error.msg,
-        confirmButtonText: 'Entendido'
-      });
+      this.alertService.errorApi(error.msg);
     });
   }
-
-  // Actualizar estado Activo/Inactivo
-  actualizarEstado(producto: Producto): void {
-    const { _id, activo } = producto;
-    Swal.fire({
-      title: '¿Estas seguro?',
-      text: `¿Quieres actualizar el estado?`,
-      icon: 'info',
-      showCancelButton: true,
-      confirmButtonText: 'Si, estoy seguro',
-      cancelButtonText: 'No'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.loading = true;  
-        this.productosService.actualizarProducto(_id, {activo: !activo}).subscribe(() => {
-          this.listarProductos();
-          Swal.fire({
-            icon: 'success',
-            title: 'Completado',
-            text: `Estado actualizado`,
-            showConfirmButton: false,
-            timer: 1000
-          });
-          this.loading = false;
-        }, ({error}) => {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: error.msg,
-            confirmButtonText: 'Entendido'
-          });
-          this.loading = false;
-        });
-      }
-    });
-
-  }
-
+  
   // Reiniciar paginación
   reiniciarPaginacion(): void {
     this.paginacion.desde = 0;
@@ -170,12 +105,7 @@ export class ProductosComponent implements OnInit {
 
   detalleProducto(id): void {
     if(this.usuarioLogin.role !== 'ADMIN_ROLE'){
-      Swal.fire({
-        icon: 'info',
-        title: 'Información',
-        text: 'No tienes permiso para ingresar',
-        confirmButtonText: 'Entendido'
-      });
+      this.alertService.info('No tienes permisos para ingresar');
       return;
     }
     this.router.navigateByUrl(`/dashboard/producto/${id}`);
@@ -183,7 +113,7 @@ export class ProductosComponent implements OnInit {
 
   // Filtrar Activo/Inactivo
   filtrarActivos(activo: any): void{
-    this.loading = true;
+    this.alertService.loading();
     this.filtro.activo = activo;
     this.reiniciarPaginacion();
     this.listarProductos();
@@ -191,7 +121,7 @@ export class ProductosComponent implements OnInit {
 
   // Filtrar por parametro
   filtrarDescripcion(descripcion: string): void{
-    this.loading = true;
+    this.alertService.loading();
     this.filtro.descripcion= descripcion;
     this.reiniciarPaginacion();
     this.listarProductos();
@@ -200,7 +130,7 @@ export class ProductosComponent implements OnInit {
   // Funcion de paginación
   actualizarDesdeHasta(selector): void {
     
-    this.loading = true;
+    this.alertService.loading();
     
     if (selector === 'siguiente'){ // Incrementar
       if (this.paginacion.hasta < this.total){
@@ -222,7 +152,7 @@ export class ProductosComponent implements OnInit {
   
   // Ordenar por columna
   ordenarPorColumna(columna: string){
-    this.loading = true;
+    this.alertService.loading();
     this.ordenar.columna = columna;
     this.ordenar.direccion = this.ordenar.direccion == 1 ? -1 : 1; 
     this.listarProductos();

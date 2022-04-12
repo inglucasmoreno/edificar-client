@@ -3,6 +3,9 @@ import Swal from 'sweetalert2';
 import { ProductosService } from '../../services/productos.service';
 import { PresupuestosService } from '../../services/presupuestos.service';
 import { environment } from '../../../environments/environment';
+import gsap from 'gsap';
+import { AlertService } from 'src/app/services/alert.service';
+import { DataService } from 'src/app/services/data.service';
 
 const base_url = environment.base_url;
 
@@ -17,10 +20,6 @@ export class PresupuestoComponent implements OnInit {
   // Fecha
   public fechaHoy = Date.now();
 
-  // Loadings
-  public loading = false;
-  public loadingTabla = false;
-
   // Datos de cliente
   public cliente = {
     descripcion: '',
@@ -32,7 +31,6 @@ export class PresupuestoComponent implements OnInit {
 
   // Variables de producto
   public total = 0;
-  public loadingPDF = false;
   public precioTotal = 0;
   public productos: any = [];
   public seleccionado: any = {};
@@ -49,9 +47,14 @@ export class PresupuestoComponent implements OnInit {
   }
 
   constructor(private productosService: ProductosService,
+              private dataService: DataService,
+              private alertService: AlertService,
               private presupuestosService: PresupuestosService) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.dataService.ubicacionActual = "Dashboard - Presupuestos";
+    gsap.from('.gsap-contenido', { y:100, opacity: 0, duration: .3 });
+  }
   
   // Cargando datos de cliente
   datosCliente(data: string, selector: string): void{
@@ -64,80 +67,41 @@ export class PresupuestoComponent implements OnInit {
 
   // Se el presupuesto
   crearPresupuesto(): void { 
-    Swal.fire({
-      title: '¿Está seguro?',
-      text: "Está por generar un nuevo presupuesto",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Generar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-      
-        console.log(this.cliente);
 
-        // Se verifican los datos obligatorios
-        if(this.cliente.descripcion.trim() === '' || 
-           this.cliente.identificacion.trim() === '' ||
-           this.cliente.telefono.trim() === ''      
-        ){
-          Swal.fire({
-            icon: 'info',
-            title: 'Información',
-            text: 'Debe completar los datos obligatorios',
-            confirmButtonText: 'Entendido',
-          });
-          return;
-        }
+    this.alertService.question({ msg: 'Está por generar un presupuesto', buttonText: 'Generar' })
+        .then(({isConfirmed}) => {  
+          if (isConfirmed) {
+            // Se verifican los datos obligatorios
+            if(this.cliente.descripcion.trim() === '' || 
+              this.cliente.identificacion.trim() === '' ||
+              this.cliente.telefono.trim() === ''      
+            ){
+              this.alertService.info('Debe completar los datos obligatorios');
+              return;
+            }
 
-        const data = {
-          cliente: this.cliente,
-          productos: this.seleccionados
-        }
+            const data = {
+              cliente: this.cliente,
+              productos: this.seleccionados
+            }
 
-        Swal.fire({
-          title: 'Generando',
-          html: 'Creando presupuesto',
-          timerProgressBar: true,
-          allowOutsideClick: false,
-          didOpen: () => {
-            Swal.showLoading()
-          },
-        });
+            this.alertService.loading();
 
-        this.loadingPDF = true;
-        this.presupuestosService.generarPresupuesto(data).subscribe( resp => {
-          this.loadingPDF = false;    
-          Swal.close();
-          window.open(`${base_url}/presupuestos`, '_blank');  
-        },({error}) => {
-          this.loadingPDF = false;
-          Swal.close();
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: error.msg,
-            confirmButtonText: 'Entendido'
-          });
-        });
-
-      }
-    })
-
+            this.presupuestosService.generarPresupuesto(data).subscribe( () => {
+              this.alertService.close();
+              window.open(`${base_url}/presupuestos`, '_blank');  
+            },({error}) => {
+              this.alertService.errorApi(error.msg);
+            });
+          }
+        }); 
   }
 
   // Agregar producto al presupuesto
   agregarProducto(txtCantidad: any): void{
 
     if(txtCantidad.value.trim() === '' || txtCantidad.value === '0'){
-      Swal.fire({
-        icon: 'info',
-        title: 'Información',
-        text: 'Debe colocar una cantidad valida',
-        confirmButtonText: 'Entendido'
-      })
+      this.alertService.info('Debe colocar una cantidad valida');
       return;
     }else{
 
@@ -179,12 +143,7 @@ export class PresupuestoComponent implements OnInit {
     // Se controla si el producto ya esa en el presupuesto
     const existe = this.seleccionados.find(elemento => elemento.id == producto._id);
     if(existe){
-      Swal.fire({
-        icon: 'info',
-        title: 'Información',
-        text: 'Este producto ya esta agregado',
-        confirmButtonText: 'Entendido'
-      });
+      this.alertService.info('Este producto ya esta agregado');
       this.productos = [];
     }else{
       this.flagSeleccionado = true;
@@ -202,15 +161,10 @@ export class PresupuestoComponent implements OnInit {
   // Listar productos
   buscarProducto(): void{
     if(this.descripcion.trim() === ''){
-      Swal.fire({
-        icon: 'info',
-        title: 'Información',
-        text: 'Formulario inválido',
-        confirmButtonText: 'Entendido'
-      });
+      this.alertService.formularioInvalido();
       return;
     }
-    this.loading = true;
+    this.alertService.loading();
     this.reiniciarPaginacion();
     this.listarProductos();
   }
@@ -225,17 +179,9 @@ export class PresupuestoComponent implements OnInit {
     ).subscribe(({productos, total}) => {
       this.total = total;
       this.productos = productos;
-      this.loading = false;
-      this.loadingTabla = false;
+      this.alertService.close();
     },({error}) => {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: error.msg,
-        confirmButtonText: 'Entendido'
-      });
-      this.loading = false;
-      this.loadingTabla = false;
+      this.alertService.errorApi(error.msg);
     });
   }
 
@@ -247,21 +193,13 @@ export class PresupuestoComponent implements OnInit {
 
   // Eliminar presupuesto
   eliminarPresupuesto(): void {
-    Swal.fire({
-      title: '¿Estas seguro?',
-      text: "Estas por eliminar el presupuesto",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Eliminar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.seleccionados = [];
-        this.precioTotal = 0;
-      }
-    })
+    this.alertService.question({ msg: 'Está por eliminar el presupuesto', buttonText: 'Eliminar' })
+        .then(({isConfirmed}) => {  
+          if (isConfirmed) {
+            this.seleccionados = [];
+            this.precioTotal = 0;
+          }
+        }); 
   }
 
   // Borrar listado
@@ -269,30 +207,30 @@ export class PresupuestoComponent implements OnInit {
     this.productos = [];
   }
 
-    // Reiniciar paginación
-    reiniciarPaginacion(): void {
-      this.paginacion.desde = 0;
-      this.paginacion.hasta = 5;
-      this.paginacion.limit = 5;
-    }
-  
-    // Funcion de paginación
-    actualizarDesdeHasta(selector): void { 
-      this.loadingTabla = true;
-      if (selector === 'siguiente'){ // Incrementar
-        if (this.paginacion.hasta < this.total){
-          this.paginacion.desde += this.paginacion.limit;
-          this.paginacion.hasta += this.paginacion.limit;
-        }
-      }else{                         // Decrementar
-        this.paginacion.desde -= this.paginacion.limit;
-        if (this.paginacion.desde < 0){
-          this.paginacion.desde = 0;
-        }else{
-          this.paginacion.hasta -= this.paginacion.limit;
-        }
+  // Reiniciar paginación
+  reiniciarPaginacion(): void {
+    this.paginacion.desde = 0;
+    this.paginacion.hasta = 5;
+    this.paginacion.limit = 5;
+  }
+
+  // Funcion de paginación
+  actualizarDesdeHasta(selector): void { 
+    this.alertService.loading();
+    if (selector === 'siguiente'){ // Incrementar
+      if (this.paginacion.hasta < this.total){
+        this.paginacion.desde += this.paginacion.limit;
+        this.paginacion.hasta += this.paginacion.limit;
       }
-      this.listarProductos();
+    }else{                         // Decrementar
+      this.paginacion.desde -= this.paginacion.limit;
+      if (this.paginacion.desde < 0){
+        this.paginacion.desde = 0;
+      }else{
+        this.paginacion.hasta -= this.paginacion.limit;
+      }
     }
+    this.listarProductos();
+  }
 
 }

@@ -1,48 +1,49 @@
 
 <app-tarjeta-formulario>
-    <div class="p-3 text-gray-500" *ngIf="loading">
-        <i class="fas fa-spinner animate-spin mr-2"></i>
-        Cargando datos
-    </div>
-    <div *ngIf="!loading"> 
-        <div class="p-4 flex justify-between items-center">
-            <h1 class="flex items-center text-gray-700">
+    <div> 
+        <div class="p-4 flex border border-gray-800 justify-between rounded-t bg-gray-800 text-white items-center">
+            <h1 class="flex items-center">
                 <i routerLink="/dashboard/productos" title="Regresar" class="fas fa-arrow-left border bg-gray-100 text-gray-600 hover:text-yellow-500 border-gray-300 rounded p-2 px-3 shadow cursor-pointer"></i>
                 <div class="flex flex-col ml-2">
-                    <span class="ml-2 text-xl text-gray-600"> Productos </span>
-                    <span *ngIf="producto.activo" class="text-xs mt-1 ml-1 font-semibold border py-1 px-2 rounded border-green-200 text-green-500 bg-green-100"> 
+                    <span class="ml-2 text-xl"> Detalles de producto </span>
+                    <span *ngIf="producto.activo" class="text-xs w-max mt-1 ml-1 font-semibold border py-1 px-2 rounded border-green-200 text-green-500 bg-green-100"> 
                         <i class="fas fa-check mr-1"></i>
                         Producto activo
                     </span>
-                    <span *ngIf="!producto.activo" class="text-xs mt-1 ml-1 font-semibold border py-1 px-2 rounded text-red-500 bg-red-100 border-red-200"> 
+                    <span *ngIf="!producto.activo" class="text-xs w-max mt-1 ml-1 font-semibold border py-1 px-2 rounded text-red-500 bg-red-100 border-red-200"> 
                         <i class="fas fa-times mr-1"></i>
                         Producto inactivo
                     </span>
                 </div>
             </h1>
-            <div *ngIf="!loading" 
-                 title="Editar producto"
+            <div title="Editar producto"
                  [routerLink]="['/dashboard/productos/editar', producto._id]" 
-                 class="text-gray-600 border border-gray-300 bg-gray-100 rounded shadow cursor-pointer hover:text-yellow-500">
-                <i class="fas fa-pencil-alt px-3 py-2 text-xl"></i>
+                 class="text-gray-600 border border-gray-300 p-2 bg-gray-100 rounded shadow cursor-pointer hover:text-yellow-500">
+                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                 </svg>
             </div>
         </div>
         
-        <div *ngIf="!loading">
+        <div>
             <div class="border shadow p-4 bg-gray-100">
                 <h1 class="font-semibold text-gray-600"> DETALLES GENERALES </h1>
             </div>
         
             <div class="p-6">
                 <div class="lg:flex lg:items-center">
-                    <div class="border shadow border-gray-300 p-2 rounded">
-                        <i class="fas fa-box text-gray-600 mr-1 text-sm"></i>
-                        <span class="text-gray-600 text-sm"> Código del producto </span>
+                    <div class="border flex items-center shadow border-gray-300 p-2 rounded">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                        </svg>
+                        <span class="text-gray-600 ml-1 text-sm"> Código del producto </span>
                         <span class="ml-1 font-semibold text-md"> {{ producto.codigo }} </span>
                     </div>
-                    <div class="border shadow border-gray-300 p-2 rounded mt-2 lg:mt-0 lg:ml-10">
-                        <i class="fas fa-money-bill-wave text-gray-600 mr-1 text-sm"></i>
-                        <span class="text-sm text-gray-600"> Precio </span>
+                    <div class="border shadow flex items-center border-gray-300 p-2 rounded mt-2 lg:mt-0 lg:ml-10">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                        <span class="text-sm text-gray-600 ml-1"> Precio </span>
                         <span class="ml-2 font-semibold text-md"> ${{ producto.precio | moneda}} </span>
                     </div>
                 </div> 
@@ -60,8 +61,10 @@
     
             <div class="p-6">
                 <div *ngIf="producto.stock_minimo && producto.cantidad <= producto.cantidad_minima" class="flex">
-                    <div class="border border-red-200 bg-red-100 rounded shadow py-2 px-4 mb-3">
-                        <i class="far fa-bell text-red-800 mr-1 text-sm"></i>
+                    <div class="border border-red-200 flex items-center bg-red-100 rounded shadow py-2 px-2 mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-800 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                        </svg>
                         <span class="text-red-800 font-semibold"> Alerta de stock </span>
                     </div>
                 </div>
@@ -92,10 +95,6 @@
                 </div>
             </div>
     
-        </div>
-    
-        <div *ngIf="loading" class="mt-2 text-gray-500 px-4">
-            <i class="fas fa-spinner animate-spin ml-2"></i> <span> Cargando producto </span>
         </div>
         <br>
     </div>
