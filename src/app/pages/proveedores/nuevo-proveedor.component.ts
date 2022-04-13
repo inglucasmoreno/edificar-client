@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import Swal from 'sweetalert2';
+import { AlertService } from 'src/app/services/alert.service';
+import { DataService } from 'src/app/services/data.service';
 import { ProveedoresService } from '../../services/proveedores.service';
 
 @Component({
@@ -12,8 +13,6 @@ import { ProveedoresService } from '../../services/proveedores.service';
 })
 export class NuevoProveedorComponent implements OnInit {
 
-  public loading = false;
-
   public proveedorForm = this.fb.group({
     razon_social: ['', Validators.required],
     cuit: ['', Validators.required],
@@ -23,10 +22,14 @@ export class NuevoProveedorComponent implements OnInit {
   });
 
   constructor(private fb: FormBuilder,
+              private alertService: AlertService,
+              private dataService: DataService,
               private proveedorService: ProveedoresService,
               private router: Router) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.dataService.ubicacionActual = "Dashboard - Proveedores";
+  }
   
   // Se crea el proveedor
   crearProveedor(): void {
@@ -45,34 +48,16 @@ export class NuevoProveedorComponent implements OnInit {
         activo
       }
       if(domicilio.trim() != '') data['domicilio'] = domicilio;
-      this.loading = true;
+      this.alertService.loading();
       this.proveedorService.nuevoProveedor(data).subscribe(()=>{
-        Swal.fire({
-          icon: 'success',
-          title: 'Completado',
-          text: 'Proveedor creado correctamente',
-          timer: 1000,
-          showConfirmButton: false
-        })            
-        this.loading = false;
+        this.alertService.close();
         this.router.navigateByUrl('/dashboard/proveedores');
       },({error})=>{
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: error.msg,
-          confirmButtonText: 'Entendido'
-        });
-        this.loading = false;
+        this.alertService.errorApi(error.msg);
       }); 
 
     }else{
-      Swal.fire({
-        icon: 'info',
-        title: 'Información',
-        text: 'Formulario inválido',
-        confirmButtonText: 'Entendido'
-      });
+      this.alertService.formularioInvalido();
     }
   }
 

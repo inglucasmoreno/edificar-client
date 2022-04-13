@@ -1,18 +1,14 @@
 <app-tarjeta-formulario>
-    <div class="p-3 text-gray-500" *ngIf="loadingInicio">
-        <i class="fas fa-spinner animate-spin mr-2"></i>
-        Cargando datos
-    </div>
-    <div *ngIf="!loadingInicio">
-        <div class="p-4 flex items-center">
+    <div>
+        <div class="p-4 flex bg-gray-800 border border-gray-800 text-white items-center">
             <h1 class="flex items-center text-gray-700">
-                <i routerLink="/dashboard/proveedores"  title="Regresar" class="fas fa-arrow-left border bg-gray-100 hover:text-yellow-500 text-gray-600 border-gray-300 rounded p-2 px-3 shadow cursor-pointer"></i>
+                <button routerLink="/dashboard/proveedores" class="hover:text-yellow-500 border bg-gray-100 text-gray-600 border-gray-300 rounded p-2 px-3 shadow cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                </button> 
                 <div class="flex flex-col ml-2">
-                    <span class="ml-2 text-xl text-gray-600"> Proveedores </span>
-                    <span class="text-xs w-max mt-1 ml-1 font-semibold border py-1 px-2 rounded text-gray-600 border-gray-200 bg-yellow-100"> 
-                        <i class="fas fa-pencil-alt"></i>
-                        Editando
-                    </span>
+                    <span class="ml-2 text-xl text-white"> Proveedores </span>
                 </div>
             </h1>
         </div>
@@ -22,27 +18,27 @@
             <div class="flex flex-col lg:flex-row">
                 <div class="w-full mx-2 flex-1 svelte-1l8159u">
                     <div class="font-bold mt-3 text-gray-600 text-sm"> Razón Social </div>
-                    <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
+                    <div class="bg-white my-2 p-1 flex">
                         <input placeholder="Ej. Equinoccio Technology"
                                formControlName="razon_social" 
-                               class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"
+                               class="p-1 appearance-none border-b-2 focus:outline-none border-gray-300 transform duration-500 focus:border-yellow-500 outline-none w-full text-gray-800 text-sm"
                                ></div>
                 </div>
                 <div class="w-full mx-2 flex-1 svelte-1l8159u">
                     <div class="font-bold mt-3 text-gray-600 text-sm"> CUIT </div>
-                    <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
+                    <div class="bg-white my-2 p-1 flex">
                         <input placeholder="Ej. 24340603989"
                                formControlName="cuit"
-                               class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"></div>
+                               class="p-1 appearance-none border-b-2 focus:outline-none border-gray-300 transform duration-500 focus:border-yellow-500 outline-none w-full text-gray-800 text-sm"></div>
                 </div>
             </div>
             <div class="flex flex-col lg:flex-row">
                 <div class="w-full mx-2 flex-1 svelte-1l8159u">
-                    <div class="font-bold mt-3 text-gray-600 text-sm"> Domicilio </div>
-                    <div class="bg-white my-2 p-1 flex border border-gray-300 rounded shadow">
+                    <div class="font-bold mt-2 text-gray-600 text-sm"> Domicilio </div>
+                    <div class="bg-white my-2 p-1 flex">
                         <input placeholder="No es obligatorio" 
                                formControlName="domicilio"
-                               class="p-1 px-2 appearance-none outline-none w-full text-gray-800 text-sm"
+                               class="p-1 appearance-none border-b-2 focus:outline-none border-gray-300 transform duration-500 focus:border-yellow-500 outline-none w-full text-gray-800 text-sm"
                                ></div>
                 </div>
             </div>
@@ -52,7 +48,7 @@
                     <div class="bg-white my-2 flex">
                         <select
                                 formControlName="condicion_iva"
-                                class="border rounded p-1 py-2 w-full shadow text-sm">
+                                class="p-1 border-b-2 focus:outline-none border-gray-300 transform duration-500 focus:border-yellow-500 outline-none w-full text-gray-800 text-sm">
                                 <option value="IVA Responsable Inscripto"> IVA Responsable Inscripto </option>
                                 <option value="IVA Responsable no Inscripto"> IVA Responsable no Inscripto </option>
                                 <option value="IVA no Responsable"> IVA no Responsable </option>
@@ -75,7 +71,7 @@
                     <div class="bg-white my-2 flex">
                         <select
                                 formControlName="activo"
-                                class="border rounded p-1 py-2 w-full shadow text-sm">
+                                class="p-1 border-b-2 focus:outline-none border-gray-300 transform duration-500 focus:border-yellow-500 outline-none w-full text-gray-800 text-sm">
                             <option value=true> Activo </option>
                             <option value=false> Inactivo </option>
                         </select>
@@ -86,24 +82,11 @@
                 <div class="w-full mx-2 flex-1">
                     <button 
                             (click)="actualizarProveedor()"
-                            [disabled]="loadingActualizando"
-                            [ngClass]="{'bg-yellow-100' : loadingActualizando, 'bg-gray-100 hover:bg-yellow-100' : !loadingActualizando}"
-                            class="p-2 text-gray-600 border border-gray-300 w-full mt-3 rounded shadow"> 
-                                <span *ngIf="loadingActualizando">
-                                    <i class="fas fa-spinner animate-spin"></i> Actualizando
-                                </span>
-                                <span class="font-semibold" *ngIf="!loadingActualizando"> 
-                                    <i class="fas fa-check text-green-500"></i>
+                            class="p-2 text-gray-800 border border-gray-300 bg-gray-100 hover:text-yellow-500 w-full mt-3 rounded shadow"> 
+                                <span class="font-semibold"> 
                                     Actualizar proveedor 
                                 </span>    
                             </button>
-                </div>
-                <div class="w-full mx-2 flex-1">
-                    <button 
-                            [disabled]="loadingActualizando"
-                            [ngClass]="{'bg-gray-200' : loadingActualizando, 'bg-gray-100 hover:bg-yellow-100' : !loadingActualizando }"
-                            routerLink="/dashboard/proveedores" 
-                            class="p-2 text-gray-600 border border-gray-300 font-semibold w-full mt-3 rounded shadow"> Regresar </button>
                 </div>
             </div> 
         </form>

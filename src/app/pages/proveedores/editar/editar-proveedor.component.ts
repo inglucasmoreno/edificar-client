@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Validators, FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Proveedor } from 'src/app/models/proveedor.model';
-import Swal from 'sweetalert2';
+import { AlertService } from 'src/app/services/alert.service';
+import { DataService } from 'src/app/services/data.service';
 import { ProveedoresService } from '../../../services/proveedores.service';
 
 @Component({
@@ -13,8 +14,6 @@ import { ProveedoresService } from '../../../services/proveedores.service';
 })
 export class EditarProveedorComponent implements OnInit {
 
-  public loadingInicio = true;
-  public loadingActualizando = false;
   public proveedor: Proveedor;
 
   public proveedorForm = this.fb.group({
@@ -26,11 +25,14 @@ export class EditarProveedorComponent implements OnInit {
   });
 
   constructor(private activatedRoute: ActivatedRoute,
+              private alertService: AlertService,
+              private dataService: DataService,
               private fb: FormBuilder,
               private proveedoresService: ProveedoresService,
               private router: Router) { }
 
   ngOnInit(): void {
+    this.dataService.ubicacionActual = "Dashboard - ";
     this.activatedRoute.params.subscribe(({ id }) => {
       this.getProveedor(id);
     })
@@ -38,6 +40,7 @@ export class EditarProveedorComponent implements OnInit {
   
   // Se traen los datos del proveedor
   getProveedor(id: string): void {
+    this.alertService.loading();
     this.proveedoresService.getProveedor(id).subscribe(({proveedor})=>{
       this.proveedor = proveedor;
       this.proveedorForm.setValue({
@@ -47,15 +50,9 @@ export class EditarProveedorComponent implements OnInit {
         condicion_iva: proveedor.condicion_iva,
         activo: proveedor.activo
       });
-      this.loadingInicio = false;
+      this.alertService.close();
     },({error})=>{
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: error.msg,
-        confirmButtonText: 'Entendido'
-      });
-      this.loadingInicio = false;  
+      this.alertService.errorApi(error.msg);
     });
   }
 
@@ -69,32 +66,15 @@ export class EditarProveedorComponent implements OnInit {
                              this.proveedorForm.valid
 
     if(formularioValido){
-      this.loadingActualizando = true;
+      this.alertService.loading();
       this.proveedoresService.actualizarProveedor(this.proveedor._id, this.proveedorForm.value).subscribe(()=>{
-        Swal.fire({
-          icon: 'success',
-          title: 'Completado',
-          text: 'Actualizado correctamente',
-          timer: 1000,
-          showConfirmButton: false
-        });
+        this.alertService.close();
         this.router.navigateByUrl('/dashboard/proveedores');
-        this.loadingActualizando = false;  
       },({error})=>{
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: error.msg,
-          confirmButtonText: 'Entendido'  
-        });
+        this.alertService.errorApi(error.msg);
       });  
     }else{
-      Swal.fire({
-        icon: 'info',
-        title: 'Información',
-        text: 'Formulario inválido',
-        confirmButtonText: 'Entendido'
-      });
+      this.alertService.formularioInvalido();
     }
   }
 
