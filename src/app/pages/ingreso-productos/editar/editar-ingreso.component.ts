@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import Swal from 'sweetalert2';
 import { IngresosService } from '../../../services/ingresos.service';
 import { ProveedoresService } from '../../../services/proveedores.service';
 import { FormBuilder, Validators } from '@angular/forms';
+import { DataService } from 'src/app/services/data.service';
+import { AlertService } from 'src/app/services/alert.service';
 
 @Component({
   selector: 'app-editar-ingreso',
@@ -15,9 +16,6 @@ export class EditarIngresoComponent implements OnInit {
 
   public id: string;
   public ingreso = {};
-  public loading = false;
-  public loadingInicial = true;
-  public loadingFinal = false;
   public proveedor = {
     _id: '',
     razon_social: '',
@@ -36,14 +34,18 @@ export class EditarIngresoComponent implements OnInit {
   });
 
   constructor(private activatedRoute: ActivatedRoute,
+              private dataService: DataService,
+              private alertService: AlertService,
               private ingresosService: IngresosService,
               private proveedoresService: ProveedoresService,
               private fb: FormBuilder,
               private router: Router) { }
 
   ngOnInit(): void {
+    this.dataService.ubicacionActual = "Dashboard - Ingresos - Editando";
     this.activatedRoute.params.subscribe(({id})=>{
       this.id = id;
+      this.alertService.loading();
       this.ingresosService.getIngreso(id).subscribe(({ingreso})=>{
         this.ingreso = ingreso;
         const tempRemito = ingreso.numero_remito.split('-');
@@ -53,29 +55,19 @@ export class EditarIngresoComponent implements OnInit {
         });
         this.proveedoresService.getProveedor(ingreso.proveedor._id).subscribe(({proveedor})=>{
           this.proveedor = proveedor;
-          this.loadingInicial = false;
+          this.alertService.close();
         },({error})=>{
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: error.msg,
-            confirmButtonText: 'Entendido'
-          })            
+          this.alertService.errorApi(error.msg);          
         })
       },({error})=>{
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: error.msg,
-          confirmButtonText: 'Entendido'
-        })        
+        this.alertService.errorApi(error.msg);
       });
     })
   }
 
   // Listando proveedores
   listarProveedores(): void {
-    this.loading = true;
+    this.alertService.loading();
     this.proveedoresService.listarProveedores(
       this.limit,        // Limite de valores
       0,                 // Desde el principio de la lista
@@ -83,27 +75,16 @@ export class EditarIngresoComponent implements OnInit {
       this.descripcion   // Descripcion para busqueda
     ).subscribe(({proveedores}) => {
       this.proveedores = proveedores;
-      this.loading = false;
+      this.alertService.close();
     },({error}) =>{
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: error.msg,
-        confirmButtonText: 'Entendido'
-      })
-      this.loading = false;
+      this.alertService.errorApi(error.msg);
     });
   }
 
   // Buscar proveedores
   buscarProveedores(): void {  
     if(this.descripcion.trim() === ''){
-      Swal.fire({
-        icon: 'info',
-        title: 'Información',
-        text: 'Formulario inválido',
-        confirmButtonText: 'Entendido'
-      });
+      this.alertService.formularioInvalido();
       return;
     }
     this.listarProveedores();  
@@ -117,7 +98,7 @@ export class EditarIngresoComponent implements OnInit {
 
   // Borrar proveedor seleccionado
   borrarProveedorSeleccionado(){
-    this.loading = false;
+    this.alertService.close();
     this.proveedorSeleccionado = false;
     this.proveedores = [];
     this.proveedor = {
@@ -142,37 +123,19 @@ export class EditarIngresoComponent implements OnInit {
     const formularioValido = punto_venta.trim() !== '' && numero_comprobante.trim() !== '' && this.ingresoForm.valid && this.proveedorSeleccionado;
 
     if(formularioValido){
-      this.loadingFinal = true;
+      this.alertService.loading();
       const data = {
         numero_remito: `${this.ingresoForm.value.punto_venta}-${this.ingresoForm.value.numero_comprobante}`,
         proveedor: this.proveedor._id,
       };
       this.ingresosService.actualizarIngreso(this.id, data).subscribe(()=>{
-        Swal.fire({
-          icon: 'success',
-          title: 'Completado',
-          text: 'Actualizacion correcta',
-          timer: 1000,
-          showConfirmButton: false  
-        });
-        this.loadingFinal = false;
+        this.alertService.close();
         this.router.navigateByUrl(`/dashboard/ingreso_productos/detalles/${this.id}`);
       },({error}) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: error.msg,
-          confirmButtonText: 'Entendido'
-        })
-        this.loadingFinal = false;
+        this.alertService.errorApi(error.msg);
       });
     }else{
-      Swal.fire({
-        icon: 'info',
-        title: 'Información',
-        text: 'Formulario inválido',
-        confirmButtonText: 'Entendido'
-      });  
+      this.alertService.formularioInvalido();
     }
   }
 

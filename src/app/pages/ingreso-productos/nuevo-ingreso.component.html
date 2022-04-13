@@ -1,26 +1,12 @@
 <app-tarjeta-formulario>
-    <div class="px-4 p-2 flex items-center justify-between mr-2">
+    <div class="px-4 py-3 bg-gray-800 text-white rounded-t flex items-center justify-between mr-2">
         <div class="flex items-center">
-          <h1 class="flex items-center text-gray-700">
+          <h1 class="flex items-center">
               <i routerLink="/dashboard/ingreso_productos" title="Regresar" class="fas fa-arrow-left border bg-gray-100 text-gray-600 hover:text-yellow-500 border-gray-300 rounded p-2 px-3 shadow cursor-pointer"></i>
               <div class="flex flex-col ml-2">
-                  <span class="ml-2 text-xl text-gray-600"> Remito de ingreso </span>
-                  <span class="text-xs w-max mt-1 ml-1 font-semibold border border-gray-200 py-1 px-2 rounded text-gray-600 bg-yellow-100"> 
-                      <i class="fas fa-plus-circle"></i>
-                      Nuevo remito
-                  </span>
+                  <span class="ml-2 text-xl"> Remito de ingreso </span>
               </div>
           </h1>
-        </div>
-        <div>
-          <button [ngClass]="{'bg-yellow-100': loading || loadingFinal, 'bg-gray-100 hover:bg-yellow-100': !loading && !loadingFinal}"
-                  class="py-2 px-4 text-gray-600 rounded shadow border border-gray-300"
-                  [disabled]="loading || loadingFinal"
-                  (click)="crearIngreso(txtPuntoVenta.value, txtNroComprobante.value)"
-          >    
-            <i *ngIf="!loadingFinal" class="fas fa-check"></i> 
-            <i *ngIf="loadingFinal" class="fas fa-spinner animate-spin text-2xl text-gray-600"></i>
-        </button>
         </div>
     </div>
     <div class="px-4 pb-2">
@@ -45,9 +31,11 @@
           <span class="font-normal leading-tight text-sm text-gray-700 font-semibold"> Proveedor </span>
           <div *ngIf="proveedorSeleccionado" class="mt-2 animate__animated animate__zoomIn flex items-center">
             <span class="text-sm bg-green-100 text-green-500 border border-green-200 p-2 rounded font-semibold"> {{ proveedor.razon_social }} </span>
-            <span class="bg-red-100 text-red-500 border hover:bg-red-400 hover:text-white border-red-200 py-1 px-2 ml-2 rounded cursor-pointer"
+            <span class="bg-red-100 text-red-500 border border-red-200 py-1 px-2 ml-2 rounded cursor-pointer"
                   (click)="borrarProveedorSeleccionado()">
-              <i class="far fa-trash-alt"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
             </span>
           </div>
           <div *ngIf="!proveedorSeleccionado" class="flex items-center">
@@ -57,28 +45,42 @@
                     (keyup)="filtroDescripcion(txtBuscar.value)"
                     (keyup.enter)="buscarProveedores()"
                     class="my-2 text-sm bg-grey-light text-grey-darkest rounded h-10 p-3 focus:outline-none border shadow">          
-            <button class="border border-gray-300 bg-gray-100 text-gray-500 hover:bg-yellow-100 py-2 px-3 rounded ml-2"
-            [ngClass]="{'bg-yellow-100': loading}"
+            <button class="border border-gray-300 bg-gray-100 text-gray-800 hover:text-yellow-500 py-2 px-3 rounded ml-2"
             (click)="buscarProveedores()">
-              <i *ngIf="loading" class="fas fa-spinner animate-spin text-xl text-gray-400"></i>
-              <span *ngIf="!loading">
-                  <i class="fas fa-search"></i> Buscar
+              <span class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg> 
+                <span class="ml-1">
+                  Buscar
+                </span>
               </span>
           </button>
           </div>
+
+          <button class="bg-gray-100 w-full rounded border border-gray-300 p-2 font-semibold mt-2 hover:text-yellow-500"
+                  (click)="crearIngreso(txtPuntoVenta.value, txtNroComprobante.value)"> 
+                    Crear ingreso 
+          </button>
+
                    
           <!-- Proveedores -->
-          <div *ngIf="!proveedorSeleccionado && !loading && proveedores.length > 0" 
-               class="w-11/12 animate__animated animate__zoomIn absolute bg-white z-50 border border-gray-200 p-2 rounded shadow">
-            <div class="flex items-center justify-between p-2 bg-gray-100 rounded mb-2 border border-gray-200">
-              <h1 class="text-gray-700 font-semibold"> 
-                  <i class="fas fa-search"></i>
+          <div *ngIf="!proveedorSeleccionado && proveedores.length > 0" 
+               class="w-11/12 absolute bg-white z-50 border border-gray-300 p-2 rounded shadow">
+            <div class="flex items-center justify-between p-2 bg-gray-100 rounded mb-2 border border-gray-300">
+              <h1 class="text-gray-800 font-semibold"> 
+                <span>
                   Buscador de proveedores
+                </span>
               </h1>
-              <i (click)="borrarProveedorSeleccionado()" class="fas fa-times bg-red-100 border border-red-200 bg-white py-2 px-3 border-gray-200 shadow text-red-500 hover:bg-red-400 hover:text-white cursor-pointer"></i>
+              <button (click)="borrarProveedorSeleccionado()" class="bg-red-100 border border-red-200 bg-white rounded p-2 border-gray-200 shadow text-red-500 cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>                
+              </button>        
             </div>
             <div *ngFor="let proveedor of proveedores" 
-                  class="animate__animated animate__fadeIn flex my-2 cursor-pointer rounded text-sm border shadow hover:bg-yellow-100"
+                  class="flex my-2 cursor-pointer rounded text-sm border shadow hover:border-yellow-500"
                   (click)="seleccionarProveedor(proveedor)"
                   >
               <div class="p-2">
@@ -88,6 +90,7 @@
               </div>
             </div>
           </div> 
+        
         </div>            
     </div>
 </app-tarjeta-formulario>

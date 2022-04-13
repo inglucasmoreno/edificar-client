@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 
 import { IngresosService } from '../../services/ingresos.service';
 import { Proveedor } from '../../models/proveedor.model';
 import { ProveedoresService } from '../../services/proveedores.service';
+import { AlertService } from 'src/app/services/alert.service';
+import { DataService } from 'src/app/services/data.service';
 
 @Component({
   selector: 'app-nuevo-ingreso',
@@ -14,8 +15,6 @@ import { ProveedoresService } from '../../services/proveedores.service';
 })
 export class NuevoIngresoComponent implements OnInit {
 
-  public loading = false;
-  public loadingFinal = false;
   public numero_remito = '';
   public proveedores: Proveedor[] = [];
   public proveedor: Proveedor;
@@ -24,22 +23,21 @@ export class NuevoIngresoComponent implements OnInit {
   public descripcion = '';
 
   constructor(private proveedoresService: ProveedoresService,
+              private dataService: DataService,
+              private alertService: AlertService,
               private ingresosService: IngresosService,
               private router: Router) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.dataService.ubicacionActual = 'Dashboard - Ingresos - Creando';
+  }
 
   // Nuevo ingreso
   crearIngreso(punto_venta: string, nro_comprobante: string): void {
     
     // Se verifica validacion de formulario
     if(punto_venta.trim() == '' || nro_comprobante.trim() == '' || !this.proveedorSeleccionado){
-      Swal.fire({
-        icon: 'info',
-        title: 'Información',
-        text: 'Formulario inválido',
-        confirmButtonText: 'Entendido'
-      });  
+      this.alertService.formularioInvalido();
       return;
     }
     
@@ -50,32 +48,18 @@ export class NuevoIngresoComponent implements OnInit {
       proveedor: this.proveedor._id,
     }
 
-    this.loadingFinal = true;
+    this.alertService.loading();
     this.ingresosService.nuevoIngreso(data).subscribe(({ingreso}) => {
-      Swal.fire({
-        icon: 'success',
-        title: 'Completado',
-        text: 'Nuevo ingreso creado correctamente',
-        showConfirmButton: false,
-        timer: 1000
-      });
-      this.loadingFinal = false;  
+      this.alertService.close();
       this.router.navigateByUrl(`dashboard/ingreso_productos/detalles/${ingreso._id}`);
     },({error}) => {
-      console.log(error);
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: error.msg,
-        confirmButtonText: 'Entendido'
-      }),
-      this.loadingFinal = false;
+      this.alertService.errorApi(error.msg);
     });
   }
 
   // Listando proveedores
   listarProveedores(): void {
-    this.loading = true;
+    this.alertService.loading();
     this.proveedoresService.listarProveedores(
       this.limit,        // Limite de valores
       0,                 // Desde el principio de la lista
@@ -83,27 +67,16 @@ export class NuevoIngresoComponent implements OnInit {
       this.descripcion   // Descripcion para busqueda
     ).subscribe(({proveedores}) => {
       this.proveedores = proveedores;
-      this.loading = false;
+      this.alertService.close();
     },({error}) =>{
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: error.msg,
-        confirmButtonText: 'Entendido'
-      })
-      this.loading = false;
+      this.alertService.errorApi(error.msg);
     });
   }
 
   // Buscar proveedores
   buscarProveedores(): void {  
     if(this.descripcion.trim() === ''){
-      Swal.fire({
-        icon: 'info',
-        title: 'Información',
-        text: 'Formulario inválido',
-        confirmButtonText: 'Entendido'
-      });
+      this.alertService.formularioInvalido();
       return;
     }
     this.listarProveedores();  
@@ -123,7 +96,7 @@ export class NuevoIngresoComponent implements OnInit {
 
   // Borrar proveedor seleccionado
   borrarProveedorSeleccionado(){
-    this.loading = false;
+    this.alertService.close();
     this.proveedorSeleccionado = false;
     this.proveedores = [];
     this.proveedor = {

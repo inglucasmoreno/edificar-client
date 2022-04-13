@@ -3,6 +3,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { IngresosService } from '../../services/ingresos.service';
 import Swal from 'sweetalert2';
 import { IngresoProductosService } from '../../services/ingreso-productos.service';
+import { DataService } from 'src/app/services/data.service';
+import { AlertService } from 'src/app/services/alert.service';
+import gsap from 'gsap';
+
 
 @Component({
   selector: 'app-ingreso-detalles',
@@ -17,12 +21,6 @@ export class IngresoDetallesComponent implements OnInit {
   // Totales
   public total;
   public totalGeneral;
-
-  // Loadings
-  public loadingRemito = true;
-  public loadingProductos = true;
-  public loadingTabla = false;
-  public loadingCompletar = false;
   
   // Ingreso
   public ingreso = {
@@ -45,26 +43,24 @@ export class IngresoDetallesComponent implements OnInit {
   public productos = [];                  // Productos del ingreso
 
   constructor(private ingresoService: IngresosService,
+              private dataService: DataService,
+              private alertService: AlertService,
               private activatedRoute: ActivatedRoute,
               private ingresoProductosService: IngresoProductosService,
               private router: Router) { }
 
   ngOnInit(): void {
+    gsap.from('.gsap-contenido', { y:100, opacity: 0, duration: .2 });
+    this.dataService.ubicacionActual = "Dashboard - Ingresos - Detalles";
     this.activatedRoute.params.subscribe(({ id }) => {  
       this.id = id;
+      this.alertService.loading();
       this.ingresoService.getIngreso(id).subscribe( ({ ingreso }) => {
        this.ingreso = ingreso;
-       this.loadingRemito = false;
        this.primerIngreso();
       });  
     },({error}) => {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: error.msg,
-        confirmButtonText: 'Entendido'
-      });
-      this.loadingRemito = false;
+      this.alertService.errorApi(error.msg);
     });
   }
   
@@ -79,17 +75,9 @@ export class IngresoDetallesComponent implements OnInit {
       this.totalGeneral = totalGeneral;
       this.productos = productos;
       this.total = total;
-      this.loadingProductos = false;
-      this.loadingTabla = false;
+      this.alertService.close();
     },({error})=>{
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: error.msg,
-        confirmButtonText: 'Entendido'
-      });
-      this.loadingProductos = false;
-      this.loadingTabla = false;
+      this.alertService.errorApi(error.msg);
     });  
   }
 
@@ -98,59 +86,39 @@ export class IngresoDetallesComponent implements OnInit {
     
     // Se verifica si el remito tiene productos
     if(this.totalGeneral <= 0){
-      Swal.fire({
-        icon: 'info',
-        title: 'Información',
-        text: 'El ingreso no tiene productos',
-        confirmButtonText: 'Entendido'
-      });
+      this.alertService.info('El ingreso no tiene productos');
       return;
     }
 
-    Swal.fire({
-      title: '¿Estas seguro?',
-      text: "Estas por completar el ingreso",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Completar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
+    this.alertService.question({ msg: 'Está por completar el ingreso', buttonText: 'Completar' })
+      .then(({isConfirmed}) => {  
+        if (isConfirmed) {
+          this.alertService.loading();
 
-        this.loadingCompletar = true;
-
-        const data = {
-          persona_empresa: this.ingreso.proveedor['razon_social'],
-          documento_codigo: this.ingreso.numero_remito
-        }
-        this.ingresoProductosService.completarIngreso(this.id, data).subscribe(() => {
-          Swal.fire({
-            icon: 'success',
-            title: 'Completado',
-            text: 'Ingreso completado correctamente',
-            timer: 1000,
-            showConfirmButton: false
+          const data = {
+            persona_empresa: this.ingreso.proveedor['razon_social'],
+            documento_codigo: this.ingreso.numero_remito
+          }
+          this.ingresoProductosService.completarIngreso(this.id, data).subscribe(() => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Completado',
+              text: 'Ingreso completado correctamente',
+              timer: 1000,
+              showConfirmButton: false
+            });
+            this.alertService.close();
+            this.router.navigateByUrl('/dashboard/ingreso_productos'); 
+          },({error})=>{
+            this.alertService.errorApi(error.msg);
           });
-          this.loadingCompletar = false;
-          this.router.navigateByUrl('/dashboard/ingreso_productos'); 
-        },({error})=>{
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: error.msg,
-            confirmButtonText: 'Entendido'
-          })
-          this.loadingCompletar = false;
-        });
-      }
-    })
+        }
+      }); 
   }
 
   // Listar productos por ingreso
   listarProductosPorIngreso(): void {
-    this.loadingTabla = true;
+    this.alertService.loading();
     this.ingresoProductosService.listarProductosPorIngreso(
       this.id,
       this.paginacion.hasta,
@@ -160,32 +128,18 @@ export class IngresoDetallesComponent implements OnInit {
       this.totalGeneral = totalGeneral;
       this.productos = productos;
       this.total = total;
-      this.loadingTabla = false;
+      this.alertService.close();
     },({error})=>{
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: error.msg,
-        confirmButtonText: 'Entendido'
-      });
-      this.loadingTabla = false;
+      this.alertService.errorApi(error.msg);
     });
   }
-
+  
   // Eliminar producto
   eliminarProducto(producto: string): void {
-    Swal.fire({
-      title: '¿Estas seguro?',
-      text: "Estas por eliminar un producto",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Eliminar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.loadingTabla = true;
+    this.alertService.question({ msg: 'Está por eliminar un producto', buttonText: 'Eliminar' })
+    .then(({isConfirmed}) => {  
+      if (isConfirmed) {
+        this.alertService.loading();
         this.ingresoProductosService.eliminarProducto(producto).subscribe(() => {
           Swal.fire({
             icon: 'success',
@@ -196,61 +150,41 @@ export class IngresoDetallesComponent implements OnInit {
           });
           this.listarProductosPorIngreso();  
         },({error})=>{
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: error.msg,
-            confirmButtonText: 'Entendido'
-          })  
-          this.loadingTabla = false;      
+          this.alertService.errorApi(error.msg);
         });
       }
-    })
+    }); 
   }
 
   // Ingreso parcial de producto
   ingresoParcial(producto: string): void {
-    Swal.fire({
-      title: '¿Estas seguro?',
-      text: "Estas por ingresar un producto",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Ingresar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.loadingTabla = true;
-        const data = {
-          persona_empresa: this.ingreso.proveedor['razon_social'],
-          documento_codigo: this.ingreso.numero_remito
+    this.alertService.question({ msg: 'Está por ingresar un producto', buttonText: 'Ingresar' })
+      .then(({isConfirmed}) => {  
+        if (isConfirmed) {
+          this.alertService.loading();
+          const data = {
+            persona_empresa: this.ingreso.proveedor['razon_social'],
+            documento_codigo: this.ingreso.numero_remito
+          }
+          this.ingresoProductosService.ingresoParcial(producto, data).subscribe(() => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Completado',
+              text: 'El producto fue ingresado',
+              timer: 1000,
+              showConfirmButton: false
+            });
+            this.listarProductosPorIngreso();  
+          },({error})=>{
+            this.alertService.errorApi(error.msg);
+          });
         }
-        this.ingresoProductosService.ingresoParcial(producto, data).subscribe(() => {
-          Swal.fire({
-            icon: 'success',
-            title: 'Completado',
-            text: 'El producto fue ingresado',
-            timer: 1000,
-            showConfirmButton: false
-          });
-          this.listarProductosPorIngreso();  
-        },({error})=>{
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: error.msg,
-            confirmButtonText: 'Entendido'
-          });
-          this.loadingTabla = false;
-        });
-      }
-    })
+      }); 
   }
 
   // Filtro por activo
   filtrarActivo(activo: any): void{
-    this.loadingTabla = true;
+    this.alertService.loading();
     this.filtro.activo = activo;
     this.reiniciarPaginacion();
     this.listarProductosPorIngreso();
@@ -258,7 +192,7 @@ export class IngresoDetallesComponent implements OnInit {
 
   // Funcion de paginación
   actualizarDesdeHasta(selector): void {
-    this.loadingTabla = true;
+    this.alertService.loading();
     if (selector === 'siguiente'){ // Incrementar
       if (this.paginacion.hasta < this.total){
         this.paginacion.desde += this.paginacion.limit;

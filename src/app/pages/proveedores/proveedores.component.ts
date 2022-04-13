@@ -6,6 +6,8 @@ import { ReportesService } from '../../services/reportes.service';
 import { format } from 'date-fns';
 
 import { saveAs } from 'file-saver-es'; 
+import { AlertService } from 'src/app/services/alert.service';
+import { DataService } from 'src/app/services/data.service';
 
 @Component({
   selector: 'app-proveedores',
@@ -17,7 +19,6 @@ export class ProveedoresComponent implements OnInit {
 
   public total = 0;
   public proveedores: Proveedor[] = [];
-  public loading = true;
 
   // Paginación
   public paginacion = {
@@ -39,36 +40,23 @@ export class ProveedoresComponent implements OnInit {
   }
 
   constructor(private proveedoresService: ProveedoresService,
+              private alertService: AlertService,
+              private dataService: DataService,
               private reportesService: ReportesService) { }
 
   ngOnInit(): void {
+    this.dataService.ubicacionActual = "Dashboard - Proveedores";
     this.listarProveedores();
   }
 
   // Generar reporte de usuarios
   generarReporte(): void {
 
-    Swal.fire({
-      title: "¿Está seguro?",
-      text: "Está por generar un reporte",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Generar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
+    this.alertService.question({ msg: 'Está por generar un reporte', buttonText: 'Generar' })
+    .then(({isConfirmed}) => {  
+      if (isConfirmed) {
 
-        Swal.fire({
-          title: 'Generando',
-          html: 'Creando reporte',
-          timerProgressBar: true,
-          allowOutsideClick: false,
-          didOpen: () => {
-            Swal.showLoading()
-          },
-        });
+        this.alertService.loading();
 
         this.reportesService.proveedores(
           this.filtro.activo,
@@ -76,25 +64,18 @@ export class ProveedoresComponent implements OnInit {
           this.ordenar.direccion,
           this.ordenar.columna
         ).subscribe(archivoExcel => {
-          Swal.close();
+          this.alertService.close();
           saveAs(archivoExcel,`Proveedores ${format(new Date(), 'dd-MM-yyyy')}.xlsx`);
         },({error})=>{
-          Swal.close();
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: error.msg,
-            showCancelButton: false,
-            confirmButtonText: 'Entendido'
-          });
+          this.alertService.errorApi(error.msg);
         }); 
       }
-    })
-
+    });  
   }
 
   // Listar Proveedores
   listarProveedores(): void {
+    this.alertService.loading();
     this.proveedoresService.listarProveedores(
       this.paginacion.limit,
       this.paginacion.desde,
@@ -105,52 +86,25 @@ export class ProveedoresComponent implements OnInit {
     ).subscribe(({proveedores, total}) => {
       this.proveedores = proveedores;
       this.total = total;
-      this.loading = false;
+      this.alertService.close();
     },({error})=>{
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: error.msg,
-        confirmButtonText: 'Entendido'
-      });
-      this.loading = false;    
+      this.alertService.errorApi(error.msg);  
     });
   }
 
   // Actualizar estado
   actualizarEstado(proveedor: Proveedor): void {
-    Swal.fire({
-      title: '¿Estas seguro?',
-      text: "Se esta por actualizar un estado",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Actualizar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.loading = true;
+    this.alertService.question({ msg: 'Está por descargar la guía de usuario', buttonText: 'Descargar' })
+    .then(({isConfirmed}) => {  
+      if (isConfirmed) {
+        this.alertService.loading();
         this.proveedoresService.actualizarProveedor(proveedor._id, { activo: !proveedor.activo }).subscribe( () => {
-          Swal.fire({
-            icon: 'success',
-            title: 'Completado',
-            text: 'Estado actualizado',
-            timer: 1000,
-            showConfirmButton: false
-          });
           this.listarProveedores();          
         },(({ error }) => {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: error.msg,
-            confirmButtonText: 'Entendido'
-          });
-          this.loading = false;
+          this.alertService.errorApi(error.msg);
         }));
       }
-    })  
+    });  
   }
 
   reiniciarPaginacion(): void {
@@ -161,7 +115,7 @@ export class ProveedoresComponent implements OnInit {
 
   // Filtrar Activo/Inactivo
    filtrarActivos(activo: any): void{
-    this.loading = true;
+    this.alertService.loading();
     this.filtro.activo = activo;
     this.reiniciarPaginacion();
     this.listarProveedores();
@@ -169,7 +123,7 @@ export class ProveedoresComponent implements OnInit {
 
   // Filtrar por parametro
   filtrarDescripcion(descripcion: string): void{
-    this.loading = true;
+    this.alertService.loading();
     this.filtro.descripcion= descripcion;
     this.reiniciarPaginacion();
     this.listarProveedores();
@@ -177,7 +131,7 @@ export class ProveedoresComponent implements OnInit {
 
   // Funcion de paginación
   actualizarDesdeHasta(selector): void {
-    this.loading = true;
+    this.alertService.loading();
   
     if (selector === 'siguiente'){ // Incrementar
       if (this.paginacion.hasta < this.total){
@@ -199,7 +153,7 @@ export class ProveedoresComponent implements OnInit {
 
   // Ordenar por columna
   ordenarPorColumna(columna: string){
-    this.loading = true;
+    this.alertService.loading();
     this.ordenar.columna = columna;
     this.ordenar.direccion = this.ordenar.direccion == 1 ? -1 : 1; 
     this.listarProveedores();

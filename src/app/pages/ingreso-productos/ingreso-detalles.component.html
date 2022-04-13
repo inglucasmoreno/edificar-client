@@ -1,21 +1,21 @@
 <div class="mt-1 ml-2 lg:flex">
-    <div class="bg-white p-4 lg:h-full w-11/12 animate__animated animate__zoomIn mr-auto ml-auto lg:mr-0 lg:ml-0 lg:w-1/2 rounded shadow">
-        <div class="p-3 text-gray-500" *ngIf="loadingRemito">
-            <i class="fas fa-spinner animate-spin mr-2"></i>
-            Cargando remito
-        </div>
-        <div *ngIf="!loadingRemito">
-            <div class="flex items-center justify-between bg-gray-100 p-2 rounded border">
-                <h1 class="font-semibold text-gray-600"> Remito Nro. {{ ingreso.numero_remito }} </h1>
-                <i [routerLink]="['/dashboard/ingreso_productos/editar', ingreso._id]" 
-                   *ngIf="ingreso.estado == 'Pendiente'"
-                   title="Editar ingreso" 
-                   class="fas fa-pencil-alt text-gray-600 mr-2 py-2 px-3 border rounded border-gray-300 bg-white hover:bg-yellow-100 cursor-pointer"></i>
+    <div class="bg-white gsap-contenido lg:h-full w-11/12 border border-gray-300 mr-auto ml-auto lg:mr-0 lg:ml-0 lg:w-1/2 rounded shadow">
+        <div *ngIf="ingreso">
+            <div class="flex bg-gray-800 text-white border-gray-800 items-center justify-between bg-gray-100 p-2 rounded-t border">
+                <h1 class="font-semibold"> Remito Nro. {{ ingreso.numero_remito }} </h1>
+                <button [routerLink]="['/dashboard/ingreso_productos/editar', ingreso._id]"
+                        *ngIf="ingreso.estado == 'Pendiente'"                
+                        title="Editar ingreso"
+                        class="text-gray-600 mr-2 py-2 px-3 border rounded border-gray-300 bg-white hover:text-yellow-500 cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                    </svg>
+                </button>
             </div>
             <div class="flex flex-col lg:flex-row">
                 <div class="w-full mx-2 flex-1 svelte-1l8159u">
                     <div class="font-semibold mt-3 text-gray-600 text-sm"> Proveedor </div>
-                    <div class="block p-2 rounded border border-gray-200 shadow mt-2 bg-white text-sm">
+                    <div class="block py-2 border-b-2 border-gray-200 bg-white text-sm">
                         {{ ingreso.proveedor.razon_social}}
                     </div>
                 </div>
@@ -23,13 +23,13 @@
             <div class="flex flex-col lg:flex-row">
                 <div class="w-full mx-2 flex-1 svelte-1l8159u">
                     <div class="font-semibold mt-3 text-gray-600 text-sm"> Condición frente al IVA </div>
-                    <div class="block p-2 rounded border shadow mt-2 border border-gray-200 bg-white text-sm">
+                    <div class="block py-2 border-b-2 border-gray-200 bg-white text-sm">
                         {{ ingreso.proveedor.condicion_iva }}
                     </div>
                 </div>
                 <div class="w-full mx-2 flex-1 svelte-1l8159u">
                     <div class="font-semibold mt-3 text-gray-600 text-sm"> CUIT </div>
-                    <div class="block p-2 rounded border shadow mt-2 border border-gray-200 bg-white text-sm">
+                    <div class="block py-2 border-b-2 border-gray-200 bg-white text-sm">
                         {{ ingreso.proveedor.cuit }}
                     </div>
                 </div>
@@ -37,57 +37,47 @@
             <div class="flex flex-col lg:flex-row">
                 <div class="w-full mx-2 flex-1 svelte-1l8159u">
                     <div class="font-semibold mt-3 text-gray-600 text-sm"> Domicilio comercial </div>
-                    <div class="block p-2 rounded border border-gray-200 shadow mt-2 bg-white text-sm">
+                    <div class="block py-2 border-b-2 border-gray-200 bg-white text-sm">
                         {{ ingreso.proveedor.domicilio }}
                     </div>
                 </div>
             </div>
-            <div>
-                <div *ngIf="ingreso.estado !== 'Pendiente'" class="p-2 text-center text-sm border border-green-200 text-gray-600 w-full font-semibold bg-green-100 mt-4 rounded">
-                    <i class="fas fa-check text-green-500"></i>
-                    Completado el {{ ingreso.fecha_ingreso | fecha }}        
+            <div class="px-2 pb-2">
+                <div *ngIf="ingreso.estado !== 'Pendiente'" class="p-2 flex items-center justify-center text-sm border border-green-200 text-gray-600 w-full font-semibold bg-green-100 mt-4 rounded">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 font-semibold text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>
+                        Completado el {{ ingreso.fecha_ingreso | fecha }}        
+                    </span>
                 </div>
-                <button *ngIf="ingreso.estado === 'Pendiente'" class="p-2 font-semibold text-center text-sm border border-gray-300 text-gray-600 w-full mt-4 rounded"
-                        [ngClass]="{'bg-green-200' : loadingCompletar, 'bg-gray-100 hover:bg-green-200' : !loadingCompletar}"
-                        [disabled]="loadingCompletar"
-                        (click)="completarIngreso()">
-                        
-                    <div *ngIf="loadingCompletar">
-                        <i class="fas fa-spinner animate-spin mr-2"></i>
-                        Completando ingreso    
-                    </div>
-
-                    <div *ngIf="!loadingCompletar">
-                        <i class="fas fa-check text-green-500"></i>
-                        Completar ingreso 
-                    </div>    
+                <button *ngIf="ingreso.estado === 'Pendiente'" class="p-2 font-semibold bg-gray-100 hover:text-yellow-500 text-center text-sm border border-gray-300 text-gray-600 w-full mt-4 rounded"
+                        (click)="completarIngreso()"> 
+                    Completar ingreso
                 </button>    
             </div>
         </div>
 
     </div>
 
-    <div class="bg-white w-11/12 lg:w-1/2 ml-auto lg:ml-2 mt-2 lg:mt-0 mr-auto lg:mr-2 p-4 lg:h-full rounded animate__animated animate__zoomIn">
-        
-        <div class="p-3 text-gray-500" *ngIf="loadingProductos">
-            <i class="fas fa-spinner animate-spin mr-2"></i>
-            Cargando productos
-        </div>
+    <div class="bg-white w-11/12 gsap-contenido lg:w-1/2 ml-auto lg:ml-2 mt-2 lg:mt-0 mr-auto lg:mr-2 border border-gray-300 lg:h-full rounded">
                   
         <!-- Detalle de productos -->
 
-        <div *ngIf="!loadingProductos">
-            <div class="flex items-center justify-between bg-gray-100 p-2 rounded border">
-                <div class="flex">
-                    <h1 class="font-semibold text-gray-600"> Productos ({{ total }}) </h1>
-                    <i *ngIf="loadingTabla" class="fas fa-spinner animate-spin text-xl text-gray-500 ml-2"></i>
-                </div>
-                <i [routerLink]="['/dashboard/ingreso_productos/nuevo-producto', ingreso._id]" 
-                    *ngIf="ingreso.estado == 'Pendiente'" 
-                    title="Agregar productos"
-                    class="fas fas fa-box-open text-gray-600 px-3 py-2 bg-white mr-2 cursor-pointer border border-gray-300 hover:bg-yellow-100 rounded"></i>
+        <div *ngIf="ingreso">
+            <div class="flex items-center bg-gray-800 border-gray-800 text-white justify-between bg-gray-100 p-2 rounded-t border">
+                <h1 class="text-xl ml-2"> Productos ({{ total }}) </h1>
+                <button class="text-gray-600 px-3 py-2 bg-white mr-2 cursor-pointer border border-gray-300 hover:text-yellow-500 rounded"
+                        [routerLink]="['/dashboard/ingreso_productos/nuevo-producto', ingreso._id]"
+                        *ngIf="ingreso.estado == 'Pendiente'"
+                        title="Agregar productos"
+                        >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                    </svg>
+                </button>
             </div>
-            <div class="bg-gray-100 p-2 mt-3 border border-gray-200 rounded text-gray-600 text-sm" *ngIf="totalGeneral <= 0">
+            <div class="bg-gray-100 p-2 mt-3 border border-gray-200 mx-3 rounded text-gray-600 text-sm" *ngIf="totalGeneral <= 0">
                 <i class="fas fa-exclamation-circle mr-1"></i>
                 Debes agregar al menos un producto    
             </div> 
@@ -95,7 +85,6 @@
                 <div *ngIf="ingreso.estado != 'Completado'" class="mt-2 text-center">
                     <div class="flex items-center justify-center">
                         <select class="border p-2 rounded shadow text-xs"
-                                [disabled]="loadingTabla"
                                 #txtActivo
                                 (change)="filtrarActivo(txtActivo.value)">
                                     <option value=""> Todos </option>
@@ -105,23 +94,25 @@
                     </div>
                 </div>
                 <div class="flex items-center justify-center mt-3">
-                    <button class="mr-4 px-4 py-2 border rounded shadow hover:bg-yellow-100 text-gray-700 cursor-pointer bg-white text-xs"
+                    <button class="mr-4 p-2 border rounded shadow hover:text-yellow-500 text-gray-700 cursor-pointer bg-white text-xs"
                             (click)="actualizarDesdeHasta('anterior')"
-                            [ngClass]="{'bg-gray-100':loadingTabla}"
-                            [disabled]="loadingTabla"> 
-                                <i class="fas fa-arrow-left"></i> 
+                            > 
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                            </svg> 
                     </button>
                     <div class="text-gray-500 text-xs font-semibold"> Mostrando {{ total > 0 ? paginacion.desde + 1 : 0 }} - {{ paginacion.hasta < total ? paginacion.hasta : total }} de {{ total }} elementos </div>
-                    <button class="ml-4 px-4 py-2 border rounded shadow hover:bg-yellow-100 text-gray-700 cursor-pointer bg-white text-xs" 
+                    <button class="ml-4 p-2 border rounded shadow hover:text-yellow-500 text-gray-700 cursor-pointer bg-white text-xs" 
                             (click)="actualizarDesdeHasta('siguiente')"
-                            [ngClass]="{'bg-gray-100':loadingTabla}"
-                            [disabled]="loadingTabla"
-                            > <i class="fas fa-arrow-right"></i> 
+                            > 
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                            </svg> 
                     </button>
                 </div>
             </div>
                 
-            <div *ngIf="total === 0 && totalGeneral > 0" class="bg-gray-100 px-2 py-3 border shadow text-center mt-2 text-gray-700 font-semibold text-sm">
+            <div *ngIf="total === 0 && totalGeneral > 0" class="bg-gray-100 px-2 py-3 mx-2 border shadow text-center mt-2 text-gray-700 font-semibold text-sm">
                 No se encontraron productos
             </div>
     
@@ -129,8 +120,8 @@
     
             <div class="mt-4">
                 <div *ngFor="let producto of productos" 
-                        class="animate__animated animate__fadeIn border shadow rounded p-2 m-2 font-semibold flex items-center justify-between mt-3"
-                        [ngClass]="{'bg-green-100 border-green-300': !producto.activo, 'bg-white border-gray-200': producto.activo}"
+                        class="border shadow rounded p-2 m-2 font-semibold flex items-center justify-between mt-3"
+                        [ngClass]="{'bg-green-100 border-green-300': !producto.activo, 'bg-white border-gray-300': producto.activo}"
                         >
                     <div>
                         <span class="block"> {{ producto.producto.codigo }} </span>
@@ -140,21 +131,21 @@
         
                     <div *ngIf="producto.activo" class="flex w-max">
                         <button title="Ingreso parcial" 
-                                [disabled]="loadingTabla"
-                                class="py-1 px-3 rounded border border-green-200 bg-green-100 text-green-500 mr-2 shadow cursor-pointer"
-                                [ngClass]="{'hover:bg-green-400 hover:text-white':!loadingTabla}"
+                                class="p-2 rounded border hover:bg-green-400 hover:text-white border-green-200 bg-green-100 text-green-500 mr-2 shadow cursor-pointer"
                                 (click)="ingresoParcial(producto._id)"
                                 > 
-                                <i class="fas fa-check"></i> 
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                </svg>
                         </button>
                         
                         <button title="Eliminar producto"
-                                [disabled]="loadingTabla" 
-                                class="py-1 px-3 rounded border border-red-200 bg-red-100 text-red-500 cursor-pointer"
-                                [ngClass]="{'hover:bg-red-400 shadow hover:text-white':!loadingTabla}"
+                                class="p-2 rounded border border-red-200 hover:bg-red-400 shadow hover:text-white bg-red-100 text-red-500 cursor-pointer"
                                 (click)="eliminarProducto(producto._id)"
                                 > 
-                            <i class="fas fa-times"></i> 
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
                         </button>
                     </div>
                     

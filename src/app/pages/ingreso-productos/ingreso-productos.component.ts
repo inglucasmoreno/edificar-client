@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import Swal from 'sweetalert2';
 import { Ingreso } from '../../models/ingreso.model';
 import { IngresosService } from '../../services/ingresos.service';
 import { format } from 'date-fns';
 
 import { saveAs } from 'file-saver-es'; 
 import { ReportesService } from '../../services/reportes.service';
+import { DataService } from 'src/app/services/data.service';
+import { AlertService } from 'src/app/services/alert.service';
 
 
 @Component({
@@ -17,7 +18,6 @@ import { ReportesService } from '../../services/reportes.service';
 export class IngresoProductosComponent implements OnInit {
 
   public total = 0;
-  public loading = true;
   public ingresos: Ingreso[] = [];
 
   // Paginación
@@ -39,58 +39,35 @@ export class IngresoProductosComponent implements OnInit {
     columna: 'createdAt'
   }
   constructor(private ingresosService: IngresosService,
+              private dataService: DataService,
+              private alertService: AlertService,
               private reportesService: ReportesService) { }
 
   ngOnInit(): void {
+    this.dataService.ubicacionActual = "Dashboard - Ingresos";
+    this.alertService.loading();
     this.listarIngresos();
   }
 
   // Generar reporte de ingresos
   generarReporte(): void {
-
-  Swal.fire({
-    title: "¿Está seguro?",
-    text: "Está por generar un reporte",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Generar',
-    cancelButtonText: 'Cancelar'
-  }).then((result) => {
-    if (result.isConfirmed) {
-
-      Swal.fire({
-        title: 'Generando',
-        html: 'Creando reporte',
-        timerProgressBar: true,
-        allowOutsideClick: false,
-        didOpen: () => {
-          Swal.showLoading()
-        },
-      });
-
-      this.reportesService.ingresos(
-        this.filtro.estado,
-        this.filtro.descripcion,
-        this.ordenar.direccion,
-        this.ordenar.columna  
-      ).subscribe(archivoExcel => {
-        Swal.close();
-        saveAs(archivoExcel, `Ingresos ${format(new Date(), 'dd-MM-yyyy')}.xlsx`);
-      },({error})=>{
-        Swal.close();
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: error.msg,
-          showCancelButton: false,
-          confirmButtonText: 'Entendido'
-        });
-      }); 
-    }
-  })
-
+    this.alertService.question({ msg: 'Está por generar un reporte', buttonText: 'Generar' })
+        .then(({isConfirmed}) => {  
+          if (isConfirmed) {
+            this.alertService.loading();
+            this.reportesService.ingresos(
+              this.filtro.estado,
+              this.filtro.descripcion,
+              this.ordenar.direccion,
+              this.ordenar.columna  
+            ).subscribe(archivoExcel => {
+              this.alertService.close();
+              saveAs(archivoExcel, `Ingresos ${format(new Date(), 'dd-MM-yyyy')}.xlsx`);
+            },({error})=>{
+              this.alertService.errorApi(error.msg);
+            }); 
+          }
+        }); 
   }
 
   listarIngresos(): void {
@@ -104,15 +81,9 @@ export class IngresoProductosComponent implements OnInit {
     ).subscribe( ({ ingresos, total }) => {
       this.ingresos = ingresos;
       this.total = total;
-      this.loading = false;
+      this.alertService.close();
     },({error})=>{
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: error.msg,
-        confirmButtonText: 'Entendido'
-      })
-      this.loading = false;  
+      this.alertService.errorApi(error.msg);
     });
   }
 
@@ -124,7 +95,7 @@ export class IngresoProductosComponent implements OnInit {
 
   // Filtro por Estado
    filtrarActivos(estado: string): void{
-    this.loading = true;
+    this.alertService.loading();
     this.filtro.estado = estado;
     this.reiniciarPaginacion();
     this.listarIngresos();
@@ -132,7 +103,7 @@ export class IngresoProductosComponent implements OnInit {
 
   // Filtrar por parametro
   filtrarDescripcion(descripcion: string): void{
-    this.loading = true;
+    this.alertService.loading();
     this.filtro.descripcion= descripcion;
     this.reiniciarPaginacion();
     this.listarIngresos();
@@ -140,7 +111,8 @@ export class IngresoProductosComponent implements OnInit {
 
   // Funcion de paginación
   actualizarDesdeHasta(selector): void {
-    this.loading = true;
+
+    this.alertService.loading();
   
     if (selector === 'siguiente'){ // Incrementar
       if (this.paginacion.hasta < this.total){
@@ -162,7 +134,7 @@ export class IngresoProductosComponent implements OnInit {
 
   // Ordenar por columna
   ordenarPorColumna(columna: string){
-    this.loading = true;
+    this.alertService.loading();
     this.ordenar.columna = columna;
     this.ordenar.direccion = this.ordenar.direccion == 1 ? -1 : 1; 
     this.listarIngresos();
