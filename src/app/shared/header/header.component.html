@@ -1,107 +1,11 @@
-<!-- <div class="lg:flex flex-col animate__animated animate__fadeIn lg:flex-row lg:min-h-screen w-full shadow">
-  <div class="flex flex-col w-full lg:w-64 text-gray-700 bg-white flex-shrink-0">
-      <div class="border-t-8 border-yellow-500"></div>
-      <div class="flex-shrink-0 px-8 py-4 flex flex-row items-center justify-between">
-        <a routerLink="home" class="font-semibold text-gray-900 rounded-lg focus:outline-none focus:shadow-outline">
-          <div class="flex items-center">
-            <img class="w-1/4" src="assets/Edificar-Logo.png" alt="">
-            <h1 class="uppercase"> Edificar SRL </h1>
-          </div>
-        </a>
-        <button (click)="showMenu = !showMenu" class="rounded-lg lg:hidden rounded-lg focus:outline-none focus:shadow-outline">
-          <i [ngClass]="{'rotate-180': showMenu, 'rotate-0': !showMenu}" class="fas fa-chevron-up text-gray-600 text-3xl transition-transform duration-200 transform"></i>
-        </button>
-      </div>
-      <nav *ngIf="showMenu" class="flex-grow lg:block px-4 pb-4 lg:pb-0 lg:overflow-y-auto">
-        <a routerLinkActive="text-yellow-500" routerLink="home" class="block px-4 py-2 mt-2 text-sm font-semibold text-gray-900 rounded-lg hover:text-gray-900 focus:outline-none focus:shadow-outline cursor-pointer hover:text-yellow-500"> 
-          <i class="fas fa-home mr-1"></i>
-          Home 
-        </a>
-        
-        <div class="relative" *ngIf="usuarioLogin.role === 'ADMIN_ROLE'">
-          <button (click)="showUsuarios = !showUsuarios" class="flex flex-row items-center w-full px-4 py-2 mt-2 text-sm font-semibold text-left bg-transparent rounded-lg lg:block focus:outline-none focus:shadow-outline">
-            <span> 
-              <i class="fas fa-user mr-1"></i>
-              Usuarios 
-            </span>
-            <svg fill="currentColor" [ngClass]="{'rotate-180': !showUsuarios, 'rotate-0': showUsuarios}" viewBox="0 0 20 20"  class="inline w-4 h-4 mt-1 ml-1 transition-transform duration-200 transform lg:-mt-1"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-          </button>
-          <div *ngIf="showUsuarios" class="border bg-gray-100 rounded">
-            <a routerLinkActive="text-yellow-500" [routerLinkActiveOptions]="{exact:true}" routerLink="usuarios" class="cursor-pointer block px-4 py-2 mt-1 text-sm font-semibold text-gray-900 bg-transparent rounded-lg hover:text-yellow-500 hover:text-gray-900 focus:outline-none focus:shadow-outline"> 
-              Listar usuarios 
-            </a>
-            <a routerLinkActive="text-yellow-500" [routerLinkActiveOptions]="{exact:true}" routerLink="usuarios/nuevo" class="cursor-pointer block mb-1 px-4 py-2 text-sm font-semibold text-gray-900 bg-transparent rounded-lg hover:text-yellow-500 hover:text-gray-900 focus:outline-none focus:shadow-outline"> Nuevo usuario </a>
-          </div>
-        </div>
-
-        <div class="relative">
-          <button (click)="showProductos = !showProductos" class="flex flex-row items-center w-full px-4 py-2 mt-2 text-sm font-semibold text-left bg-transparent rounded-lg lg:block focus:outline-none focus:shadow-outline">
-            <span> 
-              <i class="fas fa-box mr-1"></i>
-              Productos
-            </span>
-            <svg fill="currentColor" [ngClass]="{'rotate-180': !showProductos, 'rotate-0': showProductos}" viewBox="0 0 20 20"  class="inline w-4 h-4 mt-1 ml-1 transition-transform duration-200 transform lg:-mt-1"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-          </button>
-          <div *ngIf="showProductos" class="border bg-gray-100 rounded">
-            <a routerLinkActive="text-yellow-500" [routerLinkActiveOptions]="{exact:true}" routerLink="productos" class="cursor-pointer block px-4 py-2 mt-1 text-sm font-semibold text-gray-900 bg-transparent rounded-lg hover:text-yellow-500 hover:text-gray-900 focus:outline-none focus:shadow-outline"> 
-              Listar productos 
-            </a>
-            <a *ngIf="usuarioLogin.role === 'ADMIN_ROLE'" routerLinkActive="text-yellow-500" [routerLinkActiveOptions]="{exact:true}" routerLink="productos/nuevo" class="cursor-pointer block mb-1 px-4 py-2 text-sm font-semibold text-gray-900 bg-transparent rounded-lg hover:text-yellow-500 hover:text-gray-900 focus:outline-none focus:shadow-outline"> 
-              Nuevo producto 
-            </a>
-            <a *ngIf="usuarioLogin.role === 'ADMIN_ROLE'" routerLinkActive="text-yellow-500" [routerLinkActiveOptions]="{exact:true}" routerLink="unidad-medida" class="cursor-pointer block mb-1 px-4 py-2 text-sm font-semibold text-gray-900 bg-transparent rounded-lg hover:text-yellow-500 hover:text-gray-900 focus:outline-none focus:shadow-outline"> 
-              Unidades de medida
-            </a>
-          </div>
-        </div>
-
-        <div class="relative" *ngIf="usuarioLogin.role === 'ADMIN_ROLE'">
-          <button (click)="showIngresoEgreso = !showIngresoEgreso" class="flex flex-row items-center w-full px-4 py-2 mt-2 text-sm font-semibold text-left bg-transparent rounded-lg lg:block focus:outline-none focus:shadow-outline">
-            <span> 
-              <i class="fas fa-exchange-alt mr-1"></i>
-              Ingreso/Egreso
-            </span>
-            <svg fill="currentColor" [ngClass]="{'rotate-180': !showIngresoEgreso, 'rotate-0': showIngresoEgreso}" viewBox="0 0 20 20"  class="inline w-4 h-4 mt-1 ml-1 transition-transform duration-200 transform lg:-mt-1"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-          </button>
-          <div *ngIf="showIngresoEgreso" class="border bg-gray-100 rounded">
-            <a routerLinkActive="text-yellow-500" [routerLinkActiveOptions]="{exact:true}" routerLink="ingreso_productos" class="cursor-pointer block px-4 py-2 mt-1 text-sm font-semibold text-gray-900 bg-transparent rounded-lg hover:text-yellow-500 hover:text-gray-900 focus:outline-none focus:shadow-outline"> 
-              Ingreso de productos 
-            </a>
-            <a routerLinkActive="text-yellow-500" [routerLinkActiveOptions]="{exact:true}" routerLink="egreso_productos" class="cursor-pointer block px-4 py-2 mt-1 text-sm font-semibold text-gray-900 bg-transparent rounded-lg hover:text-yellow-500 hover:text-gray-900 focus:outline-none focus:shadow-outline"> 
-              Egreso de productos 
-            </a>
-            <a routerLinkActive="text-yellow-500" [routerLinkActiveOptions]="{exact:true}" routerLink="proveedores" class="cursor-pointer block px-4 py-2 mt-1 text-sm font-semibold text-gray-900 bg-transparent rounded-lg hover:text-yellow-500 hover:text-gray-900 focus:outline-none focus:shadow-outline"> 
-              Proveedores
-            </a>
-          </div>        
-        </div>
-
-        <a *ngIf="usuarioLogin.role === 'ADMIN_ROLE'" routerLinkActive="text-yellow-500" routerLink="trazabilidad" class="block px-4 py-2 mt-2 text-sm font-semibold text-gray-900 rounded-lg hover:text-gray-900 focus:outline-none focus:shadow-outline cursor-pointer hover:text-yellow-500"> 
-          <i class="fas fa-chart-line mr-1"></i>
-          Trazabilidad
-        </a>
-
-        <a routerLinkActive="text-yellow-500" routerLink="presupuesto" class="block px-4 py-2 mt-2 text-sm font-semibold text-gray-900 rounded-lg hover:text-gray-900 focus:outline-none focus:shadow-outline cursor-pointer hover:text-yellow-500"> 
-          <i class="far fa-file-alt mr-1"></i>
-          Presupuesto
-        </a>
-
-        <a (click)="logout()" class="block px-4 py-2 mt-2 text-sm font-semibold hover:text-red-500 focus:bg-gray-200 focus:outline-none focus:shadow-outline cursor-pointer">
-          <i class="fas fa-door-open mr-1"></i>
-          Cerrar Sesion
-        </a>
-      </nav>
-    </div>
-  </div> -->
-
   <nav [ngClass]="{'-translate-x-0 ease-in opacity-100' : this.dataService.showMenu === true, '-translate-x-full ease-out opacity-0':this.dataService.showMenu === false}" class="absolute inset-0 transform duration-200 lg:transform-none lg:opacity-100 ease-in -translate-x-full lg:relative z-10 w-80 bg-gray-800 text-white h-full border-r-4 border-yellow-500 p-3">
     <div class="flex justify-between">
-        <div routerLink="perfil" class="flex hover:text-yellow-500 cursor-pointer">
+        <div class="flex">
             <div *ngIf="authService.usuario.role === 'ADMIN_ROLE'" class="bg-blue-100 flex items-center justify-center w-14 h-14 rounded-full shadow border border-blue-200">
-                <p class="text-3xl font-semibold text-blue-700"> A </p>
+                <p class="text-3xl font-semibold text-blue-900"> A </p>
             </div>
-            <div *ngIf="authService.usuario.role === 'USER_ROLE'" class="bg-orange-100 flex items-center justify-center w-14 h-14 rounded-full shadow border border-orange-200">
-                <p class="text-3xl font-semibold text-orange-500"> E </p>
+            <div *ngIf="authService.usuario.role === 'USER_ROLE'" class="bg-yellow-100 flex items-center justify-center w-14 h-14 rounded-full shadow border border-orange-200">
+                <p class="text-3xl font-semibold text-yellow-900"> C </p>
             </div>
             <div class='ml-2 mt-2'>
                 <p class="capitalize text-sm font-semibold"> {{ authService.usuario.apellido.toLowerCase() + ' ' + authService.usuario.nombre.toLowerCase() }} </p>

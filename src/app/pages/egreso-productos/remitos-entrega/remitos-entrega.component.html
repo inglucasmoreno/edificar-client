@@ -1,53 +1,47 @@
-<div class="mt-1 ml-2 lg:flex">
-    <div class="bg-white px-4 py-5 lg:h-full w-11/12 animate__animated animate__zoomIn mr-auto ml-auto lg:mr-0 lg:ml-0 lg:w-1/2 rounded shadow">
-        
-        <div class="p-3 text-gray-500" *ngIf="loadingRemitosInicio || loadingProductosInicio">
-            <i class="fas fa-spinner animate-spin mr-2"></i>
-            Cargando historial de remitos
-        </div>
-
-        <div *ngIf="!loadingRemitosInicio && !loadingProductosInicio">
-            <div class="flex items-center bg-gray-100 p-2 rounded border">
-                <i [routerLink]="['/dashboard/egreso_productos/detalles', id]" class="fas fa-arrow-left border bg-white hover:text-yellow-500 text-gray-600 border-gray-300 rounded p-2 px-3 shadow cursor-pointer"></i>
-                <h1 class="font-semibold text-gray-600 ml-2"> Historial de remitos </h1>
+<div class="mt-1 ml-2 lg:flex gsap-contenido">
+    <div class="bg-white lg:h-full w-11/12 mr-auto ml-auto lg:mr-0 lg:ml-0 lg:w-1/2 rounded shadow">
+        <div class="border border-gray-200">
+            <div class="flex items-center bg-gray-800 text-white p-3 rounded-t border border-gray-800">
+                <button [routerLink]="['/dashboard/egreso_productos/detalles', id]" class="hover:text-yellow-500 border bg-gray-100 text-gray-600 border-gray-300 rounded p-2 px-3 shadow cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                      </svg>
+                </button>  
+                <h1 class="text-xl ml-3"> Historial de remitos </h1>
             </div>
-            <p *ngIf="remitos.length === 0" class="mt-2 p-2 bg-gray-100 rounded text-gray-500 border"> 
-                <i class="fas fa-exclamation-circle"></i>
-                <span class="ml-1 text-sm">
-                    No hay remitos de entrega
-                </span>
-            </p>
-            <div *ngFor="let remito of remitos" 
-                  class="border-l-8 border-gray-200 shadow rounded p-3 mt-2 hover:bg-yellow-100 hover:border-yellow-500 cursor-pointer"
-                  [routerLink]="['/dashboard/egreso_productos/remitos-detalles', remito._id]"
-                 >
-                <p class="text-sm"> 
-                    <span class="font-semibold"> Número de remito: </span>
-                    {{ remito.numero_remito }} </p>
-                <p class="text-sm"> 
-                    <span class="font-semibold"> Cliente: </span>
-                    {{ egresoCliente }}  </p>
-                <p class="text-sm text-gray-800 mt-2 font-semibold"> 
-                    <i class="far fa-calendar"></i>
-                    <span>
-                        {{ remito.createdAt | fecha }} 
+            <div class="p-2">
+                <p *ngIf="remitos.length === 0" class="mt-2 p-2 bg-gray-100 rounded text-gray-500 border border-gray-300"> 
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span class="ml-1 text-sm">
+                        No hay remitos de entrega
                     </span>
                 </p>
+                <div *ngFor="let remito of remitos" 
+                      class="border border-gray-300 shadow rounded p-3 mt-2 hover:border-yellow-500 cursor-pointer"
+                      [routerLink]="['/dashboard/egreso_productos/remitos-detalles', remito._id]"
+                     >
+                    <p class="text-sm"> 
+                        <span class="font-semibold"> Número de remito: </span>
+                        {{ remito.numero_remito }} </p>
+                    <p class="text-sm"> 
+                        <span class="font-semibold"> Cliente: </span>
+                        {{ egresoCliente }}  </p>
+                    <p class="text-sm text-gray-800 mt-2 font-semibold"> 
+                        <i class="far fa-calendar"></i>
+                        <span>
+                            {{ remito.createdAt | fecha }} 
+                        </span>
+                    </p>
+                </div>
             </div>
         </div>
 
     </div>
 
-    <div class="bg-white px-4 py-5 w-11/12 lg:w-1/2 ml-auto lg:ml-2 mt-2 lg:mt-0 mr-auto lg:mr-2 p-4 lg:h-full rounded animate__animated animate__zoomIn" >     
-        
-        <div class="p-3 text-gray-500" *ngIf="loadingRemitosInicio || loadingProductosInicio">
-            <i class="fas fa-spinner animate-spin mr-2"></i>
-            Cargando productos
-        </div>
-        
-        <div *ngIf="!loadingRemitosInicio && !loadingProductosInicio">
-            <div class="text-center bg-gray-100 p-2 rounded border">
-                <h1 class="font-semibold text-gray-600"> Remito de entrega </h1>
+    <div class="bg-white w-11/12 lg:w-1/2 ml-auto lg:ml-2 mt-2 lg:mt-0 mr-auto lg:mr-2 lg:h-full rounded-t border border-gray-200 shadow" >     
+        <div>
+            <div class="text-center bg-gray-800 p-4 rounded-t border border-gray-800 text-white">
+                <h1 class="text-xl"> Remito de entrega </h1>
             </div>
             <p *ngIf="egresoEstado === 'Completado'" class="p-2 bg-gray-100 rounded text-gray-500 border mt-2"> 
                 <i class="fas fa-exclamation-circle"></i>
@@ -63,7 +57,7 @@
                                #txtPuntoVenta
                                (keyup)="completandoDatosRemito('punto_venta', txtPuntoVenta.value)"
                                placeholder="Ej. 0001" 
-                               class="border rounded py-2 px-2 mt-2 shadow text-sm w-full">
+                               class="border-b-2 transform duration-500 focus:outline-none outline-none focus:border-yellow-500 py-2 px-2 mt-2 text-sm w-full">
                     </div>
                     <div class="w-full mx-2 flex-1 svelte-1l8159u">
                         <div class="font-semibold mt-3 text-gray-600 text-sm"> Número de comprobante </div>
@@ -71,51 +65,45 @@
                                #txtNroComprobante
                                (keyup)="completandoDatosRemito('nro_comprobante', txtNroComprobante.value)" 
                                placeholder="Ej. 00000082" 
-                               class="border rounded py-2 px-2 mt-2 shadow text-sm w-full">
+                               class="border-b-2 transform duration-500 focus:outline-none outline-none focus:border-yellow-500 py-2 px-2 mt-2 text-sm w-full">
                     </div>
                 </div>
                 <div class="px-2 text-center mt-5">
-                    <h1 class="font-semibold mb-3 p-2 bg-gray-100 rounded border text-gray-600"> Listado de productos </h1>
+                    <h1 class="font-semibold mb-3 p-2 bg-gray-100 rounded border border-gray-300 text-gray-600"> Listado de productos </h1>
                     <div *ngIf="parciales.length !== 0" class="mt-4">
                         <button 
                             [disabled]="loadingProductos || loadingRemitos"
-                            class="py-1 px-2 shadow border border-gray-300 rounded text-md text-gray-700 bg-gray-100 border hover:bg-yellow-100"
+                            class="py-1 px-2 shadow border border-gray-300 rounded text-md font-semibold text-gray-700 bg-gray-100 border hover:text-yellow-500"
                             (click)="entregaParcial(txtPuntoVenta, txtNroComprobante)"
                         > 
-                            <span *ngIf="!loadingProductos || !loadingRemitos"> Entrega parcial </span>
-                            <span class="text-sm" *ngIf="loadingProductos || loadingRemitos">
-                                <i class="fas fa-spinner animate-spin mr-1"></i>
-                                Entregando    
-                            </span>
+                            <span> Entrega parcial </span>
                         </button>
                         <button 
                             [disabled]="loadingProductos || loadingRemitos"
-                            class="ml-3 py-1 px-2 shadow border border-gray-300 bg-gray-100 text-gray-700 rounded text-md hover:bg-green-100"
+                            class="ml-3 py-1 px-2 shadow border border-gray-300 bg-gray-100 text-gray-700 rounded font-semibold text-md hover:text-green-500"
                             (click)="entregaTotal(txtPuntoVenta, txtNroComprobante)"
                         > 
-                            <span *ngIf="!loadingProductos || !loadingRemitos"> Entrega total </span>
-                            <span class="text-sm" *ngIf="loadingProductos || loadingRemitos">
-                                <i class="fas fa-spinner animate-spin mr-1"></i>
-                                Entregando    
-                            </span>                   
+                            <span> Entrega total </span>
                         </button>
                     </div>
                     <!-- No hay productos para entregar -->
-                    <p *ngIf="parciales.length === 0" class="p-2 bg-gray-100 rounded text-gray-500 border"> 
-                        <i class="fas fa-exclamation-circle"></i>
+                    <p *ngIf="parciales.length === 0" class="p-2 m-2 flex items-center bg-gray-100 rounded text-gray-600 border border-gray-300"> 
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                        </svg>
                         <span class="ml-1 text-sm">
                             No hay productos para entregar
                         </span>
                     </p>
                 </div>
         
-                <div *ngIf="parciales.length !== 0" class="mt-4">
+                <div *ngIf="parciales.length !== 0" class="mt-4 p-2">
                     <!-- Listado de producos -->
-                    <div class="border rounded">
+                    <div class="border border-gray-300">
                         <h3 class="font-semibold p-2 text-gray-600 text-sm bg-gray-100"> Productos - Entrega parcial </h3>
                         <div class="p-2">
                             <div *ngFor="let producto of productos"
-                                 class="flex items-center text-sm p-2 mb-2 rounded justify-between border"
+                                 class="flex items-center text-sm p-2 mb-2 rounded justify-between border border-gray-300"
                             >
                                 <div class="w-5/6">
                                     <p class="text-sm font-semibold"> {{ producto.producto.codigo }} </p>
@@ -123,10 +111,9 @@
                                     <p class="font-semibold"> Resta entregar: {{ producto.cantidad - producto.cantidad_entregada }} ({{ producto.producto.unidad_medida.descripcion }}) </p>
                                 </div>
                                 <input type="number"
-                                    [disabled]="loadingProductos || loadingRemitos"
                                     #txtValor
                                     (keyup)="actualizandoProductos(producto._id, txtValor.value)"
-                                    class="border shadow rounded p-1 text-center font-semibold w-1/5"
+                                    class="border border-gray-300 rounded p-2 text-center font-semibold w-1/5"
                                     placeholder="Cantidad">   
                             </div>
                         </div>

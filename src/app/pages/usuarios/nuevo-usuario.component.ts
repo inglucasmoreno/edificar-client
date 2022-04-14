@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AlertService } from 'src/app/services/alert.service';
+import { DataService } from 'src/app/services/data.service';
 import { UsuariosService } from 'src/app/services/usuarios.service';
-import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-nuevo-usuario',
@@ -11,8 +12,6 @@ import Swal from 'sweetalert2';
   ]
 })
 export class NuevoUsuarioComponent implements OnInit {
-
-  public loading = false;
   
   // Modelo reactivo
   public usuarioForm = this.fb.group({
@@ -27,10 +26,14 @@ export class NuevoUsuarioComponent implements OnInit {
   });
 
   constructor(private fb: FormBuilder,
+              private alertService: AlertService,
+              private dataService: DataService,
               private router: Router,
               private usuariosService: UsuariosService) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.dataService.ubicacionActual = 'Dashboard - Usuarios - Creando';
+  }
   
   // Crear nuevo usuario
   nuevoUsuario(): void {
@@ -48,47 +51,24 @@ export class NuevoUsuarioComponent implements OnInit {
 
     // Se verifica si los campos son invalidos
     if(status === 'INVALID' || campoVacio){
-      Swal.fire({
-        icon: 'info',
-        title: 'Información',
-        text: 'Formulario inválido',
-        confirmButtonText: 'Entendido'  
-      });
+      this.alertService.formularioInvalido();
       return;
     }
 
     // Se verifica si las contraseñas coinciden
     if(password !== repetir){
-      Swal.fire({
-        icon: 'info',
-        title: 'Información',
-        text: 'Las contraseñas deben coincidir',
-        confirmButtonText: 'Entendido'  
-      });
+      this.alertService.info('Las contraseñas deben coincidir');
       return;   
     }
 
-    this.loading = true; 
+    this.alertService.loading();
 
     // Se crear el nuevo usuario
     this.usuariosService.nuevoUsuario(this.usuarioForm.value).subscribe(() => {
-      Swal.fire({
-        icon: 'success',
-        title: 'Completado',
-        text: 'El usuario ha sido creado',
-        timer: 1000,
-        showConfirmButton: false
-      });
-      this.loading = false;  // Finaliza la creacion de usuario
+      this.alertService.close();
       this.router.navigateByUrl('dashboard/usuarios');
     },( ({error}) => {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: error.msg,
-        confirmButtonText: 'Entendido'    
-      });
-      this.loading = false;  // Finaliza la creacion de usuario
+      this.alertService.errorApi(error.msg); // Finaliza la creacion de usuario
       return;  
     }));
 

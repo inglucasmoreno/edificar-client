@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import Swal from 'sweetalert2';
 import { Egreso } from '../../models/egreso.model';
 import { EgresoService } from '../../services/egreso.service';
 import { ReportesService } from '../../services/reportes.service';
 
 import { format } from 'date-fns';
 import { saveAs } from 'file-saver-es'; 
+import { AlertService } from 'src/app/services/alert.service';
+import { DataService } from 'src/app/services/data.service';
 
 @Component({
   selector: 'app-egreso-productos',
@@ -16,7 +17,6 @@ import { saveAs } from 'file-saver-es';
 export class EgresoProductosComponent implements OnInit {
 
   public total = 0;
-  public loading = true;
   public egresos: Egreso[] = [];
 
   // Paginación
@@ -39,57 +39,36 @@ export class EgresoProductosComponent implements OnInit {
   }
 
   constructor(private egresoService: EgresoService,
+              private alertService: AlertService,
+              private dataService: DataService,
               private reportesService: ReportesService) { }
 
   ngOnInit(): void {
+    this.dataService.ubicacionActual = "Dashboard - Egresos";
+    this.alertService.loading();
     this.listarEgresos();
   }
 
   // Generar reporte de egresos
   generarReporte(): void {
   
-    Swal.fire({
-      title: "¿Está seguro?",
-      text: "Está por generar un reporte",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Generar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-    
-        Swal.fire({
-          title: 'Generando',
-          html: 'Creando reporte',
-          timerProgressBar: true,
-          allowOutsideClick: false,
-          didOpen: () => {
-            Swal.showLoading()
-          },
-        });
-    
-        this.reportesService.egresos(
-          this.filtro.estado,
-          this.filtro.descripcion,
-          this.ordenar.direccion,
-          this.ordenar.columna       
-        ).subscribe(archivoExcel => {
-          Swal.close();
-          saveAs(archivoExcel, `Egresos ${format(new Date(), 'dd-MM-yyyy')}.xlsx`);
-        },({error})=>{
-          Swal.close();
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: error.msg,
-            showCancelButton: false,
-            confirmButtonText: 'Entendido'
-          });
-        }); 
-      }
-    })
+    this.alertService.question({ msg: 'Está por generar un reporte', buttonText: 'Generar' })
+        .then(({isConfirmed}) => {  
+          if (isConfirmed) {
+            this.alertService.loading();    
+            this.reportesService.egresos(
+              this.filtro.estado,
+              this.filtro.descripcion,
+              this.ordenar.direccion,
+              this.ordenar.columna       
+            ).subscribe(archivoExcel => {
+              this.alertService.close();
+              saveAs(archivoExcel, `Egresos ${format(new Date(), 'dd-MM-yyyy')}.xlsx`);
+            },({error})=>{
+              this.alertService.errorApi(error.msg);
+            }); 
+          }
+        });  
     
   }
   
@@ -105,15 +84,9 @@ export class EgresoProductosComponent implements OnInit {
     ).subscribe( ({ egresos, total }) => {
       this.egresos = egresos;
       this.total = total;
-      this.loading = false;
+      this.alertService.close();
     },({error})=>{
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: error.msg,
-        confirmButtonText: 'Entendido'
-      })
-      this.loading = false;
+      this.alertService.errorApi(error.msg);
     });
   }
 
@@ -125,7 +98,7 @@ export class EgresoProductosComponent implements OnInit {
 
   // Filtro por Estado
   filtrarActivos(estado: string): void{
-    this.loading = true;
+    this.alertService.loading();
     this.filtro.estado = estado;
     this.reiniciarPaginacion();
     this.listarEgresos();
@@ -133,7 +106,7 @@ export class EgresoProductosComponent implements OnInit {
 
   // Filtrar por parametro
   filtrarDescripcion(descripcion: string): void{
-    this.loading = true;
+    this.alertService.loading();
     this.filtro.descripcion= descripcion;
     this.reiniciarPaginacion();
     this.listarEgresos();
@@ -141,8 +114,9 @@ export class EgresoProductosComponent implements OnInit {
 
   // Funcion de paginación
   actualizarDesdeHasta(selector): void {
-    this.loading = true;
-  
+
+    this.alertService.loading();
+    
     if (selector === 'siguiente'){ // Incrementar
       if (this.paginacion.hasta < this.total){
         this.paginacion.desde += this.paginacion.limit;
@@ -163,7 +137,7 @@ export class EgresoProductosComponent implements OnInit {
 
   // Ordenar por columna
   ordenarPorColumna(columna: string){
-    this.loading = true;
+    this.alertService.loading();
     this.ordenar.columna = columna;
     this.ordenar.direccion = this.ordenar.direccion == 1 ? -1 : 1; 
     this.listarEgresos();

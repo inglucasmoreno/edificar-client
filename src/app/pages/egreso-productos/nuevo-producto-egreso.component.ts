@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Producto } from 'src/app/models/producto.model';
+import { AlertService } from 'src/app/services/alert.service';
+import { DataService } from 'src/app/services/data.service';
 import { EgresoProductosService } from 'src/app/services/egreso-productos.service';
 import { ProductosService } from 'src/app/services/productos.service';
-import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-nuevo-producto-egreso',
@@ -14,9 +15,6 @@ import Swal from 'sweetalert2';
 export class NuevoProductoEgresoComponent implements OnInit {
 
   public id;
-  public loading = false;
-  public loadingTabla = false;
-  public loadingCreacion = false;
   public limit = 5;
   public productos = [];
   public producto: Producto;
@@ -34,10 +32,13 @@ export class NuevoProductoEgresoComponent implements OnInit {
   }
 
   constructor(private activatedRoute: ActivatedRoute,
+              private alertService: AlertService,
+              private dataService: DataService,
               private productosService: ProductosService,
               private egresoProductoService: EgresoProductosService) { }
 
   ngOnInit(): void {
+    this.dataService.ubicacionActual = 'Dashboard - Egresos';
     this.activatedRoute.params.subscribe( ({ id }) => {
       this.id = id;
     });
@@ -46,30 +47,17 @@ export class NuevoProductoEgresoComponent implements OnInit {
   // Egregar producto a egreso
   nuevoProducto(cantidad: any): void {
     if(cantidad.trim() == '' || Number(cantidad) < 0){
-      Swal.fire({
-        icon: 'info',
-        title: 'Información',
-        text: 'Cantidad inválida',
-        confirmButtonText: 'Entendido'
-      });
+      this.alertService.info('Cantidad inválida');
       return;
     }
 
     if(Number(cantidad) > this.producto.cantidad){
-      Swal.fire({
-        title: '¿Estas seguro?',
-        text: "La cantidad es superior al disponible",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Continuar',
-        cancelButtonText: 'Cancelar'
-      }).then((result) => {
-        if (result.isConfirmed) {
+      this.alertService.question({ msg: 'La cantidad es superior al disponible', buttonText: 'Aceptar' })
+      .then(({isConfirmed}) => {  
+        if (isConfirmed) {
           this.crearProducto(cantidad);
         }
-      })
+      });  
     }else{
       this.crearProducto(cantidad);
     }
@@ -83,28 +71,16 @@ export class NuevoProductoEgresoComponent implements OnInit {
       cantidad  
     }
     
-    this.loadingCreacion = true;
+    this.alertService.loading();
+
     this.egresoProductoService.nuevoProducto(data).subscribe(()=>{
-      Swal.fire({
-        icon: 'success',
-        title: 'Completado',
-        text: 'Producto agregado correctamente',
-        timer: 1000,
-        showConfirmButton: false
-      });
       this.productos = [];
       this.productoSeleccionado = false;
       this.ultimoIngresado = this.producto;
       this.ultimoIngresado['cantidad'] = cantidad; 
-      this.loadingCreacion = false;
+      this.alertService.success('Producto agregado correctamente');
     },({error})=>{
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: error.msg,
-        confirmButtonText: 'Entendido'
-      })  
-      this.loadingCreacion = false; 
+      this.alertService.errorApi(error.msg);
     });
   }
 
@@ -120,17 +96,9 @@ export class NuevoProductoEgresoComponent implements OnInit {
     ).subscribe(({ productos, total }) => {
       this.total = total;
       this.productos = productos;
-      this.loading = false;  
-      this.loadingTabla = false;
+      this.alertService.close();
     },({error}) => {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: error.msg,
-        confirmButtonText: 'Entendido'
-      })
-      this.loading = false;
-      this.loadingTabla = false;
+      this.alertService.errorApi(error.msg);
     });
   }
 
@@ -144,15 +112,10 @@ export class NuevoProductoEgresoComponent implements OnInit {
   // Buscar productos
   buscarProductos(): void {  
     if(this.descripcion.trim() === ''){
-      Swal.fire({
-        icon: 'info',
-        title: 'Información',
-        text: 'Formulario inválido',
-        confirmButtonText: 'Entendido'
-      });
+      this.alertService.formularioInvalido();
       return;
     }
-    this.loading = true;
+    this.alertService.loading();
     this.reiniciarPaginacion();
     this.listarProductos();  
   }
@@ -165,7 +128,7 @@ export class NuevoProductoEgresoComponent implements OnInit {
 
   // Borrar proveedor seleccionado
   borrarProductoSeleccionado(){
-    this.loading = false;
+    this.alertService.close();
     this.productoSeleccionado = false;
     this.productos = [];
   }
@@ -179,7 +142,9 @@ export class NuevoProductoEgresoComponent implements OnInit {
 
   // Funcion de paginación
   actualizarDesdeHasta(selector): void {
-    this.loadingTabla = true;
+   
+    this.alertService.loading();
+   
     if (selector === 'siguiente'){ // Incrementar
       if (this.paginacion.hasta < this.total){
         this.paginacion.desde += this.paginacion.limit;

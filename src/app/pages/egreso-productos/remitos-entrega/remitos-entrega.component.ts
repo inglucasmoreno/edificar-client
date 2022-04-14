@@ -4,6 +4,9 @@ import { ActivatedRoute } from '@angular/router';
 import { RemitosEntregaService } from '../../../services/remitos-entrega.service';
 import Swal from 'sweetalert2';
 import { EgresoService } from '../../../services/egreso.service';
+import { DataService } from 'src/app/services/data.service';
+import { AlertService } from 'src/app/services/alert.service';
+import gsap from 'gsap';
 
 @Component({
   selector: 'app-remitos-entrega',
@@ -12,12 +15,6 @@ import { EgresoService } from '../../../services/egreso.service';
   ]
 })
 export class RemitosEntregaComponent implements OnInit {
-
-  public loadingProductosInicio = true;
-  public loadingRemitosInicio = true;
-
-  public loadingProductos = false;
-  public loadingRemitos = false;
 
   public id;
   public egresoEstado = '';
@@ -33,27 +30,27 @@ export class RemitosEntregaComponent implements OnInit {
   public parciales = [];
 
   constructor(private egresoProductosService: EgresoProductosService,
+              private dataService: DataService,
+              private alertService: AlertService,
               private egresoService: EgresoService,
               private activatedRoute: ActivatedRoute,
               private remitosEntregaService: RemitosEntregaService
               ) { }
 
   ngOnInit(): void {
+    this.dataService.ubicacionActual = "Dashboard - Egresos";
+    gsap.from('.gsap-contenido', { y:100, opacity: 0, duration: .2 });
     this.activatedRoute.params.subscribe(({id})=>{
       this.id = id;
       this.datosRemito.egreso = id;
+      this.alertService.loading();
       this.listarProductos();
       this.listarRemitos();
       this.egresoService.getEgreso(id).subscribe(({ egreso }) => {
         this.egresoEstado = egreso.estado;
         this.egresoCliente = egreso.descripcion_cliente;
       },({error}) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: error.msg,
-          confirmButtonText: 'Entendido'
-        });
+        this.alertService.errorApi(error.msg);
       });
     });
   }
@@ -71,28 +68,14 @@ export class RemitosEntregaComponent implements OnInit {
   
   // Entregar todos los productos
   entregaTotal(txtPuntoVenta: any, txtNroComprobante: any): void {
-    Swal.fire({
-      title: '¿Está seguro?',
-      html: "Está por realizar una <b style='color: green'>entrega total</b>",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Entregar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
+    this.alertService.question({ msg: 'Está por realizar una entrega total', buttonText: 'Entregar' })
+    .then(({isConfirmed}) => {  
+      if (isConfirmed) {
         if(this.datosRemito.punto_venta.trim() === '' || this.datosRemito.nro_comprobante.trim() === ''){
-          Swal.fire({
-            icon: 'info',
-            title: 'Información',
-            text: 'Debe completar los datos del remito',
-            confirmButtonText: 'Entendido'    
-          });
+          this.alertService.info('Debe completar los datos del remito');
           return;
         }
-        this.loadingProductos = true;
-        this.loadingRemitos = true;  
+        this.alertService.loading();
         this.remitosEntregaService.nuevoRemitoEntrega(this.datosRemito).subscribe(() => {
            txtPuntoVenta.value = '';
            txtNroComprobante.value = '';
@@ -101,15 +84,7 @@ export class RemitosEntregaComponent implements OnInit {
            this.listarRemitos();
            this.listarProductos();
            this.parciales = [];
-           this.loadingProductos = false;
-           this.loadingRemitos = false;
-           Swal.fire({
-             icon: 'success',
-             title: 'Completado',
-             text: 'Entrega realizada correctamente!',
-             timer: 1000,
-             showConfirmButton: false
-           });
+           this.alertService.success('Entrega realizada correctamente!');
         },({error}) => {
           txtPuntoVenta.value = '';
           txtNroComprobante.value = '';
@@ -118,40 +93,20 @@ export class RemitosEntregaComponent implements OnInit {
           this.listarRemitos();
           this.listarProductos();
           this.parciales = [];
-          this.loadingProductos = false;
-          this.loadingRemitos = false;
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: error.msg,
-            confirmButtonText: 'Entendido'
-          });
-        });      
-      };
-    });
+          this.alertService.errorApi(error.msg);
+        });          
+      }
+    });    
   }
 
   // Entregar parcial
   entregaParcial(txtPuntoVenta: any, txtNroComprobante: any): void {
   
-    Swal.fire({
-      title: '¿Está seguro?',
-      html: "Está por realizar una <b style='color: orange'>entrega parcial</b>",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Entregar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
+    this.alertService.question({ msg: 'Está por realizar una entrega parcial', buttonText: 'Entregar' })
+    .then(({isConfirmed}) => {  
+      if (isConfirmed) {
         if(this.datosRemito.punto_venta.trim() === '' || this.datosRemito.nro_comprobante.trim() === ''){
-          Swal.fire({
-            icon: 'info',
-            title: 'Información',
-            text: 'Debe completar los datos del remito',
-            confirmButtonText: 'Entendido'    
-          });
+          this.alertService.info('Debe completar los datos del remito');
           return;
         }  
         
@@ -162,24 +117,14 @@ export class RemitosEntregaComponent implements OnInit {
         let cantidadInvalida = false;
         productoParciales.forEach(producto => {
           if(producto.cantidad > producto.cantidad_restante){
-            Swal.fire({
-              icon: 'info',
-              title: 'Información',
-              text: `Cantidad inválida en ${producto.descripcion}`,
-              confirmButtonText: 'Entendido' 
-            })
+            this.alertService.info(`Cantidad inválida en ${producto.descripcion}`);
             cantidadInvalida = true;  
           }
         })
         if(cantidadInvalida) return;
 
         if(productoParciales.length === 0){
-          Swal.fire({
-            icon: 'info',
-            title: 'Información',
-            text: 'No se seleccionó ningún producto',
-            confirmButtonText: 'Entendido'
-          });
+          this.alertService.info('No se seleccionó ningún producto');
           return;
         }
 
@@ -190,8 +135,8 @@ export class RemitosEntregaComponent implements OnInit {
           productos: productoParciales
         }
 
-        this.loadingProductos = true;
-        this.loadingRemitos = true;
+        this.alertService.loading();
+        
         this.remitosEntregaService.entregaParcial(data).subscribe(resp => {
           txtPuntoVenta.value = '';
           txtNroComprobante.value = '';
@@ -200,15 +145,7 @@ export class RemitosEntregaComponent implements OnInit {
           this.parciales = [];
           this.listarRemitos();
           this.listarProductos();
-          this.loadingProductos = false;
-          this.loadingRemitos = false;
-          Swal.fire({
-            icon: 'success',
-            title: 'Completado',
-            text: 'Entrega realizada correctamente!',
-            timer: 1000,
-            showConfirmButton: false
-          });
+          this.alertService.success('Entrega realizada correctamente!');
         },({error}) => {
           txtPuntoVenta.value = '';
           txtNroComprobante.value = '';
@@ -217,17 +154,11 @@ export class RemitosEntregaComponent implements OnInit {
           this.parciales = [];
           this.listarRemitos();
           this.listarProductos();
-          this.loadingProductos = false;
-          this.loadingRemitos = false;
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: error.msg,
-            confirmButtonText: 'Entendido'
-          });
+          this.alertService.errorApi(error.msg);
         });
-      };
+      }
     });
+        
   }
 
   // Listado de productos
@@ -240,15 +171,11 @@ export class RemitosEntregaComponent implements OnInit {
       this.productos.forEach(producto => { 
         this.parciales.push({id: producto._id, descripcion: producto.producto.descripcion, cantidad: 0, cantidad_restante: producto.cantidad_restante}); 
       });
-      this.loadingProductosInicio = false;
+
+      this.alertService.close();
+
     },({error}) => {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: error.msg,
-        confirmButtonText: 'Entendido'
-      });
-      this.loadingProductosInicio = false;
+      this.alertService.errorApi(error.msg);
     })
   }
 
@@ -256,15 +183,9 @@ export class RemitosEntregaComponent implements OnInit {
   listarRemitos(): void {
     this.remitosEntregaService.listarRemitosEntrega(this.id).subscribe(({ remitos }) => {
       this.remitos = remitos;
-      this.loadingRemitosInicio = false;
+      this.alertService.close();
     },({error}) => {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: error.msg,
-        confirmButtonText: 'Entendido'
-      });
-      this.loadingRemitosInicio = false;
+      this.alertService.errorApi(error.msg);
     });  
   }
 }

@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import Swal from 'sweetalert2';
 import { EgresoService } from '../../services/egreso.service';
 import { Router } from '@angular/router';
+import { AlertService } from 'src/app/services/alert.service';
+import { DataService } from 'src/app/services/data.service';
 
 @Component({
   selector: 'app-nuevo-egreso',
@@ -12,9 +13,9 @@ import { Router } from '@angular/router';
 })
 export class NuevoEgresoComponent implements OnInit {
 
-  public loading = false;
-
   constructor(private fb: FormBuilder,
+              private alertService: AlertService,
+              private dataService: DataService,
               private egresoService: EgresoService,
               private router: Router) { }
   
@@ -24,7 +25,9 @@ export class NuevoEgresoComponent implements OnInit {
     identificacion_cliente: ['', Validators.required],
   });
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.dataService.ubicacionActual = 'Dashboard - Egresos - Creando';
+  }
 
   // Nuevo egreso
   crearEgreso(): void {
@@ -33,33 +36,15 @@ export class NuevoEgresoComponent implements OnInit {
     const formularioValido = this.egresoForm.valid && descripcion_cliente.trim() !== '' && tipo_identificacion_cliente.trim() !== '' && identificacion_cliente.trim() !== '';
    
     if(formularioValido){
-      this.loading = true;
+      this.alertService.loading();
       this.egresoService.nuevoEgreso(this.egresoForm.value).subscribe(({egreso})=>{
-        Swal.fire({
-          icon: 'success',
-          title: 'Completado',
-          text: 'Nuevo egreso creado correctamente',
-          showConfirmButton: false,
-          timer: 1000
-        });
-        this.loading = false;
+        this.alertService.close();
         this.router.navigateByUrl(`/dashboard/egreso_productos/detalles/${egreso._id}`);
       },({error})=>{
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: error.msg,
-          confirmButtonText: 'Entendido'
-        }),
-        this.loading = false;  
+        this.alertService.errorApi(error.msg);
       });
     }else{
-      Swal.fire({
-        icon: 'info',
-        title: 'Información',
-        text: 'Formulario inválido',
-        confirmButtonText: 'Entendido'
-      });
+      this.alertService.formularioInvalido();
     }  
   }
 

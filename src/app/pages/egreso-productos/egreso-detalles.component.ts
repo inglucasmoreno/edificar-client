@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AlertService } from 'src/app/services/alert.service';
+import { DataService } from 'src/app/services/data.service';
 import { EgresoProductosService } from 'src/app/services/egreso-productos.service';
 import Swal from 'sweetalert2';
+import gsap from 'gsap';
 import { EgresoService } from '../../services/egreso.service';
 
 @Component({
@@ -16,12 +19,6 @@ export class EgresoDetallesComponent implements OnInit {
   public total = 0;
 
   public totalGeneral;
-
-  // Loadings
-  public loadingNota = true;
-  public loadingProductos = true;
-  public loadingTabla = false;
-  public loadingCompletar = false;
 
   // Egreso
   public egreso = {
@@ -44,40 +41,34 @@ export class EgresoDetallesComponent implements OnInit {
   public productos = [];
 
   constructor(private activatedRoute: ActivatedRoute,
+              private alertService: AlertService,
+              private dataService: DataService,
               private egresosService: EgresoService,
               private egresoProductosService: EgresoProductosService,
               private router: Router
               ) { }
 
   ngOnInit(): void {
+    gsap.from('.gsap-contenido', { y:100, opacity: 0, duration: .2 });
+    this.dataService.ubicacionActual = "Dashboard - Egresos - Detalles";
     this.activatedRoute.params.subscribe( ({id}) => {
       this.id = id;
+      this.alertService.loading();
       this.egresosService.getEgreso(id).subscribe(({ egreso }) => {
         this.egreso = egreso;
-        this.loadingNota = false;
+        this.alertService.close();
         this.primerIngreso();
       },({error}) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: error.msg,
-          confirmButtonText: 'Entendido'
-        });
-        this.loadingNota = false;        
+        this.alertService.errorApi(error.msg);
       })         
     },({error}) => {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: error.msg,
-        confirmButtonText: 'Entendido'
-      });
-      this.loadingNota = false;
+      this.alertService.errorApi(error.msg);
     });
   };
 
   // Primer ingreso a la vista
   primerIngreso(): void {
+    this.alertService.loading();
     this.egresoProductosService.listarProductosPorEgreso(
       this.id,
       this.paginacion.hasta,
@@ -87,21 +78,15 @@ export class EgresoDetallesComponent implements OnInit {
       this.totalGeneral = totalGeneral;
       this.productos = productos;
       this.total = total;
-      this.loadingProductos = false;
+      this.alertService.close();
     },({error})=>{
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: error.msg,
-        confirmButtonText: 'Entendido'
-      });
-      this.loadingProductos = false;
+      this.alertService.errorApi(error.msg);
     })  
   }
 
   // Listar productos de egreso
   listarProductos(): void {
-    this.loadingTabla = true;
+    this.alertService.loading();
     this.egresoProductosService.listarProductosPorEgreso(
       this.id,
       this.paginacion.hasta,
@@ -111,15 +96,9 @@ export class EgresoDetallesComponent implements OnInit {
       this.totalGeneral = totalGeneral;
       this.productos = productos;
       this.total = total;
-      this.loadingTabla = false;
+      this.alertService.close();
     },({error})=>{
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: error.msg,
-        confirmButtonText: 'Entendido'
-      });
-      this.loadingTabla = false;
+      this.alertService.errorApi(error.msg);
     })
   }
 
@@ -128,93 +107,46 @@ export class EgresoDetallesComponent implements OnInit {
 
     // Se verifica si la nota de venta tiene productos
     if(this.totalGeneral <= 0){
-      Swal.fire({
-        icon: 'info',
-        title: 'Información',
-        text: 'El egreso no tiene productos',
-        confirmButtonText: 'Entendido'
-      });
+      this.alertService.info('El egreso no tiene productos');
       return;
     }
 
-    Swal.fire({
-      title: '¿Estas seguro?',
-      text: "Estas por completar el egreso",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Completar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.loadingCompletar= true;
-        const data = {
-          persona_empresa: this.egreso.descripcion_cliente,
-          documento_codigo: this.egreso.codigo_cadena  
-        };
-        this.egresoProductosService.completarEgreso(this.id, data).subscribe(() => {
-          Swal.fire({
-            icon: 'success',
-            title: 'Completado',
-            text: 'Egreso completado correctamente',
-            timer: 1000,
-            showConfirmButton: false
-          });
-          this.loadingCompletar = false;
-          this.router.navigateByUrl('/dashboard/egreso_productos'); 
-        },({error})=>{
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: error.msg,
-            confirmButtonText: 'Entendido'
-          });
-          this.loadingCompletar = false;
-        });
-      }
-    })
+    this.alertService.question({ msg: 'Estas por completar el egreso', buttonText: 'Completar' })
+        .then(({isConfirmed}) => {  
+          if (isConfirmed) {
+            this.alertService.loading();
+            const data = {
+              persona_empresa: this.egreso.descripcion_cliente,
+              documento_codigo: this.egreso.codigo_cadena  
+            };
+            this.egresoProductosService.completarEgreso(this.id, data).subscribe(() => {
+              this.alertService.close();
+              this.router.navigateByUrl('/dashboard/egreso_productos'); 
+            },({error})=>{
+              this.alertService.errorApi(error.msg);
+            });
+          }
+        });   
   }
 
   // Eliminar producto
   eliminarProducto(producto: string): void {
-    Swal.fire({
-      title: '¿Estas seguro?',
-      text: "Estas por eliminar un producto",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Eliminar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.loadingTabla = true;
-        this.egresoProductosService.eliminarProducto(producto).subscribe(()=>{
-          Swal.fire({
-            icon: 'success',
-            title: 'Completado',
-            text: 'Producto eliminado correctamente',
-            timer: 1000,
-            showConfirmButton: false
-          });
-          this.listarProductos();
-        },({error})=>{
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: error.msg,
-            confirmButtonText: 'Entendido'
-          });
-          this.loadingTabla = false;
-        });    
-      }
-    })
+    this.alertService.question({ msg: 'Está por eliminar un producto', buttonText: 'Eliminar' })
+        .then(({isConfirmed}) => {  
+          if (isConfirmed) {
+            this.alertService.loading();
+            this.egresoProductosService.eliminarProducto(producto).subscribe(()=>{
+              this.listarProductos();
+            },({error})=>{
+              this.alertService.errorApi(error.msg);
+            });  
+          }
+        });  
   }
 
   // Filtro por activo
   filtrarActivo(activo: any): void{
-    this.loadingTabla = true;
+    this.alertService.loading();
     this.filtro.activo = activo;
     this.reiniciarPaginacion();
     this.listarProductos();
@@ -222,7 +154,7 @@ export class EgresoDetallesComponent implements OnInit {
 
   // Funcion de paginación
   actualizarDesdeHasta(selector): void {
-    this.loadingTabla = true;
+    this.alertService.loading();
     if (selector === 'siguiente'){ // Incrementar
       if (this.paginacion.hasta < this.total){
         this.paginacion.desde += this.paginacion.limit;

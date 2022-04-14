@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Egreso } from 'src/app/models/egreso.model';
+import { AlertService } from 'src/app/services/alert.service';
+import { DataService } from 'src/app/services/data.service';
 import Swal from 'sweetalert2';
 import { EgresoService } from '../../../services/egreso.service';
 
@@ -14,8 +16,6 @@ import { EgresoService } from '../../../services/egreso.service';
 export class EditarEgresoComponent implements OnInit {
   
   public id: string;
-  public loading = true;
-  public loadingFinal = false;
   public egreso: Egreso;
   
 
@@ -26,13 +26,17 @@ export class EditarEgresoComponent implements OnInit {
   });
 
   constructor(private fb: FormBuilder,
+              private alertService: AlertService,
+              private dataService: DataService,
               private activatedRouter: ActivatedRoute,
               private egresoService: EgresoService,
               private router: Router) { }
 
   ngOnInit(): void {
+    this.dataService.ubicacionActual = 'Dashboard - Egresos - Editando';
     this.activatedRouter.params.subscribe(({id})=>{
       this.id = id;
+      this.alertService.loading();
       this.egresoService.getEgreso(id).subscribe(({egreso})=>{
         this.egreso = egreso;
         this.egresoForm.setValue({
@@ -40,14 +44,9 @@ export class EditarEgresoComponent implements OnInit {
           tipo_identificacion_cliente: egreso.tipo_identificacion_cliente,
           identificacion_cliente: egreso.identificacion_cliente
         });  
-        this.loading = false;
+        this.alertService.close();
       },({error})=>{
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: error.msg,
-          confirmButtonText: 'Entendido'
-        })        
+        this.alertService.errorApi(error.msg);
       })
     })  
   }
@@ -60,32 +59,15 @@ export class EditarEgresoComponent implements OnInit {
     const formularioValido = this.egresoForm.valid && descripcion_cliente.trim() !== '' && tipo_identificacion_cliente.trim() !== '' && identificacion_cliente.trim() !== '';
 
     if(formularioValido){
-      this.loadingFinal = true;
+      this.alertService.loading();
       this.egresoService.actualizarEgreso(this.id, this.egresoForm.value).subscribe(()=>{
-        Swal.fire({
-          icon: 'success',
-          title: 'Completado',
-          text: 'Actualizacion completada',
-          timer: 1000,
-          showConfirmButton: false
-        });
-        this.loadingFinal = false;
+        this.alertService.close();
         this.router.navigateByUrl(`/dashboard/egreso_productos/detalles/${this.id}`);
       },({error})=>{
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: error.msg,
-          confirmButtonText: 'Entendido'
-        })  
+        this.alertService.errorApi(error.msg);
       });
     }else{
-      Swal.fire({
-        icon: 'info',
-        title: 'Información',
-        text: 'Formulario inválido',
-        confirmButtonText: 'Entendido'
-      });
+      this.alertService.formularioInvalido();
     }   
   }
 

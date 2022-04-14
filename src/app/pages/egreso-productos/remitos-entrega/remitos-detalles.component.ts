@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import Swal from 'sweetalert2';
 import { RemitosEntregaService } from '../../../services/remitos-entrega.service';
 import { EgresoService } from '../../../services/egreso.service';
+import { AlertService } from 'src/app/services/alert.service';
+import { DataService } from 'src/app/services/data.service';
 
 @Component({
   selector: 'app-remitos-detalles',
@@ -13,22 +14,23 @@ import { EgresoService } from '../../../services/egreso.service';
 export class RemitosDetallesComponent implements OnInit {
 
   public id;
-  public loadingDatos = true;
-  public loadingProductos = true;
   public remito;
   public egreso;
   public productos = [];
 
   constructor(private remitosEntregaService: RemitosEntregaService,
+              private alertService: AlertService,
+              private dataService: DataService,
               private activatedRoute: ActivatedRoute,
               private egresoService: EgresoService) { }
 
 
   ngOnInit(): void {
+    this.dataService.ubicacionActual = "Dashboard - Egresos";
     this.activatedRoute.params.subscribe(({id}) => {
       this.id = id;
+      this.alertService.loading();
       this.getRemito();
-      this.getProductos();
     })
   }
   
@@ -38,25 +40,13 @@ export class RemitosDetallesComponent implements OnInit {
       this.remito = remito;
       this.egresoService.getEgreso(remito.egreso).subscribe(({egreso}) => {
         this.egreso = egreso;
-        this.loadingDatos = false;
+        this.getProductos();
       },({error}) => {
-        this.loadingDatos = false;
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: error.msg,
-          confirmButtonText: 'Entendido'
-        });
+        this.alertService.errorApi(error.msg);
       }     
       );
     },({error}) => {
-      this.loadingDatos = false;
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: error.msg,
-        confirmButtonText: 'Entendido'
-      });
+      this.alertService.errorApi(error.msg);
     });  
   }
 
@@ -64,15 +54,9 @@ export class RemitosDetallesComponent implements OnInit {
   getProductos(): void {
     this.remitosEntregaService.listarProductosRemito(this.id).subscribe(({ productos }) => {
       this.productos = productos;
-      this.loadingProductos = false;
+      this.alertService.close();
     },({error}) => {
-      this.loadingProductos = false;
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: error.msg,
-        confirmButtonText: 'Entendido'
-      });
+      this.alertService.errorApi(error.msg);
     });
   }
 
