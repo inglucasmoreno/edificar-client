@@ -32,7 +32,7 @@ export class EditarProveedorComponent implements OnInit {
               private router: Router) { }
 
   ngOnInit(): void {
-    this.dataService.ubicacionActual = "Dashboard - ";
+    this.dataService.ubicacionActual = "Dashboard - Proveedores - Actualizando";
     this.activatedRoute.params.subscribe(({ id }) => {
       this.getProveedor(id);
     })

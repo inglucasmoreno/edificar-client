@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AlertService } from 'src/app/services/alert.service';
 import { DataService } from 'src/app/services/data.service';
 import { UsuariosService } from 'src/app/services/usuarios.service';
+import gsap from 'gsap';
 
 @Component({
   selector: 'app-nuevo-usuario',
@@ -21,7 +22,7 @@ export class NuevoUsuarioComponent implements OnInit {
     email: ['', Validators.required],
     password: ['', Validators.required],
     repetir: ['', Validators.required],
-    role: ['USER_ROLE', Validators.required],
+    role: ['ADMIN_ROLE', Validators.required],
     activo: [true, Validators.required]
   });
 
@@ -32,6 +33,7 @@ export class NuevoUsuarioComponent implements OnInit {
               private usuariosService: UsuariosService) { }
 
   ngOnInit(): void {
+    gsap.from('.gsap-contenido', { y:100, opacity: 0, duration: .3 });
     this.dataService.ubicacionActual = 'Dashboard - Usuarios - Creando';
   }
   

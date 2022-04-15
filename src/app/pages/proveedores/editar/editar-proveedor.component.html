@@ -2,13 +2,13 @@
     <div>
         <div class="p-4 flex bg-gray-800 border border-gray-800 text-white items-center">
             <h1 class="flex items-center text-gray-700">
-                <button routerLink="/dashboard/proveedores" class="hover:text-yellow-500 border bg-gray-100 text-gray-600 border-gray-300 rounded p-2 px-3 shadow cursor-pointer">
+                <button routerLink="/dashboard/proveedores" class="hover:text-orange-500 border bg-gray-100 text-gray-600 border-gray-300 rounded p-2 px-3 shadow cursor-pointer">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                     </svg>
                 </button> 
                 <div class="flex flex-col ml-2">
-                    <span class="ml-2 text-xl text-white"> Proveedores </span>
+                    <span class="ml-2 text-xl text-white"> Actualizando proveedor </span>
                 </div>
             </h1>
         </div>
@@ -17,38 +17,38 @@
             class="px-5 pb-5">
             <div class="flex flex-col lg:flex-row">
                 <div class="w-full mx-2 flex-1 svelte-1l8159u">
-                    <div class="font-bold mt-3 text-gray-600 text-sm"> Razón Social </div>
+                    <div class="font-bold mt-3 text-gray-600 text-sm"> <span class="text-red-500"> * </span> Razón Social </div>
                     <div class="bg-white my-2 p-1 flex">
                         <input placeholder="Ej. Equinoccio Technology"
                                formControlName="razon_social" 
-                               class="p-1 appearance-none border-b-2 focus:outline-none border-gray-300 transform duration-500 focus:border-yellow-500 outline-none w-full text-gray-800 text-sm"
+                               class="p-1 appearance-none border-b-2 focus:outline-none border-gray-300 transform duration-500 focus:border-orange-500 outline-none w-full text-gray-800 text-sm"
                                ></div>
                 </div>
                 <div class="w-full mx-2 flex-1 svelte-1l8159u">
-                    <div class="font-bold mt-3 text-gray-600 text-sm"> CUIT </div>
+                    <div class="font-bold mt-3 text-gray-600 text-sm"> <span class="text-red-500"> * </span> CUIT </div>
                     <div class="bg-white my-2 p-1 flex">
                         <input placeholder="Ej. 24340603989"
                                formControlName="cuit"
-                               class="p-1 appearance-none border-b-2 focus:outline-none border-gray-300 transform duration-500 focus:border-yellow-500 outline-none w-full text-gray-800 text-sm"></div>
+                               class="p-1 appearance-none border-b-2 focus:outline-none border-gray-300 transform duration-500 focus:border-orange-500 outline-none w-full text-gray-800 text-sm"></div>
                 </div>
             </div>
             <div class="flex flex-col lg:flex-row">
                 <div class="w-full mx-2 flex-1 svelte-1l8159u">
                     <div class="font-bold mt-2 text-gray-600 text-sm"> Domicilio </div>
                     <div class="bg-white my-2 p-1 flex">
-                        <input placeholder="No es obligatorio" 
+                        <input placeholder="Portugal 1030" 
                                formControlName="domicilio"
-                               class="p-1 appearance-none border-b-2 focus:outline-none border-gray-300 transform duration-500 focus:border-yellow-500 outline-none w-full text-gray-800 text-sm"
+                               class="p-1 appearance-none border-b-2 focus:outline-none border-gray-300 transform duration-500 focus:border-orange-500 outline-none w-full text-gray-800 text-sm"
                                ></div>
                 </div>
             </div>
             <div class="flex flex-col lg:flex-row">
                 <div class="w-full mx-2 flex-1">
-                    <div class="font-bold mt-3 text-gray-600 text-sm"> Condición frente al IVA </div>
+                    <div class="font-bold mt-3 text-gray-600 text-sm"> <span class="text-red-500"> * </span> Condición frente al IVA </div>
                     <div class="bg-white my-2 flex">
                         <select
                                 formControlName="condicion_iva"
-                                class="p-1 border-b-2 focus:outline-none border-gray-300 transform duration-500 focus:border-yellow-500 outline-none w-full text-gray-800 text-sm">
+                                class="p-1 border-b-2 focus:outline-none border-gray-300 transform duration-500 focus:border-orange-500 outline-none w-full text-gray-800 text-sm">
                                 <option value="IVA Responsable Inscripto"> IVA Responsable Inscripto </option>
                                 <option value="IVA Responsable no Inscripto"> IVA Responsable no Inscripto </option>
                                 <option value="IVA no Responsable"> IVA no Responsable </option>
@@ -67,11 +67,11 @@
                     </div>
                 </div>
                 <div class="w-full mx-2 flex-1">
-                    <div class="font-bold mt-3 text-gray-600 text-sm"> Estado </div>
+                    <div class="font-bold mt-3 text-gray-600 text-sm"> <span class="text-red-500"> * </span> Estado </div>
                     <div class="bg-white my-2 flex">
                         <select
                                 formControlName="activo"
-                                class="p-1 border-b-2 focus:outline-none border-gray-300 transform duration-500 focus:border-yellow-500 outline-none w-full text-gray-800 text-sm">
+                                class="p-1 border-b-2 focus:outline-none border-gray-300 transform duration-500 focus:border-orange-500 outline-none w-full text-gray-800 text-sm">
                             <option value=true> Activo </option>
                             <option value=false> Inactivo </option>
                         </select>
@@ -82,7 +82,7 @@
                 <div class="w-full mx-2 flex-1">
                     <button 
                             (click)="actualizarProveedor()"
-                            class="p-2 text-gray-800 border border-gray-300 bg-gray-100 hover:text-yellow-500 w-full mt-3 rounded shadow"> 
+                            class="p-2 text-gray-800 border border-gray-300 bg-gray-100 hover:text-orange-500 w-full mt-3 rounded shadow"> 
                                 <span class="font-semibold"> 
                                     Actualizar proveedor 
                                 </span>    

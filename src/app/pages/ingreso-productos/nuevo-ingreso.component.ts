@@ -15,6 +15,9 @@ import { DataService } from 'src/app/services/data.service';
 })
 export class NuevoIngresoComponent implements OnInit {
 
+  // Modal
+  public showModal = false;
+
   public numero_remito = '';
   public proveedores: Proveedor[] = [];
   public proveedor: Proveedor;
@@ -68,6 +71,7 @@ export class NuevoIngresoComponent implements OnInit {
     ).subscribe(({proveedores}) => {
       this.proveedores = proveedores;
       this.alertService.close();
+      this.showModal = true;
     },({error}) =>{
       this.alertService.errorApi(error.msg);
     });
@@ -92,6 +96,7 @@ export class NuevoIngresoComponent implements OnInit {
   seleccionarProveedor(proveedorSeleccionado: Proveedor): void {
     this.proveedorSeleccionado = true;
     this.proveedor = proveedorSeleccionado
+    this.showModal = false;
   }
 
   // Borrar proveedor seleccionado
@@ -104,6 +109,7 @@ export class NuevoIngresoComponent implements OnInit {
       cuit: '',
       activo: false  
     };
+    this.showModal = false;
   }
 
 }

@@ -1,7 +1,7 @@
 <app-tarjeta-formulario>
     <div>
         <h1 class="flex bg-gray-800 items-center p-3 rounded-t text-white">
-            <button routerLink="/dashboard/productos" class="hover:text-yellow-500 border bg-gray-100 text-gray-600 border-gray-300 rounded p-2 px-3 shadow cursor-pointer">
+            <button routerLink="/dashboard/productos" class="hover:text-orange-500 border bg-gray-100 text-gray-600 border-gray-300 rounded p-2 px-3 shadow cursor-pointer">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
@@ -15,48 +15,48 @@
             class="px-5 pb-5">
             <div class="flex flex-col lg:flex-row">
                 <div class="w-full mx-2 flex-1 svelte-1l8159u">
-                    <div class="font-semibold mt-3 text-gray-600 text-sm"> Código </div>
+                    <div class="font-semibold mt-3 text-gray-600 text-sm"> <span class="text-red-500"> * </span> Código </div>
                     <div class="bg-white my-2 flex">
                         <input placeholder="Ej. LB0001" 
-                               class="p-1 appearance-none border-b-2 transform focus:outline-none duration-500 outline-none w-full border-gray-300 focus:border-yellow-500 text-gray-800 text-sm"
+                               class="p-1 appearance-none border-b-2 transform focus:outline-none duration-500 outline-none w-full border-gray-300 focus:border-orange-500 text-gray-800 text-sm"
                                formControlName="codigo" 
                                ></div>
                 </div>
                 <div class="w-full mx-2 flex-1 svelte-1l8159u">
-                    <div class="font-semibold mt-3 text-gray-600 text-sm"> Descripción </div>
+                    <div class="font-semibold mt-3 text-gray-600 text-sm"> <span class="text-red-500"> * </span> Descripción </div>
                     <div class="bg-white my-2 flex">
                         <input placeholder="Ej. Ladrillos"
                                formControlName="descripcion" 
-                               class="p-1 appearance-none border-b-2 transform focus:outline-none duration-500 outline-none w-full border-gray-300 focus:border-yellow-500 text-gray-800 text-sm"></div>
+                               class="p-1 appearance-none border-b-2 transform focus:outline-none duration-500 outline-none w-full border-gray-300 focus:border-orange-500 text-gray-800 text-sm"></div>
                 </div>
             </div>
             <div class="flex flex-col lg:flex-row">
                 <div class="w-full mx-2 flex-1">
-                    <div class="font-semibold mt-3 text-gray-600 text-sm"> Unidad de medida </div>
+                    <div class="font-semibold mt-3 text-gray-600 text-sm"> <span class="text-red-500"> * </span> Unidad de medida </div>
                     <div class="bg-white my-2 flex">
-                        <select class="p-1 border-b-2 transform focus:outline-none duration-500 outline-none w-full border-gray-300 focus:border-yellow-500 text-gray-800 text-sm" formControlName="unidad_medida">
+                        <select class="p-1 border-b-2 transform focus:outline-none duration-500 outline-none w-full border-gray-300 focus:border-orange-500 text-gray-800 text-sm" formControlName="unidad_medida">
                             <option *ngFor="let unidad of unidades" [value]="unidad._id"> {{ unidad.descripcion }} </option>
                         </select>
                     </div>
                 </div>
                 <div class="w-full mx-2 flex-1 svelte-1l8159u">
                     <div class="font-semibold mt-3 text-gray-600 text-sm"> 
-                            Stock inicial 
+                        <span class="text-red-500"> * </span> Stock inicial 
                     </div>
                     <div class="bg-white my-2 flex">
                         <input placeholder="Ej. 200" 
                                type="number"
                                formControlName="cantidad"
                                min="0"
-                               class="p-1 appearance-none border-b-2 transform focus:outline-none duration-500 outline-none w-full border-gray-300 focus:border-yellow-500 text-gray-800 text-sm"> </div>
+                               class="p-1 appearance-none border-b-2 transform focus:outline-none duration-500 outline-none w-full border-gray-300 focus:border-orange-500 text-gray-800 text-sm"> </div>
                 </div>
             </div>
             <div class="flex flex-col lg:flex-row">
                 <div class="w-full mx-2 flex-1">
-                    <div class="font-semibold mt-3 text-gray-600 text-sm"> ¿Stock mínimo? </div>
+                    <div class="font-semibold mt-3 text-gray-600 text-sm"> <span class="text-red-500"> * </span> ¿Stock mínimo? </div>
                     <div class="bg-white my-2 flex">
                         <select (change)="stockMinimo = !stockMinimo"
-                                class="p-1 border-b-2 transform focus:outline-none duration-500 outline-none w-full border-gray-300 focus:border-yellow-500 text-gray-800 text-sm"
+                                class="p-1 border-b-2 transform focus:outline-none duration-500 outline-none w-full border-gray-300 focus:border-orange-500 text-gray-800 text-sm"
                                 formControlName="stock_minimo">
                             <option value=false> No </option>
                             <option value=true> Si </option>
@@ -64,14 +64,14 @@
                     </div>
                 </div>
                 <div class="w-full mx-2 flex-1">
-                    <div class="font-semibold mt-3 text-gray-600 text-sm"> Stock mínimo </div>
+                    <div class="font-semibold mt-3 text-gray-600 text-sm">  <span *ngIf="stockMinimo" class="text-red-500"> * </span> Stock mínimo </div>
                     <div *ngIf="stockMinimo" class="bg-white my-2 flex">
                         <input
                                type="number" 
                                placeholder="Ej. 20" 
                                min="0"
                                formControlName="cantidad_minima"
-                               class="p-1 appearance-none border-b-2 transform focus:outline-none duration-500 outline-none w-full border-gray-300 focus:border-yellow-500 text-gray-800 text-sm"> </div>
+                               class="p-1 appearance-none border-b-2 transform focus:outline-none duration-500 outline-none w-full border-gray-300 focus:border-orange-500 text-gray-800 text-sm"> </div>
                     <div *ngIf="!stockMinimo"
                          class="p-1 appearance-none border-b-2 focus:outline-none bg-gray-100 mt-2 outline-none w-full border-gray-300 text-gray-800 text-sm">
                         Sin stock mínimo
@@ -80,18 +80,18 @@
             </div>
             <div class="flex flex-col lg:flex-row">
                 <div class="w-full mx-2 flex-1 svelte-1l8159u">
-                    <div class="font-semibold mt-3 text-gray-600 text-sm"> Precio c/u ($) </div>
+                    <div class="font-semibold mt-3 text-gray-600 text-sm"> <span class="text-red-500"> * </span> Precio c/u ($) </div>
                     <div class="bg-white my-2 flex">
                         <input type="number"
                                placeholder="Ej. 2500"
                                formControlName="precio" 
                                step="0.01"                           
-                               class="p-1 appearance-none border-b-2 transform focus:outline-none duration-500 outline-none w-full border-gray-300 focus:border-yellow-500 text-gray-800 text-sm"></div>
+                               class="p-1 appearance-none border-b-2 transform focus:outline-none duration-500 outline-none w-full border-gray-300 focus:border-orange-500 text-gray-800 text-sm"></div>
                 </div>
                 <div class="w-full mx-2 flex-1">
-                    <div class="font-semibold mt-3 text-gray-600 text-sm"> Estado </div>
+                    <div class="font-semibold mt-3 text-gray-600 text-sm"> <span class="text-red-500"> * </span> Estado </div>
                     <div class="bg-white my-2 flex">
-                        <select class="p-1 border-b-2 transform focus:outline-none duration-500 outline-none w-full border-gray-300 focus:border-yellow-500 text-gray-800 text-sm">
+                        <select class="p-1 border-b-2 transform focus:outline-none duration-500 outline-none w-full border-gray-300 focus:border-orange-500 text-gray-800 text-sm">
                             <option value=true> Activo </option>
                             <option value=false> Inactivo </option>
                         </select>
@@ -102,7 +102,7 @@
                 <div class="w-full mx-2 flex-1">
                     <button 
                         (click)="crearProducto()"
-                        class="p-2 text-gray-800 w-full border mt-3 bg-gray-100 hover:text-yellow-500 border-gray-300 rounded shadow"> 
+                        class="p-2 text-gray-800 w-full border mt-3 bg-gray-100 hover:text-orange-500 border-gray-300 rounded shadow"> 
                             <span class="font-semibold"> 
                                 Crear producto 
                             </span>    

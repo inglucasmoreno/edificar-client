@@ -3,7 +3,7 @@
     <div class="p-3 flex items-center justify-between rounded-t bg-gray-800 text-white">
         <div class="flex items-center">
             <h1 class="flex items-center">
-                <button routerLink="/dashboard/egreso_productos"   class="hover:text-yellow-500 border bg-gray-100 text-gray-600 border-gray-300 rounded p-2 px-3 shadow cursor-pointer">
+                <button routerLink="/dashboard/egreso_productos"   class="hover:text-orange-500 border bg-gray-100 text-gray-600 border-gray-300 rounded p-2 px-3 shadow cursor-pointer">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                       </svg>
@@ -21,19 +21,19 @@
         <h1 class="font-semibold ml-2 text-gray-700 bg-gray-100 p-2 mt-2 mb-1 rounded border border-gray-300"> Datos de cliente </h1>
         <div class="flex flex-col lg:flex-row">
             <div class="w-full mx-2 flex-1 svelte-1l8159u">
-                <div class="font-semibold mt-3 text-gray-600 text-sm"> Descripción </div>
+                <div class="font-semibold mt-3 text-gray-600 text-sm"> <span class="text-red-500"> * </span> Descripción </div>
                 <div class="bg-white py-1 flex">
                     <input placeholder="Ej. Moreno Lucas" 
                            formControlName="descripcion_cliente"
-                           class="p-1 appearance-none border-b-2 transform duration-500 focus:outline-none focus:border-yellow-500 outline-none w-full text-gray-800 text-sm"
+                           class="p-1 appearance-none border-b-2 transform duration-500 focus:outline-none focus:border-orange-500 outline-none w-full text-gray-800 text-sm"
                            ></div>
             </div>
             <div class="w-full mx-2 flex-1 svelte-1l8159u"></div>
         </div>
         <div class="flex flex-col lg:flex-row pb-3">
             <div class="w-full mx-2 flex-1 svelte-1l8159u">
-                <div class="font-semibold mt-4 text-gray-600 text-sm"> Tipo de identificación </div>
-                <select class="p-1 border-b-2 transform mt-2 duration-500 focus:outline-none focus:border-yellow-500 outline-none w-full text-gray-800 text-sm"
+                <div class="font-semibold mt-4 text-gray-600 text-sm"> <span class="text-red-500"> * </span> Tipo de identificación </div>
+                <select class="p-1 border-b-2 transform mt-2 duration-500 focus:outline-none focus:border-orange-500 outline-none w-full text-gray-800 text-sm"
                         formControlName="tipo_identificacion_cliente">
                     <option value="DNI"> DNI </option>
                     <option value="CUIL"> CUIL </option>
@@ -41,14 +41,14 @@
                 </select>
             </div>
             <div class="w-full mx-2 flex-1 svelte-1l8159u">
-                <div class="font-semibold mt-3 text-gray-600 text-sm"> Identificación </div>
+                <div class="font-semibold mt-3 text-gray-600 text-sm"> <span class="text-red-500"> * </span> Identificación </div>
                 <div class="bg-white my-2 p-1 flex">
                     <input placeholder="Ej. 34060398"
                            formControlName="identificacion_cliente" 
-                           class="p-1 appearance-none border-b-2 transform duration-500 focus:outline-none focus:border-yellow-500 outline-none w-full text-gray-800 text-sm"></div>
+                           class="p-1 appearance-none border-b-2 transform duration-500 focus:outline-none focus:border-orange-500 outline-none w-full text-gray-800 text-sm"></div>
             </div>
         </div> 
-        <button (click)="crearEgreso()" class="bg-gray-100 text-gray-800 font-semibold rounded w-full p-2 border border-gray-300 hover:text-yellow-500"> Crear egreso </button>
+        <button (click)="crearEgreso()" class="bg-gray-100 text-gray-800 font-semibold rounded w-full p-2 border border-gray-300 hover:text-orange-500"> Crear egreso </button>
     </form>
 
 </app-tarjeta-formulario>

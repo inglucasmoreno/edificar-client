@@ -14,6 +14,9 @@ import { AlertService } from 'src/app/services/alert.service';
 })
 export class EditarIngresoComponent implements OnInit {
 
+  // Modal
+  public showModal = false;
+
   public id: string;
   public ingreso = {};
   public proveedor = {
@@ -76,6 +79,7 @@ export class EditarIngresoComponent implements OnInit {
     ).subscribe(({proveedores}) => {
       this.proveedores = proveedores;
       this.alertService.close();
+      this.showModal = true;
     },({error}) =>{
       this.alertService.errorApi(error.msg);
     });
@@ -93,7 +97,8 @@ export class EditarIngresoComponent implements OnInit {
   // Seleccionar proveedor
   seleccionarProveedor(proveedorSeleccionado: any): void {
     this.proveedorSeleccionado = true;
-    this.proveedor = proveedorSeleccionado
+    this.proveedor = proveedorSeleccionado;
+    this.showModal = false;
   }
 
   // Borrar proveedor seleccionado
@@ -108,6 +113,7 @@ export class EditarIngresoComponent implements OnInit {
       activo: false,
       domicilio: '' 
     };
+    this.showModal = false;
   }
 
   // Filtro por descripcion

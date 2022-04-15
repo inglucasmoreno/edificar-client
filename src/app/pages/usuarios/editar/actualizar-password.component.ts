@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Usuario } from 'src/app/models/usuario.model';
+import { AlertService } from 'src/app/services/alert.service';
+import { DataService } from 'src/app/services/data.service';
 import { UsuariosService } from 'src/app/services/usuarios.service';
 import Swal from 'sweetalert2';
 
@@ -15,7 +17,6 @@ import Swal from 'sweetalert2';
 export class ActualizarPasswordComponent implements OnInit {
 
   public id: string;
-  public loading = true;
   public usuario: Usuario = {
     uid: '',
     dni: '',
@@ -30,15 +31,19 @@ export class ActualizarPasswordComponent implements OnInit {
 
   constructor(private router: Router,
               private fb: FormBuilder,
+              private alertService: AlertService,
+              private dataService: DataService,
               private activatedRoute: ActivatedRoute,
               private usuariosService: UsuariosService) { }
 
   ngOnInit(): void {
+    this.dataService.ubicacionActual = "Dashboard - Actualizando password";
     this.activatedRoute.params.subscribe(({id}) => {
       this.id = id;
+      this.alertService.loading();
       this.usuariosService.getUsuario(id).subscribe( usuario => {
         this.usuario = usuario;
-        this.loading = false;
+        this.alertService.close();
       });
     });
   }
@@ -48,42 +53,21 @@ export class ActualizarPasswordComponent implements OnInit {
     const {password, repetir} = this.passwordForm.value;
 
     if (password.trim() === '' || repetir.trim() === ''){
-      Swal.fire({
-        icon: 'info',
-        title: 'Información',
-        text: 'Debes completar todos los campos',
-        confirmButtonText: 'Entendido'
-      });
+      this.alertService.info('Debes completar todos los campos');
       return false;
     }
 
     if (password !== repetir){
-      Swal.fire({
-        icon: 'info',
-        title: 'Información',
-        text: 'Las contraseñas deben coincidir',
-        confirmButtonText: 'Entendido'
-      });
+      this.alertService.info('Las contraseñas deben coincidir');
       return false;
     }
 
     this.usuario.password = password;
     this.usuariosService.actualizarUsuario(this.id, this.usuario).subscribe(() => {
-      Swal.fire({
-        icon: 'success',
-        title: 'Completado',
-        text: 'Contraseña actualizada!',
-        showConfirmButton: false,
-        timer: 1000
-      });
+      this.alertService.close();
       this.router.navigateByUrl('/dashboard/usuarios');
     }, ({error}) => {
-      Swal.fire({
-        icon: 'info',
-        title: 'Información',
-        text: error.msg,
-        confirmButtonText: 'Entendido'
-      });
+      this.alertService.errorApi(error.msg);
     });
 
   }

@@ -1,12 +1,12 @@
 <div class="mt-1 ml-2 lg:flex">
     <div class="bg-white gsap-contenido lg:h-full w-11/12 border border-gray-300 mr-auto ml-auto lg:mr-0 lg:ml-0 lg:w-1/2 rounded shadow">
         <div *ngIf="ingreso">
-            <div class="flex bg-gray-800 text-white border-gray-800 items-center justify-between bg-gray-100 p-2 rounded-t border">
+            <div class="flex bg-gray-800 text-white border-gray-800 items-center justify-between p-2 rounded-t border">
                 <h1 class="font-semibold"> Remito Nro. {{ ingreso.numero_remito }} </h1>
                 <button [routerLink]="['/dashboard/ingreso_productos/editar', ingreso._id]"
                         *ngIf="ingreso.estado == 'Pendiente'"                
                         title="Editar ingreso"
-                        class="text-gray-600 mr-2 py-2 px-3 border rounded border-gray-300 bg-white hover:text-yellow-500 cursor-pointer">
+                        class="text-gray-600 mr-2 py-2 px-3 border rounded border-gray-300 bg-white hover:text-orange-500 cursor-pointer">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                     </svg>
@@ -51,7 +51,7 @@
                         Completado el {{ ingreso.fecha_ingreso ? (ingreso.fecha_ingreso | fecha) : null }}        
                     </span>
                 </div>
-                <button *ngIf="ingreso.estado === 'Pendiente'" class="p-2 font-semibold bg-gray-100 hover:text-yellow-500 text-center text-sm border border-gray-300 text-gray-600 w-full mt-4 rounded"
+                <button *ngIf="ingreso.estado === 'Pendiente'" class="p-2 font-semibold bg-gray-100 hover:text-orange-500 text-center text-sm border border-gray-300 text-gray-600 w-full mt-4 rounded"
                         (click)="completarIngreso()"> 
                     Completar ingreso
                 </button>    
@@ -65,9 +65,9 @@
         <!-- Detalle de productos -->
 
         <div *ngIf="ingreso">
-            <div class="flex items-center bg-gray-800 border-gray-800 text-white justify-between bg-gray-100 p-2 rounded-t border">
+            <div class="flex items-center bg-gray-800 border-gray-800 text-white justify-between p-2 rounded-t border">
                 <h1 class="text-xl ml-2"> Productos ({{ total }}) </h1>
-                <button class="text-gray-600 px-3 py-2 bg-white mr-2 cursor-pointer border border-gray-300 hover:text-yellow-500 rounded"
+                <button class="text-gray-600 px-3 py-2 bg-white mr-2 cursor-pointer border border-gray-300 hover:text-orange-500 rounded"
                         [routerLink]="['/dashboard/ingreso_productos/nuevo-producto', ingreso._id]"
                         *ngIf="ingreso.estado == 'Pendiente'"
                         title="Agregar productos"
@@ -94,7 +94,7 @@
                     </div>
                 </div>
                 <div class="flex items-center justify-center mt-3">
-                    <button class="mr-4 p-2 border rounded shadow hover:text-yellow-500 text-gray-700 cursor-pointer bg-white text-xs"
+                    <button class="mr-4 p-2 border rounded shadow hover:text-orange-500 text-gray-700 cursor-pointer bg-white text-xs"
                             (click)="actualizarDesdeHasta('anterior')"
                             > 
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -102,7 +102,7 @@
                             </svg> 
                     </button>
                     <div class="text-gray-500 text-xs font-semibold"> Mostrando {{ total > 0 ? paginacion.desde + 1 : 0 }} - {{ paginacion.hasta < total ? paginacion.hasta : total }} de {{ total }} elementos </div>
-                    <button class="ml-4 p-2 border rounded shadow hover:text-yellow-500 text-gray-700 cursor-pointer bg-white text-xs" 
+                    <button class="ml-4 p-2 border rounded shadow hover:text-orange-500 text-gray-700 cursor-pointer bg-white text-xs" 
                             (click)="actualizarDesdeHasta('siguiente')"
                             > 
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">

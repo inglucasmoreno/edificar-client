@@ -22,6 +22,9 @@ export class NuevoProductoIngresoComponent implements OnInit {
               private productosService: ProductosService,
               private ingresoProductosService: IngresoProductosService) { }
 
+  // Modal
+  public showModal = false;
+
   public id;
   public productos = [];
   public producto: Producto;
@@ -85,6 +88,7 @@ export class NuevoProductoIngresoComponent implements OnInit {
       this.total = total;
       this.productos = productos;
       this.alertService.close();
+      this.showModal = true;
     },({error}) => {
       this.alertService.errorApi(error.msg);
     });
@@ -95,10 +99,11 @@ export class NuevoProductoIngresoComponent implements OnInit {
     this.productoSeleccionado = true;
     this.producto = producto;
     this.productos = [];
+    this.showModal = false;
   }
 
-   // Filtro por descripcion
-   filtroDescripcion(descripcion: string): void {
+  // Filtro por descripcion
+  filtroDescripcion(descripcion: string): void {
     if(this.descripcion.trim() === '') this.productos = [];
     this.descripcion = descripcion;    
   }
@@ -145,6 +150,7 @@ export class NuevoProductoIngresoComponent implements OnInit {
     this.alertService.close();
     this.productoSeleccionado = false;
     this.productos = [];
+    this.showModal = false;
   }
 
 }

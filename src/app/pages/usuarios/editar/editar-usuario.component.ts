@@ -4,6 +4,9 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { UsuariosService } from '../../../services/usuarios.service';
 import { Usuario } from '../../../models/usuario.model';
 import Swal from 'sweetalert2';
+import gsap from 'gsap';
+import { AlertService } from 'src/app/services/alert.service';
+import { DataService } from 'src/app/services/data.service';
 
 @Component({
   selector: 'app-editar-usuario',
@@ -23,19 +26,26 @@ export class EditarUsuarioComponent implements OnInit {
     role: ['USER_ROLE', Validators.required],
     activo: [true, Validators.required],
   });
-  public loading = true;
-  public loadingEnd = false;
 
   constructor(private router: Router,
+              private alertService: AlertService,
+              private dataService: DataService,
               private fb: FormBuilder,
               private activatedRoute: ActivatedRoute,
               private usuariosService: UsuariosService,
               ) { }
 
   ngOnInit(): void {
+    
+    this.dataService.ubicacionActual = "Dashboard - Usuarios - Actualizando";
+    
+    gsap.from('.gsap-contenido', { y:100, opacity: 0, duration: .3 });
     this.activatedRoute.params.subscribe(({id}) => {
       this.id = id;
     });
+    
+    this.alertService.loading();
+    
     this.usuariosService.getUsuario(this.id).subscribe(usuario => {
       this.usuario = usuario;
       const {dni, apellido, nombre, email, role, activo} = this.usuario;
@@ -47,8 +57,9 @@ export class EditarUsuarioComponent implements OnInit {
         role,
         activo
       });
-      this.loading = false;
+      this.alertService.close();
     });
+  
   }
 
   // Editar usuario
@@ -64,40 +75,19 @@ export class EditarUsuarioComponent implements OnInit {
 
     // Se verifica que todos los campos esten rellenos
     if (this.usuarioForm.status === 'INVALID' || campoVacio){
-    Swal.fire({
-      icon: 'info',
-      title: 'Información',
-      text: 'Formulario inválido',
-      confirmButtonText: 'Entendido'
-    });
-    return false;
+      this.alertService.formularioInvalido();
+      return false;
     }
 
-    this.loadingEnd = true;  // Comienza la edicion de usuario
+    this.alertService.loading();
+
     this.usuariosService.actualizarUsuario(this.id, this.usuarioForm.value).subscribe(resp => {
-      Swal.fire({
-        icon: 'success',
-        title: 'Completado',
-        text: 'Usuario actualizado correctamente',
-        showConfirmButton: false,
-        timer: 1000
-      });
-      this.loadingEnd = false;  // Finaliza la edicion de usuario
+      this.alertService.close()
       this.router.navigateByUrl('dashboard/usuarios');
     }, ({error}) => {
-      this.loadingEnd = false;  // Finaliza la edicion de usuario
-      Swal.fire({
-        icon: 'info',
-        title: 'Información',
-        text: error.msg,
-        confirmButtonText: 'Entendido'
-      })
+      this.alertService.errorApi(error.msg);
     });
 
-  }
-
-  regresar(): void{
-    this.router.navigateByUrl('/dashboard/usuarios');
   }
 
 }

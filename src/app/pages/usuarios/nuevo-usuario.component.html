@@ -1,10 +1,10 @@
-<div class="flex p-2">
+<div class="lg:flex p-2 gsap-contenido">
 
     <!-- Formulario de usuario -->
     
-    <div class="w-1/2 border border-gray-300 shadow">
+    <div class="lg:w-1/2 w-full border border-gray-300 shadow">
         <div class="flex items-center bg-gray-800 border border-gray-800 rounded-t p-3">
-            <button routerLink="/dashboard/usuarios" class="hover:text-yellow-500 border bg-gray-100 text-gray-600 border-gray-300 rounded p-2 px-3 shadow cursor-pointer">
+            <button routerLink="/dashboard/usuarios" class="hover:text-orange-500 border bg-gray-100 text-gray-600 border-gray-300 rounded p-2 px-3 shadow cursor-pointer">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                     </svg>
@@ -18,63 +18,63 @@
             class="px-5 pb-5">
             <div class="flex flex-col lg:flex-row">
                 <div class="w-full mx-2 flex-1 svelte-1l8159u">
-                    <div class="font-semibold bold mt-3 text-gray-600 text-sm"> Nombre de usuario </div>
-                    <div class="bg-white my-2 p-1 flex border-gray-300">
+                    <div class="font-semibold bold mt-3 text-gray-600 text-sm"> <span class="text-red-500"> * </span> Nombre de usuario </div>
+                    <div class="bg-white my-2 py-1 flex border-gray-300">
                         <input placeholder="Ej. lmoreno" 
-                               class="p-1 appearance-none border-b-2 transform duration-500 focus:outline-none outline-none focus:border-yellow-500 w-full text-gray-800 text-sm"
+                               class="p-1 appearance-none border-b-2 transform duration-500 focus:outline-none outline-none focus:border-orange-500 w-full text-gray-800 text-sm"
                                formControlName="dni"
                                ></div>
                 </div>
                 <div class="w-full mx-2 flex-1 svelte-1l8159u">
-                    <div class="font-semibold mt-3 text-gray-600 text-sm"> Email </div>
-                    <div class="bg-white my-2 p-1 flex">
+                    <div class="font-semibold mt-3 text-gray-600 text-sm"> <span class="text-red-500"> * </span> Email </div>
+                    <div class="bg-white my-2 py-1 flex">
                         <input type="email"
                                formControlName="email" 
                                placeholder="Ej. lucasmoreno@gmail.com" 
-                               class="p-1 appearance-none border-b-2 transform duration-500 focus:outline-none outline-none focus:border-yellow-500 w-full text-gray-800 text-sm"></div>
+                               class="p-1 appearance-none border-b-2 transform duration-500 focus:outline-none outline-none focus:border-orange-500 w-full text-gray-800 text-sm"></div>
                 </div>
             </div>
             <div class="flex flex-col lg:flex-row">
                 <div class="w-full mx-2 flex-1 svelte-1l8159u">
-                    <div class="font-semibold mt-3 text-gray-600 text-sm"> Apellido </div>
-                    <div class="bg-white my-2 p-1 flex">
+                    <div class="font-semibold mt-3 text-gray-600 text-sm"> <span class="text-red-500"> * </span> Apellido </div>
+                    <div class="bg-white my-2 py-1 flex">
                         <input placeholder="Ej. Moreno" 
                                formControlName="apellido"
-                               class="p-1 appearance-none border-b-2 transform duration-500 focus:outline-none outline-none focus:border-yellow-500 w-full text-gray-800 text-sm"> 
+                               class="p-1 appearance-none border-b-2 transform duration-500 focus:outline-none outline-none focus:border-orange-500 w-full text-gray-800 text-sm"> 
                     </div>
                 </div>
                 <div class="w-full mx-2 flex-1 svelte-1l8159u">
-                    <div class="font-semibold mt-3 text-gray-600 text-sm"> Nombre </div>
-                    <div class="bg-white my-2 p-1 flex">
+                    <div class="font-semibold mt-3 text-gray-600 text-sm"> <span class="text-red-500"> * </span> Nombre </div>
+                    <div class="bg-white my-2 py-1 flex">
                         <input placeholder="Ej. Lucas" 
                                formControlName="nombre"
-                               class="p-1 appearance-none border-b-2 transform duration-500 focus:outline-none outline-none focus:border-yellow-500 w-full text-gray-800 text-sm"> </div>
+                               class="p-1 appearance-none border-b-2 transform duration-500 focus:outline-none outline-none focus:border-orange-500 w-full text-gray-800 text-sm"> </div>
                 </div>
             </div>
             <div class="flex flex-col lg:flex-row">
                 <div class="w-full mx-2 flex-1">
-                    <div class="font-semibold mt-3 text-gray-600 text-sm"> Contraseña </div>
-                    <div class="bg-white my-2 p-1 flex">
+                    <div class="font-semibold mt-3 text-gray-600 text-sm"> <span class="text-red-500"> * </span> Contraseña </div>
+                    <div class="bg-white my-2 py-1 flex">
                         <input type="password" 
                                formControlName="password"
                                placeholder="******" 
-                               class="p-1 appearance-none border-b-2 transform duration-500 focus:outline-none outline-none focus:border-yellow-500 w-full text-gray-800 text-sm"> 
+                               class="p-1 appearance-none border-b-2 transform duration-500 focus:outline-none outline-none focus:border-orange-500 w-full text-gray-800 text-sm"> 
                     </div>
                 </div>
                 <div class="w-full mx-2 flex-1">
-                    <div class="font-semibold mt-3 text-gray-600 text-sm"> Repetir contraseña </div>
-                    <div class="bg-white my-2 p-1 flex">
+                    <div class="font-semibold mt-3 text-gray-600 text-sm"> <span class="text-red-500"> * </span> Repetir contraseña </div>
+                    <div class="bg-white my-2 py-1 flex">
                         <input type="password" 
                                formControlName="repetir"
                                placeholder="******" 
-                               class="p-1 appearance-none border-b-2 transform duration-500 focus:outline-none outline-none focus:border-yellow-500 w-full text-gray-800 text-sm"> </div>
+                               class="p-1 appearance-none border-b-2 transform duration-500 focus:outline-none outline-none focus:border-orange-500 w-full text-gray-800 text-sm"> </div>
                 </div>
             </div>
             <div class="flex flex-col lg:flex-row">
                 <div class="w-full mx-2 flex-1">
-                    <div class="font-semibold mt-3 text-gray-600 text-sm"> Rol </div>
+                    <div class="font-semibold mt-3 text-gray-600 text-sm"> <span class="text-red-500"> * </span> Rol </div>
                     <div class="bg-white my-2 flex">
-                        <select class="p-1 border-b-2 transform duration-500 focus:outline-none outline-none focus:border-yellow-500 w-full text-gray-800 text-sm"
+                        <select class="py-1 border-b-2 transform duration-500 focus:outline-none outline-none focus:border-orange-500 w-full text-gray-800 text-sm"
                                 formControlName="role">
                             <option value="USER_ROLE"> Consulta </option>
                             <option value="ADMIN_ROLE"> Administrador </option>
@@ -82,9 +82,9 @@
                     </div>
                 </div>
                 <div class="w-full mx-2 flex-1">
-                    <div class="font-semibold mt-3 text-gray-600 text-sm"> Estado </div>
+                    <div class="font-semibold mt-3 text-gray-600 text-sm"> <span class="text-red-500"> * </span> Estado </div>
                     <div class="bg-white my-2 flex">
-                        <select class="p-1 border-b-2 transform duration-500 focus:outline-none outline-none focus:border-yellow-500 w-full text-gray-800 text-sm"
+                        <select class="py-1 border-b-2 transform duration-500 focus:outline-none outline-none focus:border-orange-500 w-full text-gray-800 text-sm"
                                 formControlName="activo">
                             <option value=true> Activo </option>
                             <option value=false> Inactivo </option>
@@ -96,26 +96,35 @@
     </div>
 
     <!-- Muestra de datos -->
-    <div class="w-1/2 border ml-5 border-gray-300 shadow p-4 rounded h-full">
+    <div class="lg:w-1/2 w-full border lg:ml-5 mt-3 lg:mt-0 border-gray-300 shadow p-4 rounded h-full">
         <div class="flex">
             <div *ngIf="usuarioForm.value.role === 'ADMIN_ROLE'" class="bg-blue-100 flex items-center justify-center w-32 h-32 rounded-full shadow border border-blue-200">
                 <p class="text-6xl font-semibold text-blue-900"> A </p>
             </div> 
-            <div *ngIf="usuarioForm.value.role === 'USER_ROLE'" class="bg-yellow-100 flex items-center justify-center w-32 h-32 rounded-full shadow border border-yellow-200">
-                <p class="text-6xl font-semibold text-yellow-900"> C </p>
+            <div *ngIf="usuarioForm.value.role === 'USER_ROLE'" class="bg-orange-100 flex items-center justify-center w-32 h-32 rounded-full shadow border border-orange-200">
+                <p class="text-6xl font-semibold text-orange-900"> C </p>
             </div> 
             <div class="mt-2 ml-4 text-gray-400">
+                
                 <!-- Nombre de usuario -->
-                <p  class="text-3xl"> {{ usuarioForm.value.dni.trim() === '' ? 'Nombre de usuario' : usuarioForm.value.dni }}  </p>
-                <p class="text-2xl capitalize"> {{ usuarioForm.value.apellido.trim() === '' && usuarioForm.value.nombre.trim() === '' ? 'Apellido y Nombre' : (usuarioForm.value.apellido.toLowerCase() + ' ' + usuarioForm.value.nombre.toLowerCase())  }} </p>
-                <p class="text-xl"> {{ usuarioForm.value.email.trim() === '' ? 'Correo electrónico' : usuarioForm.value.email.toLowerCase() }} </p>
+                <p *ngIf="usuarioForm.value.dni.trim() !== ''" class="text-3xl text-gray-800 font-semibold"> {{ usuarioForm.value.dni }}  </p>
+                <p *ngIf="usuarioForm.value.dni.trim() === ''" class="text-3xl"> Nombre de usuario  </p>
+                
+                <!-- Apellido y Nombre -->
+                <p *ngIf="usuarioForm.value.apellido.trim() !== '' || usuarioForm.value.nombre.trim() !== ''" class="text-xl text-gray-800 capitalize"> {{ usuarioForm.value.apellido.toLowerCase() }} {{ usuarioForm.value.nombre.toLowerCase() }}  </p>
+                <p *ngIf="usuarioForm.value.apellido.trim() === '' && usuarioForm.value.nombre.trim() === ''" class="text-xl"> Apellido y Nombre  </p>
+                
+                
+                <!-- <p class="text-2xl capitalize"> {{ usuarioForm.value.apellido.trim() === '' && usuarioForm.value.nombre.trim() === '' ? 'Apellido y Nombre' : (usuarioForm.value.apellido.toLowerCase() + ' ' + usuarioForm.value.nombre.toLowerCase())  }} </p> -->
+                <p *ngIf="usuarioForm.value.email.trim() !== ''" class="text-lg"> {{ usuarioForm.value.email.toLowerCase() }} </p>
+                <p *ngIf="usuarioForm.value.email.trim() === ''" class="text-lg"> Correo electrónico </p>
             </div>
         </div>
         <div class="flex flex-col lg:flex-row mt-2">
             <div class="w-full mx-2 flex-1">
                 <button 
                     (click)="nuevoUsuario()"
-                    class="p-2 text-gray-600 border shadow border-gray-300 w-full mt-3 rounded shadow bg-gray-100 hover:text-yellow-500"> 
+                    class="p-2 text-gray-600 border shadow border-gray-300 w-full mt-3 rounded shadow bg-gray-100 hover:text-orange-500"> 
                         <span class="font-semibold"> Crear este usuario </span>    
                     </button>
             </div>

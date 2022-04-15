@@ -28,7 +28,7 @@ export class NuevoProveedorComponent implements OnInit {
               private router: Router) { }
 
   ngOnInit(): void {
-    this.dataService.ubicacionActual = "Dashboard - Proveedores";
+    this.dataService.ubicacionActual = "Dashboard - Proveedores - Creando";
   }
   
   // Se crea el proveedor

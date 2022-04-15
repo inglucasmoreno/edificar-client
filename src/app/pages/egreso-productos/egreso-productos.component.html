@@ -2,16 +2,16 @@
     <div class="antialiased font-sans bg-white">
         <div class="flex items-center justify-between bg-gray-800 text-white p-3 rounded-t">
             <div>
-                <h2 class="text-2xl font-semibold leading-tight"> Listado de egresos </h2>
+                <h2 class="text-2xl leading-tight"> Listado de egresos </h2>
                 <p> Cantidad de egresos: {{ total }} </p>
             </div>
             <div>
-                <button (click)="generarReporte()"  title="Generar reporte" class="py-2 px-3 border bg-white text-gray-800 rounded hover:text-yellow-500">
+                <button (click)="generarReporte()"  title="Generar reporte" class="py-2 px-3 border bg-white text-gray-800 rounded hover:text-orange-500">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
                     </svg>                    
                 </button>
-                <button routerLink="nuevo" title="Nuevo egreso" class="py-2 px-3 ml-3 mr-2 border bg-white text-gray-800 rounded hover:text-yellow-500">
+                <button routerLink="nuevo" title="Nuevo egreso" class="py-2 px-3 ml-3 mr-2 border bg-white text-gray-800 rounded hover:text-orange-500">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                     </svg>                   
@@ -43,7 +43,7 @@
                             <div class="flex items-center">
                                 <div class="block relative">
                                     <span class="h-full absolute inset-y-0 left-0 flex items-center pl-2">
-                                        <svg viewBox="0 0 24 24" class="h-4 w-4 fill-current text-gray-500 hover:text-yellow-500 cursor-pointer">
+                                        <svg viewBox="0 0 24 24" class="h-4 w-4 fill-current text-gray-500 hover:text-orange-500 cursor-pointer">
                                             <path
                                                 d="M10 4a6 6 0 100 12 6 6 0 000-12zm-8 6a8 8 0 1114.32 4.906l5.387 5.387a1 1 0 01-1.414 1.414l-5.387-5.387A8 8 0 012 10z">
                                             </path>
@@ -158,7 +158,7 @@
                             </thead>
                             <tbody>
                                 <tr [routerLink]="['/dashboard/egreso_productos/detalles/', egreso._id]"
-                                    class="animate__animated animate__fadeIn hover:bg-yellow-100 cursor-pointer" *ngFor="let egreso of egresos">
+                                    class="animate__animated animate__fadeIn hover:bg-orange-100 cursor-pointer" *ngFor="let egreso of egresos">
                                     <td class="px-5 py-2 border-b border-gray-200 text-sm">
                                         <p class="text-gray-900 whitespace-no-wrap font-semibold">
                                             {{ egreso.codigo_cadena }}
@@ -200,12 +200,12 @@
                             <div class="inline-flex mt-2 xs:mt-0">
                                 <button
                                     (click)="actualizarDesdeHasta('anterior')"
-                                    class="text-sm bg-gray-200 border hover:bg-yellow-100 border-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-l">
+                                    class="text-sm bg-gray-200 border hover:bg-orange-100 border-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-l">
                                     Anterior
                                 </button>
                                 <button
                                     (click)="actualizarDesdeHasta('siguiente')"
-                                    class="text-sm bg-gray-200 border hover:bg-yellow-100 border-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-r">
+                                    class="text-sm bg-gray-200 border hover:bg-orange-100 border-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-r">
                                     Proximo
                                 </button>
                             </div>

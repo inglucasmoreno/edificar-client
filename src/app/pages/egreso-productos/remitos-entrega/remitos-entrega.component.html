@@ -2,7 +2,7 @@
     <div class="bg-white lg:h-full w-11/12 mr-auto ml-auto lg:mr-0 lg:ml-0 lg:w-1/2 rounded shadow">
         <div class="border border-gray-200">
             <div class="flex items-center bg-gray-800 text-white p-3 rounded-t border border-gray-800">
-                <button [routerLink]="['/dashboard/egreso_productos/detalles', id]" class="hover:text-yellow-500 border bg-gray-100 text-gray-600 border-gray-300 rounded p-2 px-3 shadow cursor-pointer">
+                <button [routerLink]="['/dashboard/egreso_productos/detalles', id]" class="hover:text-orange-500 border bg-gray-100 text-gray-600 border-gray-300 rounded p-2 px-3 shadow cursor-pointer">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                       </svg>
@@ -17,7 +17,7 @@
                     </span>
                 </p>
                 <div *ngFor="let remito of remitos" 
-                      class="border border-gray-300 shadow rounded p-3 mt-2 hover:border-yellow-500 cursor-pointer"
+                      class="border border-gray-300 shadow rounded p-3 mt-2 hover:border-orange-500 cursor-pointer"
                       [routerLink]="['/dashboard/egreso_productos/remitos-detalles', remito._id]"
                      >
                     <p class="text-sm"> 
@@ -52,20 +52,20 @@
             <div *ngIf="egresoEstado === 'Pendiente'">
                 <div class="flex flex-col lg:flex-row">
                     <div class="w-full mx-2 flex-1 svelte-1l8159u">
-                        <div class="font-semibold mt-3 text-gray-600 text-sm"> Punto de venta </div>
+                        <div class="font-semibold mt-3 text-gray-600 text-sm"> <span class="text-red-500"> * </span> Punto de venta </div>
                         <input type="text" 
                                #txtPuntoVenta
                                (keyup)="completandoDatosRemito('punto_venta', txtPuntoVenta.value)"
                                placeholder="Ej. 0001" 
-                               class="border-b-2 transform duration-500 focus:outline-none outline-none focus:border-yellow-500 py-2 px-2 mt-2 text-sm w-full">
+                               class="border-b-2 transform duration-500 focus:outline-none outline-none focus:border-orange-500 py-2 px-2 mt-2 text-sm w-full">
                     </div>
                     <div class="w-full mx-2 flex-1 svelte-1l8159u">
-                        <div class="font-semibold mt-3 text-gray-600 text-sm"> Número de comprobante </div>
+                        <div class="font-semibold mt-3 text-gray-600 text-sm"> <span class="text-red-500"> * </span> Número de comprobante </div>
                         <input type="text" 
                                #txtNroComprobante
                                (keyup)="completandoDatosRemito('nro_comprobante', txtNroComprobante.value)" 
                                placeholder="Ej. 00000082" 
-                               class="border-b-2 transform duration-500 focus:outline-none outline-none focus:border-yellow-500 py-2 px-2 mt-2 text-sm w-full">
+                               class="border-b-2 transform duration-500 focus:outline-none outline-none focus:border-orange-500 py-2 px-2 mt-2 text-sm w-full">
                     </div>
                 </div>
                 <div class="px-2 text-center mt-5">
@@ -73,7 +73,7 @@
                     <div *ngIf="parciales.length !== 0" class="mt-4">
                         <button 
                             [disabled]="loadingProductos || loadingRemitos"
-                            class="py-1 px-2 shadow border border-gray-300 rounded text-md font-semibold text-gray-700 bg-gray-100 border hover:text-yellow-500"
+                            class="py-1 px-2 shadow border border-gray-300 rounded text-md font-semibold text-gray-700 bg-gray-100 border hover:text-orange-500"
                             (click)="entregaParcial(txtPuntoVenta, txtNroComprobante)"
                         > 
                             <span> Entrega parcial </span>

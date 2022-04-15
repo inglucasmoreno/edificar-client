@@ -14,6 +14,9 @@ import { ProductosService } from 'src/app/services/productos.service';
 })
 export class NuevoProductoEgresoComponent implements OnInit {
 
+  // Modal
+  public showModal = false;
+
   public id;
   public limit = 5;
   public productos = [];
@@ -97,6 +100,7 @@ export class NuevoProductoEgresoComponent implements OnInit {
       this.total = total;
       this.productos = productos;
       this.alertService.close();
+      this.showModal = true;
     },({error}) => {
       this.alertService.errorApi(error.msg);
     });
@@ -107,6 +111,7 @@ export class NuevoProductoEgresoComponent implements OnInit {
     this.productoSeleccionado = true;
     this.producto = producto;
     this.productos = [];
+    this.showModal = false;
   }
 
   // Buscar productos
@@ -131,6 +136,7 @@ export class NuevoProductoEgresoComponent implements OnInit {
     this.alertService.close();
     this.productoSeleccionado = false;
     this.productos = [];
+    this.showModal = false;
   }
 
   // Reiniciar paginación

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import Swal from 'sweetalert2';
 import { ProductosService } from '../../services/productos.service';
 import { PresupuestosService } from '../../services/presupuestos.service';
 import { environment } from '../../../environments/environment';
@@ -16,6 +15,9 @@ const base_url = environment.base_url;
   ]
 })
 export class PresupuestoComponent implements OnInit {
+
+  // Modal
+  public showProductos = false;
 
   // Fecha
   public fechaHoy = Date.now();
@@ -155,7 +157,8 @@ export class PresupuestoComponent implements OnInit {
   // Eliminar producto seleccionado
   borrarProductoSeleccionado(): void {
     this.seleccionado = {};
-    this.flagSeleccionado = false;  
+    this.flagSeleccionado = false;
+    this.showProductos = false;  
   }
 
   // Listar productos
@@ -180,6 +183,7 @@ export class PresupuestoComponent implements OnInit {
       this.total = total;
       this.productos = productos;
       this.alertService.close();
+      this.showProductos = true;
     },({error}) => {
       this.alertService.errorApi(error.msg);
     });
@@ -204,6 +208,8 @@ export class PresupuestoComponent implements OnInit {
 
   // Borrar listado
   borrarListado(): void {
+    this.borrarProductoSeleccionado();
+    this.showProductos = false;
     this.productos = [];
   }
 
