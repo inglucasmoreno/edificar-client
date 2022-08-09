@@ -62,6 +62,8 @@ export class ActualizarPasswordComponent implements OnInit {
       return false;
     }
 
+    this.alertService.loading();
+
     this.usuario.password = password;
     this.usuariosService.actualizarUsuario(this.id, this.usuario).subscribe(() => {
       this.alertService.close();
